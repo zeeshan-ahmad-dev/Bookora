@@ -3,8 +3,77 @@ import Hero from "../components/Hero";
 import assets from "../assets/assets";
 import CardContainer from "../components/CardContainer";
 import CategoryGallery from "../components/CategoryGallery";
+import CardItem from "../components/CardItem";
+import { FaTruck, FaRecycle, FaDivide, FaGift } from "react-icons/fa";
+import { Recycle, Truck } from "lucide-react";
 
 const Home = () => {
+  const discoverBooks = [
+    {
+      imgUrl: assets.book1,
+      title: "The Born of APLEX",
+      price: "19.25",
+    },
+    {
+      imgUrl: assets.book2,
+      title: "Mists of Algorab",
+      price: "14.79",
+    },
+    {
+      imgUrl: assets.book3,
+      title: "Now You See Me",
+      price: "22.10",
+    },
+    {
+      imgUrl: assets.book4,
+      title: "Liar of Dreams",
+      price: "9.50",
+    },
+    {
+      imgUrl: assets.book5,
+      title: "Feugiat Maecenas",
+      price: "17.35",
+    },
+    {
+      imgUrl: assets.book6,
+      title: "2024 Sanctuary",
+      price: "12.89",
+    },
+    {
+      imgUrl: assets.book7,
+      title: "Ark Forging",
+      price: "27.45",
+    },
+    {
+      imgUrl: assets.book8,
+      title: "Cyber Angel",
+      price: "8.99",
+    },
+  ];
+
+  const editorBooks = [
+    {
+      imgUrl: assets.book9,
+      title: "This Dark Road To Mercy",
+      price: "17.15",
+    },
+    {
+      imgUrl: assets.book10,
+      title: "Into The Wild",
+      price: "14.35",
+    },
+    {
+      imgUrl: assets.book11,
+      title: "I'll Catch You",
+      price: "21.55",
+    },
+    {
+      imgUrl: assets.book12,
+      title: "Game Of Spades",
+      price: "19.25",
+    },
+  ];
+
   return (
     <>
       <Hero />
@@ -19,10 +88,8 @@ const Home = () => {
           debitis auctor.
         </p>
         <div className="py-6 pt-10 text-center">
-          <CardContainer />
-          <button className="bg-primary font-semibold px-8 mt-14 py-4">
-            DISCOVER MORE BOOKS
-          </button>
+          <CardContainer books={discoverBooks} />
+          <button className="cta-btn">DISCOVER MORE BOOKS</button>
         </div>
       </section>
 
@@ -35,24 +102,202 @@ const Home = () => {
         {/* Category Gallery */}
         <CategoryGallery />
         <div className="py-6 pt-0 text-center">
-          <button className="bg-primary font-semibold px-8 mt-14 py-4">
-            SEE ALL CATEGORIES
-          </button>
+          <button className="cta-btn">SEE ALL CATEGORIES</button>
         </div>
       </section>
 
-      <section className="relative px-8 py-14 flex">
-        <img src={assets.bestseller_bg} className="absolute w-full md:w-[60%] md:max-h-full left-0 top-0 " alt="" />
-        <div className="relative">
-          <img src={assets.bestseller_book} className="" alt="" />
+      {/* World's Best Seller Section */}
+      <section className="relative px-8 md:px-14 lg:px-20 py-14 md:py-14 lg:py-20 flex items-center flex-col md:flex-row">
+        <img
+          src={assets.bestseller_bg}
+          className="absolute w-full md:w-[100%] lg:w-[60%] md:h-full md:max-h-full left-0 top-0 "
+          alt=""
+        />
+        <div className="relative lg:ml-10 md:ml-0">
+          <img
+            src={assets.dots_icon}
+            className="hidden md:inline absolute -right-12 -top-12"
+            alt=""
+          />
+          <img
+            src={assets.bestseller_book}
+            className="relative w-full"
+            alt=""
+          />
         </div>
-        <div className="text-center py-10 space-y-2 relative">
-          <h5 className="text-lg text-black/80 ">World's Best Seller</h5>
-          <h1 className="text-3xl font-noto-serif font-bold">Below Zero</h1>
-          <p className="text-sm font-light">Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
-          <button className="bg-primary font-semibold px-8 mt-8 py-4">
-            BUY NOW
-          </button>
+        <div className="text-center md:text-left py-10 md:ml-24 lg:ml-44 space-y-2 md:space-y-4 relative flex-1">
+          <img
+            src={assets.swirl_arrow_icon}
+            className="hidden md:inline absolute -left-36 -bottom-24 w-max-40"
+            alt=""
+          />
+          <h5 className="text-lg md:text-xl font-semibold text-black/80 ">
+            World's Best Seller
+          </h5>
+          <h1 className="text-3xl md:text-5xl font-noto-serif font-bold">
+            Below Zero
+          </h1>
+          <p className="text-sm md:text-base font-light">
+            Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut
+            fugit sed quia consequuntur magni dolores eos qui ratione voluptatem
+            sequi nesciunt.
+          </p>
+          <button className="cta-btn">BUY NOW</button>
+        </div>
+      </section>
+
+      {/* Author of the Month */}
+      <section className="py-8 md:py-14 xl:py-24 px-10 md:px-0 xl:px-20 md:mx-0 bg-light-gray">
+        <h1 className="text-2xl lg:text-4xl font-noto-serif font-semibold text-center md:text-left py-12 lg:mt-5">
+          Author of the Month
+        </h1>
+        <div className="md:grid grid-cols-3 md:items-center">
+          <div className="relative">
+            <img src={assets.author_image} className="relative z-50" alt="" />
+            <img
+              src={assets.dots_icon}
+              className="absolute z-10 -bottom-44 -left-32 md:-bottom-16 md:-left-32"
+              alt=""
+            />
+          </div>
+          <div className="py-14 space-y-5 relative md:px-9">
+            <h1 className="text-2xl md:text-4xl font-noto-serif font-bold">
+              Melissa Miner
+            </h1>
+            <p className="text-sm md:text-base font-light">
+              Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit
+              aut fugit sed quia consequuntur magni dolores eos qui ratione
+              voluptatem sequi nesciunt.
+            </p>
+            <button className="cta-btn">READ MORE</button>
+          </div>
+          <div className="flex md:flex-col justify-center">
+            <div className="grid grid-cols-1 md:grid-cols-1 md:grid-rows-3 gap-4 text-left">
+              {[
+                {
+                  imgUrl: assets.small_book_1,
+                  title: "Cyber Angel",
+                  price: [20, 22],
+                },
+                {
+                  imgUrl: assets.small_book_2,
+                  title: "Ark Forging",
+                  price: [17, 23],
+                },
+                {
+                  imgUrl: assets.small_book_3,
+                  title: "Now You See Mee",
+                  price: [16, 18],
+                },
+              ].map((book, index) => (
+                <div class="md:flex items-center md:gap-4">
+                  <div className="relative">
+                    <img src={book.imgUrl} alt="" />
+                  </div>
+                  <div className="py-2 md:space-y-2">
+                    <h6 className="text-sm md:text-2xl font-noto-serif font-bold">
+                      {book.title}
+                    </h6>
+                    <p className="text-xs md:text-base font-bold text-black/70">
+                      ${book.price[0].toFixed(2)}- ${book.price[1].toFixed(2)}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-8 md:py-14 xl:py-24 px-10 md:px-0 xl:px-20 md:mx-0 bg-light-gray">
+        <h1 className="text-3xl md:text-5xl font-noto-serif font-semibold text-center py-2 lg:mt-5">
+          Picked By Editors
+        </h1>
+        <p className="text-sm lg:text-base px-1 text-black/90 leading-4 text-center py-2 lg:mt-5">
+          Congue, gravida placeat nibh sunt semper elementum anim Integer lectus
+          debitis auctor.
+        </p>
+        <div className="py-6 pt-10 text-center">
+          <CardContainer books={editorBooks} />
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-16 md:py-14 xl:py-20 px-2 md:px-0 xl:px-20 md:mx-0 bg-hero">
+        <div className="flex flex-col md:flex-row space-y-4 md:space-x-8">
+          <div className="space-y-1 md:space-y-3 flex flex-col items-center md:items-start md:justify-start text-left">
+            <FaTruck className="text-3xl md:text-5xl w-fit" />
+            <h3 className="font-noto-serif text-lg md:text-xl font-bold">
+              Worldwide Free Shipping
+            </h3>
+            <p className="text-black/80 text-sm md:text-base">
+              Justo vestibulum risus impe rdietsconse sectetur.
+            </p>
+          </div>
+          <div className="space-y-1 md:space-y-3 flex flex-col items-center md:items-start md:justify-start text-left">
+            <FaRecycle className="text-3xl md:text-5xl w-fit" />
+            <h3 className="font-noto-serif text-lg md:text-xl font-bold">
+              Free Returns For All
+            </h3>
+            <p className="text-black/80 text-sm md:text-base">
+              Justo vestibulum risus impe rdietsconse sectetur.
+            </p>
+          </div>
+          <div className="space-y-1 md:space-y-3 flex flex-col items-center md:items-start md:justify-start text-left">
+            <FaDivide className="text-3xl md:text-5xl w-fit -rotate-45" />
+            <h3 className="font-noto-serif text-lg md:text-xl font-bold">
+              10% Student Discounts
+            </h3>
+            <p className="text-black/80 text-sm md:text-base">
+              Justo vestibulum risus impe rdietsconse sectetur.
+            </p>
+          </div>
+          <div className="space-1 md:space-y-3-1 flex flex-col items-center md:items-start md:justify-start text-left">
+            <FaGift className="text-3xl md:text-5xl w-fit" />
+            <h3 className="font-noto-serif text-lg md:text-xl font-bold">
+              Gift Vouchers
+            </h3>
+            <p className="text-black/80 text-sm md:text-base">
+              Justo vestibulum risus impe rdietsconse sectetur.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Publisher's Section */}
+      <section className="py-16 md:py-14 xl:py-20 px-10 md:px-16 xl:px-32 md:mx-0 bg-light-gray md:flex md:items-center">
+        <div className="md:px-6">
+          <img src={assets.publisher_image} alt="" />
+        </div>
+        <div className="text-center md:text-left py-10 lg:ml-20 space-y-6 md:space-y-4 relative flex-1">
+          <h5 className="text-lg md:text-xl font-semibold text-black/80 ">
+            Become Our Partner
+          </h5>
+          <h1 className="text-2xl md:text-4xl font-noto-serif font-bold">
+            Self - Publishing And Book Writing
+          </h1>
+          <p className="text- text-xs md:text-base font-light">
+            Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut
+            fugit sed quia consequuntur magni dolores eos qui ratione voluptatem
+            sequi nesciunt.
+          </p>
+          <button className="cta-btn">CONTACT NOW</button>
+        </div>
+      </section>
+
+      {/* Subscribe to Email Section */}
+      <section className="py-16 md:py-20 xl:py-20 px-10 md:px-0 xl:px-24 md:mx-0 bg-hero md:flex md:items-center">
+        <div className="md:flex-[0.7] realtive">
+          <h1 className="text-[1.7rem] md:text-5xl md:text-left md:pr-40 leading-9 md:leading-14 text-center font-noto-serif font-bold mb-11">
+            Join Book Lovers Comunity and Get Latest Updates
+          </h1>
+          <div className="flex flex-col md:flex-row space-y-1 md: md:items-center gap-2 md:gap-2 w-full">
+            <input type="text" placeholder="Your Email Address" className="bg-white text-black/90 px-3 py-4 text-sm font-medium border border-gray-200 outline-none md:my-4 h-full flex-[0.6] xl:flex-[0.7]" />
+            <button className="cta-btn my-1 text-sm h-full flex-[0.2] xl:flex-[0.1">SUBSCRIBE</button>
+          </div>
+        </div>
+        <div className="mt-8 md:flex-[0.6] lg:flex-[0.4] md:relative md:px-6 lg:px-0">
+          <img src={assets.subscribe_image} className="md:w-full" alt="" />
         </div>
       </section>
     </>

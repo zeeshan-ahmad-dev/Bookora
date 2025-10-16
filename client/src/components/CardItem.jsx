@@ -10,11 +10,11 @@ const CardItem = ({ imgUrl, title, price }) => {
           <span className="opacity-0 invisible group-hover/item:opacity-100 group-hover/item:visible bg-black absolute right-10 text-xs px-2 rounded-sm py-2 text-white w-max after:content-[''] after:absolute after:size-3 after:bg-black after:top-2.5 after:rotate-45">Add to cart</span>
           <img src={assets.shopping_bag_icon} className="w-4" />
         </span>
-        <img src={imgUrl} alt="" />
+        <img src={imgUrl} className="w-full" alt="" />
       </div>
       <div className="py-2">
         <h6 className="text-sm font-noto-serif font-bold">{title}</h6>
-        <div className="flex ">
+        <div className="flex">
           {Array(5)
             .fill(0)
             .map((_, index) => (

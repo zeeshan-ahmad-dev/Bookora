@@ -35,7 +35,7 @@ const Hero = () => {
           quia consequuntur magni dolores eos qui ratione voluptatem sequi
           nesciunt.
         </p>
-        <button className="bg-primary font-semibold px-8 mt-6 py-4">
+        <button className="cta-btn">
           DISCOVER NOW
         </button>
         <img src={assets.swirl_arrow_icon} className="hidden xl:inline absolute -right-52 rotate-12 top-[40%] w-60" alt="" />

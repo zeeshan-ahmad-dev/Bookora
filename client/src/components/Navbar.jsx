@@ -21,10 +21,10 @@ const Navbar = () => {
       {/* Bigger screens */}
       {/* Links */}
       <div className="space-x-2 hidden lg:flex xl:space-x-6 text-sm text-nowrap">
-        <Link to="all-books" className="hover:text-primary transition py-8 px-2">ALL BOOKS</Link>
-        <Link to="new-arrival" className="hover:text-primary transition py-8 px-2">NEW ARRIVAL</Link>
-        <Link to="best-seller" className="hover:text-primary transition py-8 px-2">BEST SELLER</Link>
-        <Link to="editors-pick" className="hover:text-primary transition py-8 px-2">EDITORS PICK</Link>
+        <Link to="/product-category/all-books" className="hover:text-primary transition py-8 px-2">ALL BOOKS</Link>
+        <Link to="/product-category/new-arrival" className="hover:text-primary transition py-8 px-2">NEW ARRIVAL</Link>
+        <Link to="/product-category/best-seller" className="hover:text-primary transition py-8 px-2">BEST SELLER</Link>
+        <Link to="/product-category/editors-pick" className="hover:text-primary transition py-8 px-2">EDITORS PICK</Link>
         <Link to="about" className="hover:text-primary transition py-8 px-2">ABOUT</Link>
         <Link to="contact" className="hover:text-primary transition py-8 px-2">CONTACT</Link>
       </div>

@@ -3,9 +3,8 @@ import Hero from "../components/Hero";
 import assets from "../assets/assets";
 import CardContainer from "../components/CardContainer";
 import CategoryGallery from "../components/CategoryGallery";
-import CardItem from "../components/CardItem";
 import { FaTruck, FaRecycle, FaDivide, FaGift } from "react-icons/fa";
-import { Recycle, Truck } from "lucide-react";
+import SubscribeEmail from "../components/SubscribeEmail";
 
 const Home = () => {
   const discoverBooks = [
@@ -79,7 +78,7 @@ const Home = () => {
       <Hero />
 
       {/* Discover Books Section */}
-      <section className="py-8 px-8 xl:px-16 bg-light-gray">
+      <section className="py-8 px-8 xl:px-16 bg-secondary">
         <h1 className="text-3xl md:text-5xl font-noto-serif font-semibold text-center py-2 lg:mt-5">
           Discover Your New Book
         </h1>
@@ -94,7 +93,7 @@ const Home = () => {
       </section>
 
       {/* Category Section */}
-      <section className="py-8 px-0 md:px-5 bg-light-gray">
+      <section className="py-8 px-0 md:px-5 bg-secondary">
         <h1 className="text-3xl md:text-5xl font-noto-serif font-semibold text-center py-3 mb-8">
           Choose By Category
         </h1>
@@ -147,7 +146,7 @@ const Home = () => {
       </section>
 
       {/* Author of the Month */}
-      <section className="py-8 md:py-14 xl:py-24 px-10 md:px-0 xl:px-20 md:mx-0 bg-light-gray">
+      <section className="py-8 md:py-14 xl:py-24 px-10 md:px-0 xl:px-20 md:mx-0 bg-secondary">
         <h1 className="text-2xl lg:text-4xl font-noto-serif font-semibold text-center md:text-left py-12 lg:mt-5">
           Author of the Month
         </h1>
@@ -209,7 +208,7 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="py-8 md:py-14 xl:py-24 px-10 md:px-0 xl:px-20 md:mx-0 bg-light-gray">
+      <section className="py-8 md:py-14 xl:py-24 px-10 md:px-0 xl:px-20 md:mx-0 bg-secondary">
         <h1 className="text-3xl md:text-5xl font-noto-serif font-semibold text-center py-2 lg:mt-5">
           Picked By Editors
         </h1>
@@ -265,7 +264,7 @@ const Home = () => {
       </section>
 
       {/* Publisher's Section */}
-      <section className="py-16 md:py-14 xl:py-20 px-10 md:px-16 xl:px-32 md:mx-0 bg-light-gray md:flex md:items-center">
+      <section className="py-16 md:py-14 xl:py-20 px-10 md:px-16 xl:px-32 md:mx-0 bg-secondary md:flex md:items-center">
         <div className="md:px-6">
           <img src={assets.publisher_image} alt="" />
         </div>
@@ -286,20 +285,7 @@ const Home = () => {
       </section>
 
       {/* Subscribe to Email Section */}
-      <section className="py-16 md:py-20 xl:py-20 px-10 md:px-0 xl:px-24 md:mx-0 bg-hero md:flex md:items-center">
-        <div className="md:flex-[0.7] realtive">
-          <h1 className="text-[1.7rem] md:text-5xl md:text-left md:pr-40 leading-9 md:leading-14 text-center font-noto-serif font-bold mb-11">
-            Join Book Lovers Comunity and Get Latest Updates
-          </h1>
-          <div className="flex flex-col md:flex-row space-y-1 md: md:items-center gap-2 md:gap-2 w-full">
-            <input type="text" placeholder="Your Email Address" className="bg-white text-black/90 px-3 py-4 text-sm font-medium border border-gray-200 outline-none md:my-4 h-full flex-[0.6] xl:flex-[0.7]" />
-            <button className="cta-btn my-1 text-sm h-full flex-[0.2] xl:flex-[0.1">SUBSCRIBE</button>
-          </div>
-        </div>
-        <div className="mt-8 md:flex-[0.6] lg:flex-[0.4] md:relative md:px-6 lg:px-0">
-          <img src={assets.subscribe_image} className="md:w-full" alt="" />
-        </div>
-      </section>
+        <SubscribeEmail />
     </>
   );
 };

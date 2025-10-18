@@ -35,7 +35,8 @@ import book11 from "./book_covers/book-11.jpg";
 import book12 from "./book_covers/book-12.jpg";
 import publisher_image from "./items/publisher-image-400x465.png";
 import subscribe_image from "./items/subscribe-image-400x363.png";
-import cards_image from './card_images/payment-image.png'
+import cards_image from './card_images/payment-image.png';
+import about_image from './items/about-image.jpg';
 
 export default {
   footer_logo,
@@ -75,5 +76,6 @@ export default {
   book12,
   publisher_image,
   subscribe_image,
-  cards_image
+  cards_image,
+  about_image
 };

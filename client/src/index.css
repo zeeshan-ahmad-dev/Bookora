@@ -23,4 +23,10 @@ body {
     .cta-btn {
         @apply bg-primary hover:bg-primary-hover cursor-pointer transition duration-200 font-semibold px-8 mt-8 py-4;
     }
+    .about-p {
+        @apply text-sm leading-6 text-black/80;
+    }
+    .about-h1 {
+        @apply text-2xl md:text-3xl xl:text-4xl font-bold font-noto-serif;
+    }
 }

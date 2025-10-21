@@ -6,6 +6,7 @@ import NewArrival from './pages/NewArrival'
 import BestSeller from './pages/BestSeller'
 import EditorsPicks from './pages/EditorsPicks'
 import About from './pages/About'
+import Contact from './pages/Contact'
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
         <Route path="/product-category/best-seller" element={<BestSeller />} />
         <Route path="/product-category/editors-pick" element={<EditorsPicks />} />
         <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
       </Route>
     </Routes>
   )

@@ -37,6 +37,11 @@ import publisher_image from "./items/publisher-image-400x465.png";
 import subscribe_image from "./items/subscribe-image-400x363.png";
 import cards_image from './card_images/payment-image.png';
 import about_image from './items/about-image.jpg';
+import author_image1 from './authors/author-image01.jpg'
+import author_image2 from './authors/author-image02.jpg'
+import author_image3 from './authors/author-image03.jpg'
+import author_image4 from './authors/author-image04.jpg'
+import instagram_feed from './items/instagram-feed-1536x307.jpg'
 
 export default {
   footer_logo,
@@ -77,5 +82,10 @@ export default {
   publisher_image,
   subscribe_image,
   cards_image,
-  about_image
+  about_image,
+  author_image1,
+  author_image2,
+  author_image3,
+  author_image4,
+  instagram_feed
 };

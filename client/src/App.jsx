@@ -7,6 +7,7 @@ import BestSeller from './pages/BestSeller'
 import EditorsPicks from './pages/EditorsPicks'
 import About from './pages/About'
 import Contact from './pages/Contact'
+import AddBook from './pages/AddBook'
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
         <Route path="/product-category/editors-pick" element={<EditorsPicks />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/books/add" element={<AddBook />} />
       </Route>
     </Routes>
   )

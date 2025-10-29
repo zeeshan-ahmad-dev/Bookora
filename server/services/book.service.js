@@ -28,6 +28,10 @@ export const fetchBooksService = async (limit) => {
  * @returns {Promise<object>} newBook
  */
 export const addBookService = async (title, description, price, author, file) => {
+    const book = await Book.findOne({title, author});
+
+    if (book) return throwErr("Book with this title already exist", 401)
+
     return new Promise(async (resolve, reject) => {
       cloudinary.uploader
         .upload_stream({ folder: "bookora/books" }, async (error, uploadResult) => {

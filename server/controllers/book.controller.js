@@ -1,7 +1,6 @@
 import { addBookService, fetchBooksService } from "../services/book.service.js";
 
 export const fetchBooksController = async (req, res) => {
-  console.log(req.query.limit)
   const limit = req.query.limit ? parseInt(req.query.limit) : 0;
   try {
     const books = await fetchBooksService(limit);

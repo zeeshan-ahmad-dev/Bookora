@@ -5,6 +5,6 @@ import { addBookController, fetchBooksController } from '../controllers/book.con
 const bookRoutes = Router();
 
 bookRoutes.get('/', fetchBooksController);
-bookRoutes.post('/add', upload.single("cover"), addBookController);
+bookRoutes.post('/add', upload.single("coverImage"), addBookController);
 
 export default bookRoutes;

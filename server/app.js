@@ -5,6 +5,7 @@ import authRoute from "./routes/auth.route.js";
 import bookRoute from "./routes/book.route.js";
 import connectDB from "./db/config.js";
 import session from "express-session";
+import cors from 'cors';
 
 dotenv.config();
 connectDB(); // connect to database
@@ -12,6 +13,7 @@ connectDB(); // connect to database
 const app = express();
 
 app.use(express.json());
+app.use(cors({origin: ["http://localhost:5173"], credentials: true}))
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
   secret: "session-secret",

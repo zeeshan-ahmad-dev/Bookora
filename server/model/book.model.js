@@ -4,6 +4,7 @@ const bookSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
+        unique: true
     },
     description: {
         type: String,
@@ -26,7 +27,12 @@ const bookSchema = new mongoose.Schema({
     cover: {
         type: String,
         required: true
+    },
+    category: {
+        type: [String]
     }
 }, {timestamps: true});
+
+bookSchema.index({ title: 1, author: 1 }, { unique: true })
 
 export default mongoose.model("book", bookSchema);

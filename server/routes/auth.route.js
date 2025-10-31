@@ -1,9 +1,11 @@
 import express from 'express';
-import { loginController, registerUserController } from '../controllers/auth.controller.js';
+import { loginController, registerUserController, sendVerficationCodeController, verifyAccountController } from '../controllers/auth.controller.js';
 
-const cartRouter = express.Router();
+const authRouter = express.Router();
 
-cartRouter.post('/register', registerUserController)
-cartRouter.post('/login', loginController)
+authRouter.post('/register', registerUserController)
+authRouter.post('/login', loginController)
+authRouter.post('/send-verification-code', sendVerficationCodeController)
+authRouter.post('/verify-account', verifyAccountController)
 
-export default cartRouter;
+export default authRouter;

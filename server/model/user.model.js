@@ -24,7 +24,29 @@ const userSchema = new mongoose.Schema({
     isAdmin: {
         type: Boolean,
         default: false
-    }
+    },
+    profileImage: {
+        type: String,
+    },
+    authType: {
+        type: String,
+        enum: ["local", "google"],
+        default: "local"
+    },
+    isVerified: {
+        type: Boolean,
+        default: false
+    },
+    verificationCode: Number,
+    verificationCodeExpiry: {
+        type: Date,
+        default: null
+    },
+    resetPasswordCode: Number,
+    resetPasswordCodeExpiry: {
+        type: Date,
+        default: null
+    },
 }, {timestamps: true});
 
 export default mongoose.model("user", userSchema);

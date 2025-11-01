@@ -1,4 +1,4 @@
-import { registerUserService, loginService, sendVerificationCodeService, verifyAccountService, sendResetPasswordCodeService, resetPasswordService } from '../services/auth.service.js';
+import { registerUserService, loginService, sendVerificationOtpService, verifyAccountService, sendResetOtpService, verifyResetOtpService } from '../services/auth.service.js';
 
 export const registerUserController = async (req, res) => {
     const { firstName, lastName, email, password } = req.body;
@@ -26,22 +26,22 @@ export const loginController = async (req, res) => {
     }
 }
 
-export const sendVerficationCodeController = async (req, res) => {
+export const sendVerficationOtpController = async (req, res) => {
     const { userId } = req.session;
     try {
-        await sendVerificationCodeService(userId);
+        await sendVerificationOtpService(userId);
 
-        res.status(200).json({ success: true, message: "Verification code sent to your email!" });
+        res.status(200).json({ success: true, message: "Verification otp sent to your email!" });
     } catch (error) {
         res.status(error.status || 500).json({success: false, message: error.message});
     }
 }
 
 export const verifyAccountController = async (req, res) => {
-    const { verificationCode } = req.body;
+    const { verificationOtp } = req.body;
     const { userId } = req.session;
     try {
-        await verifyAccountService(userId, verificationCode);
+        await verifyAccountService(userId, verificationOtp);
 
         res.status(200).json({ success: true, message: "Your account has been verified!" });
     } catch (error) {
@@ -49,24 +49,47 @@ export const verifyAccountController = async (req, res) => {
     }
 }
 
-export const sendResetPasswordCodeController = async (req, res) => {
+export const sendResetOtpController = async (req, res) => {
     const { email } = req.body;
     try {
-        await sendResetPasswordCodeService(email);
+        await sendResetOtpService(email);
 
-        res.status(200).json({ success: true, message: "Reset Password Code sent to your email!" });
+        res.status(200).json({ success: true, message: "Reset Password otp sent to your email!" });
     } catch (error) {
         res.status(error.status || 500).json({success: false, message: error.message});
     }
 }
 
-export const resetPasswordCodeController = async (req, res) => {
-    const { verificationCode } = req.body;
+export const verifyResetOtpController = async (req, res) => {
+    const { resetOtp, email } = req.body;
+    try {
+        const token = await verifyResetOtpService(email, resetOtp);
+
+        res.status(200).json({ success: true, message: "Enter your new password!", token });
+    } catch (error) {
+        res.status(error.status || 500).json({success: false, message: error.message});
+    }
+}
+
+export const resetPasswordController = async (req, res) => {
+    const { token, newPassword } = req.body;
+    try {
+        await resetPasswordService(token, newPassword);
+
+        res.status(200).json({ success: true, message: "Password reset successfully!" });
+    } catch (error) {
+        res.status(error.status || 500).json({success: false, message: error.message});
+    }
+}
+
+export const isAuthController =  async (req, res) => {
     const { userId } = req.session;
     try {
-        await resetPasswordService(userId, verificationCode);
+        if (!req.session || !req.session.userId) return res.status(401).json({ success: false, message: "Session expired. Please log in again." })
+            
+        await isAuthService(userId);
 
-        res.status(200).json({ success: true, message: "Enter your new password!" });
+        res.status(200).json({ success: true, message: "User is logged in!" });
     } catch (error) {
         res.status(error.status || 500).json({success: false, message: error.message});
     }

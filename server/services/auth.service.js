@@ -2,6 +2,7 @@ import User from "../model/user.model.js";
 import { throwErr } from "../utils/error.utils.js";
 import { hashPassword, comparePassword } from "../utils/password.util.js";
 import transporter from "../config/nodemailer.js";
+import jwt from "jsonwebtoken";
 
 /**
  * Registers a new user to database
@@ -12,7 +13,12 @@ import transporter from "../config/nodemailer.js";
  * @returns {Promise<object>} Returns user's object
  * @throws {Error} Throws an error if failed to create user
  */
-export const registerUserService = async (firstName, lastName, email, password) => {
+export const registerUserService = async (
+  firstName,
+  lastName,
+  email,
+  password
+) => {
   try {
     const prevUser = await User.findOne({ email });
 
@@ -34,8 +40,8 @@ export const registerUserService = async (firstName, lastName, email, password) 
 };
 
 /**
- * Logs in a user 
- * 
+ * Logs in a user
+ *
  * @param {string} email The user's email address
  * @param {string} password The user's password
  * @returns {Promise<object>} Returns the user object if login is successful
@@ -59,32 +65,32 @@ export const loginService = async (email, password) => {
 };
 
 /**
- * Sends verification code to user's email
- * 
+ * Sends verification otp to user's email
+ *
  * @param {string} userId The user's id
  * @returns {Promise<{success: boolean}>} Indicates whether the operation succeeded
- * @throws {Error} Throws an error if sending fails  
+ * @throws {Error} Throws an error if sending fails
  */
-export const sendVerificationCodeController = async (userId) => {
+export const sendVerificationOtpService = async (userId) => {
   try {
     const user = await User.findById(userId);
 
     if (!user) return throwErr("User not found", 404);
 
-    const code = Math.floor(1000 + Math.random() * 9000);
+    const otp = Math.floor(1000 + Math.random() * 9000);
 
     await transporter.sendMail({
       from: `Bookora Store`,
       to: user.email,
-      subject: "Verification Code",
-      html: `<h1>Your verification code is: ${code}`
-    })
-    
-    user.verificationCode = code;
-    user.verificationCodeExpiry = Date.now() + 10 * 60 * 1000;
+      subject: "Verification Otp",
+      html: `<h1>Your verification otp is: ${otp}`,
+    });
+
+    user.verificationOtp = otp;
+    user.verificationOtpExpiry = Date.now() + 10 * 60 * 1000;
     await user.save();
 
-    return {success: true};
+    return { success: true };
   } catch (error) {
     console.error(error);
     throw error;
@@ -93,60 +99,62 @@ export const sendVerificationCodeController = async (userId) => {
 
 /**
  * Verifies a user's account
- * 
+ *
  * @param {string} userId The user's id
- * @param {number} verificationCode The code sent to the user's email
+ * @param {number} verificationOtp The otp sent to the user's email
  * @returns {Promise<{success: true}>} Indicates whether the account was verified successfully
  * @throws {Error} Throws an error if verification failed
  */
-export const verifyAccountService = async (userId, verificationCode) => {
+export const verifyAccountService = async (userId, verificationOtp) => {
   try {
     const user = await User.findById(userId);
 
     if (!user) return throwErr("User not found", 404);
 
-    if (verificationCode !== user.verificationCode) return throwErr("incorrect verification code!", 401);
-    if (Date.now() > user.verificationCodeExpiry) return throwErr("Verification code is expired!", 401);
+    if (verificationOtp !== user.verificationOtp)
+      return throwErr("incorrect OTP!", 401);
+    if (Date.now() > user.verificationOtpExpiry)
+      return throwErr("OTP is expired!", 401);
 
-    user.verificationCode = null;
-    user.verificationCodeExpiry = null;
+    user.verificationOtp = null;
+    user.verificationOtpExpiry = null;
     user.isVerified = true;
     await user.save();
 
-    return {success: true};
+    return { success: true };
   } catch (error) {
     console.log("Error during verifying email", error);
     throw error;
   }
-}
+};
 
 /**
- * Send's a reset password code to user's email
- * 
+ * Send's a reset password otp to user's email
+ *
  * @param {string} email The email of the user
- * @returns {Promise<{success: true}>} Indicates whether code was sent successfully
+ * @returns {Promise<{success: true}>} Indicates whether otp was sent successfully
  * @throws {Error} Throws an error if sending fails
  */
-export const sendResetPasswordCodeService = async (email) => {
+export const sendResetOtpService = async (email) => {
   try {
-    const user = await User.findOne({email});
+    const user = await User.findOne({ email });
 
     if (!user) return throwErr("User not found", 404);
 
-    const code = Math.floor(1000 + Math.random() * 9000);
+    const otp = Math.floor(1000 + Math.random() * 9000);
 
     await transporter.sendMail({
       from: `Bookora Store`,
       to: user.email,
-      subject: "Reset Password Code",
-      html: `<h1>Your password reset code is: ${code}`
-    })
-    
-    user.resetPasswordCode = code;
-    user.resetPasswordCodeExpiry = Date.now() + 10 * 60 * 1000;
+      subject: "Reset Password OTP",
+      html: `<h1>Your password reset otp is: ${otp}`,
+    });
+
+    user.resetPasswordOtp = otp;
+    user.resetPasswordOtpExpiry = Date.now() + 10 * 60 * 1000;
     await user.save();
 
-    return {success: true};
+    return { success: true };
   } catch (error) {
     console.error(error);
     throw error;
@@ -154,29 +162,79 @@ export const sendResetPasswordCodeService = async (email) => {
 };
 
 /**
- * Verifies the reset password code for a user
- * 
+ * Verifies the reset password otp for a user
+ *
  * @param {string} email The email id of the user
- * @param {number} resetPasswordCode The reset code sent to user's email
- * @returns {Promise<{success: boolean}>} Indicates whether reset code was verified successfully
- * @throws {Error} Throws an error if verification failed 
+ * @param {number} resetOtp The reset otp sent to user's email
+ * @returns {Promise<string>} Returns a temporary token if otp verified
+ * @throws {Error} Throws an error if verification failed
  */
-export const resetPasswordService = async (email, resetPasswordCode) => {
+export const verifyResetOtpService = async (email, resetOtp) => {
   try {
-    const user = await User.findOne({email});
+    const user = await User.findOne({ email });
 
     if (!user) return throwErr("User not found", 404);
 
-    if (resetPasswordCode !== user.resetPasswordCode) return throwErr("incorrect code!", 401);
-    if (Date.now() > user.resetPasswordCodeExpiry) return throwErr("The code is expired code is expired!", 401);
+    if (resetOtp !== user.resetPasswordOtp)
+      return throwErr("incorrect otp!", 401);
+    if (Date.now() > user.resetPasswordOtpExpiry)
+      return throwErr("The otp is expired otp is expired!", 401);
 
-    user.resetPasswordCode = null;
-    user.resetPasswordCodeExpiry = null;
+    user.resetPasswordOtp = null;
+    user.resetPasswordOtpExpiry = null;
     await user.save();
 
-    return {success: true};
+    const token = jwt.sign({ email }, process.env.JWT_SECRET, {
+      expiresIn: "10m",
+    });
+    return token;
   } catch (error) {
     console.log("Error during verifying email", error);
     throw error;
   }
-}
+};
+
+/**
+ *
+ * @param {string} token Temporaray token for verifiication
+ * @param {string} newPassword The new password for account
+ * @returns {Promise<{success: boolean>}} Indicates success if password was reset
+ * @throws {Error} Throws an error if password reset failed
+ */
+export const resetPasswordService = async (token, newPassword) => {
+  try {
+    if (newPassword.length < 6) return throwErr("Password too short", 400)
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findOne({ email: decoded.email });
+
+    if (!user) return throwErr("Invalid token", 401);
+
+    const hashedPassword = await hashPassword(newPassword);
+    user.password = hashedPassword;
+    await user.save();
+
+    return { success: true };
+  } catch (error) {
+    console.log("Token expired or invalid", error);
+    throw error;
+  }
+};
+
+/**
+ * 
+ * @param {string} userId The id of the user
+ * @returns {Promise<{success: boolean>}} Indicates if user's logged in
+ * @throws {Error} Throws an error if not logged in
+ */
+const isAuthService = async (userId) => {
+  try {
+    const user = await User.findById(userId);    
+    if (!user) throwErr("You are not logged in", 401);
+
+    return { success: true };
+  } catch (error) {
+    console.log("User not logged in", error);
+    throw error;
+  }
+} 

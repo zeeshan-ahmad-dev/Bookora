@@ -37,13 +37,13 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    verificationCode: Number,
-    verificationCodeExpiry: {
+    verificationOtp: Number,
+    verificationOtpExpiry: {
         type: Date,
         default: null
     },
-    resetPasswordCode: Number,
-    resetPasswordCodeExpiry: {
+    resetPasswordOtp: Number,
+    resetPasswordOtpExpiry: {
         type: Date,
         default: null
     },

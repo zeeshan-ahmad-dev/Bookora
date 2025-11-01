@@ -5,8 +5,8 @@ const SALT = 10;
 /**
  * Hashes a password
  * 
- * @param {string} password - Password to be hashed 
- * @returns {Promise<string>} - Hashed Password
+ * @param {string} password Password to be hashed 
+ * @returns {Promise<string>} Hashed Password
  */
 export const hashPassword = async (password) => {
     try {
@@ -21,9 +21,9 @@ export const hashPassword = async (password) => {
 /**
  * Compares plain and hashed password
  * 
- * @param {string} plainPassword - The original plain password
- * @param {string} hashedPassword - hashed Password stored in db
- * @returns {Promise<Boolean>} - True if passwords match, otherwise false
+ * @param {string} plainPassword The original plain password
+ * @param {string} hashedPassword hashed Password stored in db
+ * @returns {Promise<Boolean>} True if passwords match, otherwise false
  */
 export const comparePassword = async (plainPassword, hashedPassword) => {
     try {

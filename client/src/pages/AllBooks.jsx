@@ -1,50 +1,27 @@
-import React from "react";
-import assets from "../assets/assets";
-import BookPageLayout from "../layouts/BookPageLayout";
+import { useEffect } from "react";
+import BookPageLayout from "../layouts/BooksPageLayout.jsx";
+import { useState } from "react";
+import api from '../api.js';
+import { toast } from "react-toastify";
 
 const AllBooks = () => {
-  const books = [
-    {
-      imgUrl: assets.book9,
-      title: "This Dark Road To Mercy",
-      price: "17.15",
-    },
-    {
-      imgUrl: assets.book10,
-      title: "Into The Wild",
-      price: "14.35",
-    },
-    {
-      imgUrl: assets.book11,
-      title: "I'll Catch You",
-      price: "21.55",
-    },
-    {
-      imgUrl: assets.book12,
-      title: "Game Of Spades",
-      price: "19.25",
-    },
-    {
-      imgUrl: assets.book11,
-      title: "I'll Catch You",
-      price: "21.55",
-    },
-    {
-      imgUrl: assets.book12,
-      title: "Game Of Spades",
-      price: "19.25",
-    },
-    {
-      imgUrl: assets.book11,
-      title: "I'll Catch You",
-      price: "21.55",
-    },
-    {
-      imgUrl: assets.book12,
-      title: "Game Of Spades",
-      price: "19.25",
-    },
-  ];
+  const [books, setBooks] = useState([]);
+
+  const fetchBooks = async () => {
+    try {
+      const res = await api.get("/books?limit=5");   
+
+      setBooks(res.data.books);
+      toast.success(res.data.message)
+    } catch (error) {
+      toast.error(error.message);
+      console.log(res);
+    }
+  }
+
+  useEffect(() => {
+    fetchBooks();
+  }, []);
 
   return (
     <BookPageLayout title={"All Books"} books={books} />

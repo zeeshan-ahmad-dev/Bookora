@@ -22,7 +22,7 @@ export const registerUserService = async (
   try {
     const prevUser = await User.findOne({ email });
 
-    if (prevUser) return throwErr("User already exist with this email", 409);
+    if (prevUser) throwErr("User already exist with this email", 409);
 
     const hashedPassword = await hashPassword(password);
     const user = await User.create({
@@ -51,11 +51,11 @@ export const loginService = async (email, password) => {
   try {
     const user = await User.findOne({ email });
 
-    if (!user) return throwErr("Incorrect email or password!");
+    if (!user) throwErr("Incorrect email or password!");
 
     const isMatched = await comparePassword(password, user.password);
 
-    if (!isMatched) return throwErr("Incorrect email or password!");
+    if (!isMatched) throwErr("Incorrect email or password!");
 
     return user;
   } catch (error) {
@@ -75,7 +75,7 @@ export const sendVerificationOtpService = async (userId) => {
   try {
     const user = await User.findById(userId);
 
-    if (!user) return throwErr("User not found", 404);
+    if (!user) throwErr("User not found", 404);
 
     const otp = Math.floor(1000 + Math.random() * 9000);
 
@@ -109,7 +109,7 @@ export const verifyAccountService = async (userId, verificationOtp) => {
   try {
     const user = await User.findById(userId);
 
-    if (!user) return throwErr("User not found", 404);
+    if (!user) throwErr("User not found", 404);
 
     if (verificationOtp !== user.verificationOtp)
       return throwErr("incorrect OTP!", 401);
@@ -139,7 +139,7 @@ export const sendResetOtpService = async (email) => {
   try {
     const user = await User.findOne({ email });
 
-    if (!user) return throwErr("User not found", 404);
+    if (!user) throwErr("User not found", 404);
 
     const otp = Math.floor(1000 + Math.random() * 9000);
 
@@ -173,7 +173,7 @@ export const verifyResetOtpService = async (email, resetOtp) => {
   try {
     const user = await User.findOne({ email });
 
-    if (!user) return throwErr("User not found", 404);
+    if (!user) throwErr("User not found", 404);
 
     if (resetOtp !== user.resetPasswordOtp)
       return throwErr("incorrect otp!", 401);
@@ -203,12 +203,12 @@ export const verifyResetOtpService = async (email, resetOtp) => {
  */
 export const resetPasswordService = async (token, newPassword) => {
   try {
-    if (newPassword.length < 6) return throwErr("Password too short", 400)
+    if (newPassword.length < 6) throwErr("Password too short", 400)
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findOne({ email: decoded.email });
 
-    if (!user) return throwErr("Invalid token", 401);
+    if (!user) throwErr("Invalid token", 401);
 
     const hashedPassword = await hashPassword(newPassword);
     user.password = hashedPassword;

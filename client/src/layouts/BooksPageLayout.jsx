@@ -4,6 +4,7 @@ import CardContainer from "../components/CardContainer";
 import { Link } from "react-router-dom";
 
 const BookPageLayout = ({title, books}) => {
+
   return (
     <main className="bg-secondary">
       <section className="py-12 md:py-16 px-4 xl:px-20">

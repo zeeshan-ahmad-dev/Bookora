@@ -1,25 +1,28 @@
-import React from "react";
-import assets from "../assets/assets";
-import BookPageLayout from "../layouts/BookPageLayout";
+import BookPageLayout from "../layouts/BooksPageLayout";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
+import { useState } from "react";
+import api from "../api";
 
 const AllBooks = () => {
-  const books = [
-    {
-      imgUrl: assets.book9,
-      title: "This Dark Road To Mercy",
-      price: "17.15",
-    },
-    {
-      imgUrl: assets.book10,
-      title: "Into The Wild",
-      price: "14.35",
-    },
-    {
-      imgUrl: assets.book12,
-      title: "Game Of Spades",
-      price: "19.25",
-    },
-  ];
+  const [books, setBooks] = useState([]);
+
+  const fetchBooks = async () => {
+    try {
+      const res = await api.get("/books");   
+
+      setBooks(res.data.books);
+      toast.success(res.data.message)
+    } catch (error) {
+      toast.error(error.message);
+      console.log(res);
+    }
+  }
+
+  useEffect(() => {
+    fetchBooks();
+  }, []);
+
 
   return <BookPageLayout title={"Editors Pick"} books={books} />;
 };

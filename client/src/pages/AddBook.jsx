@@ -9,7 +9,7 @@ const AddBook = () => {
     author: "",
     price: "",
     description: "",
-    category: [],
+    categories: [],
     coverImage: "",
   });
   const fileRef = useRef();
@@ -22,7 +22,7 @@ const AddBook = () => {
     form.append("description", formData.description);
     form.append("author", formData.author);
     form.append("price", formData.price);
-    form.append("category", formData.category);
+    form.append("categories", formData.categories);
     form.append("coverImage", fileRef.current.files[0]);
 
     try {
@@ -38,7 +38,7 @@ const AddBook = () => {
   };
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === "category") {
+    if (name === "categories") {
       let categories = value.split(",");
 
       setFormData((prev) => ({
@@ -132,7 +132,7 @@ const AddBook = () => {
             <input
               type="text"
               name="category"
-              value={formData.category}
+              value={formData.categories}
               onChange={handleChange}
               className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white"
               placeholder='e.g. "Fantasy, Adventure"'

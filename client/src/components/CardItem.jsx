@@ -1,10 +1,14 @@
 import { Star, ShoppingBagIcon } from "lucide-react";
 import assets from "../assets/assets";
-import React from "react";
+import { useNavigate } from "react-router-dom";
 
-const CardItem = ({ imgUrl, title, price }) => {
+const CardItem = ({ imgUrl, title, price, id }) => {
+  const navigate = useNavigate();
+
+  console.log(id)
+  
   return (
-    <div className="cursor-pointer">
+    <div onClick={() => navigate(`/books/${id}`)} className="cursor-pointer">
       <div className="relative group">
         <span className="absolute opacity-0 invisible group-hover:opacity-100 group-hover:visible hover:bg-white transition-all right-4 top-4 bg-white/70 rounded-full p-1.5 center group/item shadow-sm">
           <span className="opacity-0 invisible group-hover/item:opacity-100 group-hover/item:visible bg-black absolute right-10 text-xs px-2 rounded-sm py-2 text-white w-max after:content-[''] after:absolute after:size-3 after:bg-black after:top-2.5 after:rotate-45">Add to cart</span>

@@ -9,42 +9,42 @@ import SubscribeEmail from "../components/SubscribeEmail";
 const Home = () => {
   const discoverBooks = [
     {
-      imgUrl: assets.book1,
+      cover: assets.book1,
       title: "The Born of APLEX",
       price: "19.25",
     },
     {
-      imgUrl: assets.book2,
+      cover: assets.book2,
       title: "Mists of Algorab",
       price: "14.79",
     },
     {
-      imgUrl: assets.book3,
+      cover: assets.book3,
       title: "Now You See Me",
       price: "22.10",
     },
     {
-      imgUrl: assets.book4,
+      cover: assets.book4,
       title: "Liar of Dreams",
       price: "9.50",
     },
     {
-      imgUrl: assets.book5,
+      cover: assets.book5,
       title: "Feugiat Maecenas",
       price: "17.35",
     },
     {
-      imgUrl: assets.book6,
+      cover: assets.book6,
       title: "2024 Sanctuary",
       price: "12.89",
     },
     {
-      imgUrl: assets.book7,
+      cover: assets.book7,
       title: "Ark Forging",
       price: "27.45",
     },
     {
-      imgUrl: assets.book8,
+      cover: assets.book8,
       title: "Cyber Angel",
       price: "8.99",
     },
@@ -52,22 +52,22 @@ const Home = () => {
 
   const editorBooks = [
     {
-      imgUrl: assets.book9,
+      cover: assets.book9,
       title: "This Dark Road To Mercy",
       price: "17.15",
     },
     {
-      imgUrl: assets.book10,
+      cover: assets.book10,
       title: "Into The Wild",
       price: "14.35",
     },
     {
-      imgUrl: assets.book11,
+      cover: assets.book11,
       title: "I'll Catch You",
       price: "21.55",
     },
     {
-      imgUrl: assets.book12,
+      cover: assets.book12,
       title: "Game Of Spades",
       price: "19.25",
     },
@@ -174,24 +174,24 @@ const Home = () => {
             <div className="grid grid-cols-1 md:grid-cols-1 md:grid-rows-3 gap-4 text-left">
               {[
                 {
-                  imgUrl: assets.small_book_1,
+                  cover: assets.small_book_1,
                   title: "Cyber Angel",
                   price: [20, 22],
                 },
                 {
-                  imgUrl: assets.small_book_2,
+                  cover: assets.small_book_2,
                   title: "Ark Forging",
                   price: [17, 23],
                 },
                 {
-                  imgUrl: assets.small_book_3,
+                  cover: assets.small_book_3,
                   title: "Now You See Mee",
                   price: [16, 18],
                 },
               ].map((book, index) => (
                 <div key={index} class="md:flex items-center md:gap-4">
                   <div className="relative">
-                    <img src={book.imgUrl} alt="" />
+                    <img src={book.cover} alt="" />
                   </div>
                   <div className="py-2 md:space-y-2">
                     <h6 className="text-sm md:text-2xl font-noto-serif font-bold">

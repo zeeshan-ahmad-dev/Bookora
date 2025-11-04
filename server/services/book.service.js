@@ -17,17 +17,34 @@ export const fetchBooksService = async (limit) => {
 }
 
 /**
+ * @param {string} id The book id
+ * @throws throws error if book not found
+ * @returns {Promise<object>} A promise that resolves to an object of book
+ */
+export const fetchBookByIdService = async (id) => {
+    console.log("ID: ", id)
+    try {
+        const book = await Book.findById(id);
+        if (!book) throwErr("No book found", 404);
+
+        return book;
+    } catch (error) {
+        throwErr("Error fetching book", 500);
+    }
+}
+
+/**
  * Store book cover in cloudinary and add book to database
  *
  * @param {string} title Title of the book
  * @param {string} description books's description
  * @param {number} price Book's price
  * @param {string} author Book's author
+ * @param {object} categories A list of cateogries related to book
  * @param {object} file file object containing buffer of the book's cover
- *
  * @returns {Promise<object>} newBook
  */
-export const addBookService = async (title, description, price, author, file) => {
+export const addBookService = async (title, description, price, author, categories, file) => {
     const book = await Book.findOne({title, author});
 
     if (book) return throwErr("Book with this title already exist", 401)
@@ -39,7 +56,7 @@ export const addBookService = async (title, description, price, author, file) =>
 
           try {
             const coverUrl = uploadResult.secure_url;
-            const newBook = await Book.create({ title, description, price, author, cover: coverUrl });
+            const newBook = await Book.create({ title, description, price, author, categories, cover: coverUrl });
             
             return resolve(newBook);
         } catch (error) {

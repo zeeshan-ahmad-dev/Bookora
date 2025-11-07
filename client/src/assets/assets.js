@@ -42,6 +42,7 @@ import author_image2 from './authors/author-image02.jpg'
 import author_image3 from './authors/author-image03.jpg'
 import author_image4 from './authors/author-image04.jpg'
 import instagram_feed from './items/instagram-feed-1536x307.jpg'
+import remove_icon from './remove_icon.svg'
 
 export default {
   footer_logo,
@@ -87,5 +88,6 @@ export default {
   author_image2,
   author_image3,
   author_image4,
-  instagram_feed
+  instagram_feed,
+  remove_icon
 };

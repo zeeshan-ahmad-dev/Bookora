@@ -189,7 +189,7 @@ const Home = () => {
                   price: [16, 18],
                 },
               ].map((book, index) => (
-                <div key={index} class="md:flex items-center md:gap-4">
+                <div key={index} className="md:flex items-center md:gap-4">
                   <div className="relative">
                     <img src={book.cover} alt="" />
                   </div>

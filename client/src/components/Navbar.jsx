@@ -102,7 +102,7 @@ const Navbar = () => {
             {cart.length > 0 && (
               <div className="px-5 max-h-44 overflow-y-scroll mb-2">
                 {cart.map((book, index) => (
-                  <div
+                  <div key={index}
                     className={`flex gap-2 items-start py-2 border-black/10 ${
                       cart.length - 1 === index ? "border-none" : "border-b"
                     }`}
@@ -131,9 +131,9 @@ const Navbar = () => {
 
             {cart.length > 0 && (
               <div className="px-5 gap-1.5 my-3 flex flex-col">
-                <button className="border text-nowrap border-primary text-primary px-10 py-4 font-bold cursor-pointer">
+                <Link to="/cart" className="border text-nowrap border-primary text-primary px-10 py-4 font-bold cursor-pointer">
                   View cart
-                </button>
+                </Link>
                 <button className="border-none text-nowrap bg-primary text-black px-10 py-4 font-bold cursor-pointer">
                   Checkout
                 </button>

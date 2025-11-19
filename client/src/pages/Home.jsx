@@ -1,54 +1,30 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import Hero from "../components/Hero";
 import assets from "../assets/assets";
 import CardContainer from "../components/CardContainer";
 import CategoryGallery from "../components/CategoryGallery";
 import { FaTruck, FaRecycle, FaDivide, FaGift } from "react-icons/fa";
 import SubscribeEmail from "../components/SubscribeEmail";
+import { toast } from "react-toastify";
+import api from "../api";
 
 const Home = () => {
-  const discoverBooks = [
-    {
-      cover: assets.book1,
-      title: "The Born of APLEX",
-      price: "19.25",
-    },
-    {
-      cover: assets.book2,
-      title: "Mists of Algorab",
-      price: "14.79",
-    },
-    {
-      cover: assets.book3,
-      title: "Now You See Me",
-      price: "22.10",
-    },
-    {
-      cover: assets.book4,
-      title: "Liar of Dreams",
-      price: "9.50",
-    },
-    {
-      cover: assets.book5,
-      title: "Feugiat Maecenas",
-      price: "17.35",
-    },
-    {
-      cover: assets.book6,
-      title: "2024 Sanctuary",
-      price: "12.89",
-    },
-    {
-      cover: assets.book7,
-      title: "Ark Forging",
-      price: "27.45",
-    },
-    {
-      cover: assets.book8,
-      title: "Cyber Angel",
-      price: "8.99",
-    },
-  ];
+  const [discoverBooks, setDiscoverBooks] = useState([]);
+  
+    const fetchBooks = async () => {
+      try {
+        const res = await api.get("/books?limit=8");   
+  
+        setDiscoverBooks(res.data.books);
+        toast.success(res.data.message)
+      } catch (error) {
+        toast.error(error.message);
+      }
+    }
+  
+    useEffect(() => {
+      fetchBooks();
+    }, []);
 
   const editorBooks = [
     {

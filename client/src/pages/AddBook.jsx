@@ -131,7 +131,7 @@ const AddBook = () => {
             </label>
             <input
               type="text"
-              name="category"
+              name="categories"
               value={formData.categories}
               onChange={handleChange}
               className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white"

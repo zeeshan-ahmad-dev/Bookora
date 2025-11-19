@@ -5,7 +5,7 @@ import Hamburger from "hamburger-react";
 import { CartContext } from "../context/CartContext";
 
 const Navbar = () => {
-  const { cart, subtotal } = useContext(CartContext);
+  const { cart, subtotal, removeBookFromCart } = useContext(CartContext);
   const [isOpen, setIsOpen] = useState(false);
 
   const location = useLocation();
@@ -111,10 +111,10 @@ const Navbar = () => {
                       <img className="size-14" src={book.cover} alt="" />
                     </div>
                     <div className="flex-1 space-y-1 text-left">
-                      <h6 className="text-sm">2024 Sanctuary</h6>
-                      <p className="text-xs">1 x ${book.price}</p>
+                      <h6 className="text-sm">{book.title}</h6>
+                      <p className="text-xs">{book.quantity} x ${book.price}</p>
                     </div>
-                    <button className="rounded-full border p-0.5 opacity-50 cursor-pointer">
+                    <button onClick={(e) => removeBookFromCart} className="rounded-full border p-0.5 opacity-50 cursor-pointer">
                       <img className="w-3.5" src={assets.remove_icon} alt="" />
                     </button>
                   </div>
@@ -142,9 +142,9 @@ const Navbar = () => {
             {cart.length === 0 && (
               <div className="px-5">
                 <p className="my-2 font-light">No products in the cart.</p>
-                <button className="border mb-4 mt-2 text-nowrap border-primary text-primary px-10 py-4 font-bold cursor-pointer">
+                <Link to="/product-category/all-books" className="border inline-block mb-4 mt-2 text-nowrap border-primary text-primary px-10 py-4 font-bold cursor-pointer">
                   Continue Shopping
-                </button>
+                </Link>
               </div>
             )}
           </div>

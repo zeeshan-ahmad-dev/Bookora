@@ -7,13 +7,13 @@ export const CartContextProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const [subtotal, setSubtotal] = useState(0);
 
-  const addBookToCart = async (bookId) => {
+  const addBookToCart = async (bookId, quantity = 1) => {
     try {
       if (cart.some((book) => book.id === bookId)) return;
       const res = await api.get(`/books/${bookId}`);
 
       setCart((prev) => {
-        const newCart = [...prev, { ...res.data.book, quantity: 1 }];
+        const newCart = [...prev, { ...res.data.book, quantity: quantity }];
         localStorage.setItem("cart", JSON.stringify(newCart));
         return newCart;
       });
@@ -49,7 +49,7 @@ export const CartContextProvider = ({ children }) => {
     const savedCart = JSON.parse(localStorage.getItem("cart")) || [];
     setCart(savedCart);
   }, []);
-  
+
   useEffect(() => {
     const total = cart.reduce((sum, book) => sum + book.price, 0);
     setSubtotal(total?.toFixed(2));
@@ -62,7 +62,7 @@ export const CartContextProvider = ({ children }) => {
     addBookToCart,
     removeBookFromCart,
     changeQuantity,
-    setUpdatedCart
+    setUpdatedCart,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

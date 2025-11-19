@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../api";
 import CardContainer from "../components/CardContainer";
 import SubscribeEmail from "../components/SubscribeEmail";
+import { CartContext } from "../context/CartContext";
 
 const ProductDetailPage = () => {
+  const { addBookToCart, cart, changeQuantity } = useContext(CartContext);
+
   const { id } = useParams();
 
   const [book, setBook] = useState({});
@@ -15,7 +18,6 @@ const ProductDetailPage = () => {
   const fetchBook = async () => {
     try {
       const res = await api.get(`/books/${id}`);
-      console.log(res);
       if (res.data.book) {
         setBook(res.data.book);
       }
@@ -23,6 +25,17 @@ const ProductDetailPage = () => {
       console.error(error);
       toast.error(error.message);
     }
+  };
+
+  const handleAddToCart = (e) => {
+    e.stopPropagation();
+
+    if (cart.some((book) => book._id === id)) { 
+      console.log(quantity)
+      return changeQuantity(id, quantity);
+    }
+
+    addBookToCart(id, quantity);
   };
 
   const fetchRelatedBooks = async () => {
@@ -75,7 +88,7 @@ const ProductDetailPage = () => {
                 onChange={handleChange}
                 value={quantity}
               />
-              <button className="bg-primary hover:bg-primary-hover cursor-pointer px-4 py-2 font-bold">
+              <button onClick={handleAddToCart} className="bg-primary hover:bg-primary-hover cursor-pointer px-4 py-2 font-bold">
                 Add to cart
               </button>
             </div>
@@ -101,7 +114,9 @@ const ProductDetailPage = () => {
           </div>
 
           {/* Description */}
-          <div className="text-sm lg:text-base text-black/80 md:mt-4">{book.description}</div>
+          <div className="text-sm lg:text-base text-black/80 md:mt-4">
+            {book.description}
+          </div>
         </div>
       </section>
       <section className="px-4 xl:px-20 py-14">

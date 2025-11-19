@@ -12,6 +12,7 @@ import ProductDetailPage from "./pages/ProductDetailPage";
 import { ToastContainer } from "react-toastify";
 import { CartContextProvider } from "./context/CartContext";
 import CartPage from "./pages/CartPage";
+import Login from "./pages/Login";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
       <CartContextProvider>
         <ToastContainer />
         <Routes>
+          <Route path="/login" element={<Login />}/>
           <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/product-category/all-books" element={<AllBooks />} />

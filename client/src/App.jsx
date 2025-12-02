@@ -13,6 +13,7 @@ import { ToastContainer } from "react-toastify";
 import { CartContextProvider } from "./context/CartContext";
 import CartPage from "./pages/CartPage";
 import Login from "./pages/Login";
+import EmailVerify from "./pages/EmailVerify";
 
 function App() {
   return (
@@ -21,21 +22,13 @@ function App() {
         <ToastContainer />
         <Routes>
           <Route path="/login" element={<Login />}/>
+          <Route path="/verify-email" element={<EmailVerify />} />
           <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/product-category/all-books" element={<AllBooks />} />
-            <Route
-              path="/product-category/new-arrival/"
-              element={<NewArrival />}
-            />
-            <Route
-              path="/product-category/best-seller"
-              element={<BestSeller />}
-            />
-            <Route
-              path="/product-category/editors-pick"
-              element={<EditorsPicks />}
-            />
+            <Route path="/product-category/new-arrival/" element={<NewArrival />} />
+            <Route path="/product-category/best-seller" element={<BestSeller />} />
+            <Route path="/product-category/editors-pick" element={<EditorsPicks />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/cart" element={<CartPage />} />

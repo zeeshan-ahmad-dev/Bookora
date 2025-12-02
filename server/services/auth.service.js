@@ -57,7 +57,17 @@ export const loginService = async (email, password) => {
 
     if (!isMatched) throwErr("Incorrect email or password!");
 
-    return user;
+    const safeUser = {
+      _id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      isVerified: user.isVerified,
+      authType: user.authType,
+    };
+
+    return safeUser;
   } catch (error) {
     console.error(error);
     throw error;
@@ -77,7 +87,7 @@ export const sendVerificationOtpService = async (userId) => {
 
     if (!user) throwErr("User not found", 404);
 
-    const otp = Math.floor(1000 + Math.random() * 9000);
+    const otp = Math.floor(100000 + Math.random() * 900000);
 
     await transporter.sendMail({
       from: `Bookora Store`,
@@ -106,12 +116,13 @@ export const sendVerificationOtpService = async (userId) => {
  * @throws {Error} Throws an error if verification failed
  */
 export const verifyAccountService = async (userId, verificationOtp) => {
+  console.log(verificationOtp);
   try {
     const user = await User.findById(userId);
 
     if (!user) throwErr("User not found", 404);
 
-    if (verificationOtp !== user.verificationOtp)
+    if (verificationOtp !== String(user.verificationOtp))
       return throwErr("incorrect OTP!", 401);
     if (Date.now() > user.verificationOtpExpiry)
       return throwErr("OTP is expired!", 401);
@@ -203,7 +214,7 @@ export const verifyResetOtpService = async (email, resetOtp) => {
  */
 export const resetPasswordService = async (token, newPassword) => {
   try {
-    if (newPassword.length < 6) throwErr("Password too short", 400)
+    if (newPassword.length < 6) throwErr("Password too short", 400);
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findOne({ email: decoded.email });
@@ -222,14 +233,14 @@ export const resetPasswordService = async (token, newPassword) => {
 };
 
 /**
- * 
+ *
  * @param {string} userId The id of the user
  * @returns {Promise<{success: boolean>}} Indicates if user's logged in
  * @throws {Error} Throws an error if not logged in
  */
 const isAuthService = async (userId) => {
   try {
-    const user = await User.findById(userId);    
+    const user = await User.findById(userId);
     if (!user) throwErr("You are not logged in", 401);
 
     return { success: true };
@@ -237,4 +248,4 @@ const isAuthService = async (userId) => {
     console.log("User not logged in", error);
     throw error;
   }
-} 
+};

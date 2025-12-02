@@ -14,13 +14,13 @@ const app = express();
 
 app.use(express.json());
 app.use(cors({origin: ["http://localhost:5173"], credentials: true}))
-app.use(express.urlencoded({ extended: true }));
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax", maxAge: 1000 * 60 * 60 * 24 }
 }));
+app.use(express.urlencoded({ extended: true }));
 
 const PORT = process.env.PORT;
 

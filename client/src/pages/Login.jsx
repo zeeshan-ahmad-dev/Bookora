@@ -6,12 +6,18 @@ import VerifyOtpModal from "../components/login/VerifyOtpModal.jsx";
 import { toast } from "react-toastify";
 import LoaderOverlay from "../components/LoaderOverlay.jsx";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../context/UserContext.jsx";
+import { CartContext } from "../context/CartContext.jsx";
 
 function Login() {
   const navigate = useNavigate();
   const [isOn, setIsOn] = useState(true);
   const [showOtpModal, setShowOtpModal] = useState(false);
   const [lgShowRegister, setLgShowRegister] = useState(true);
+
+  const { registerUser } = useContext(UserContext);
+  const { initializeCart } = useContext(CartContext);
 
   const {
     register,
@@ -26,6 +32,7 @@ function Login() {
       if (res.data.success) {
         await api.post("/auth/send-verify-otp");
         setShowOtpModal(true);
+        registerUser(res.data.user);
       }
       console.log(res.data);
     } catch (error) {
@@ -42,9 +49,10 @@ function Login() {
   const onSubmitLogin = async (data) => {
     try {
       const res = await api.post("/auth/login", data);
+      registerUser(res.data.user);
+      await initializeCart();
 
       navigate('/');
-      console.log(res.data);
     } catch (error) {
       toast.error(error.message);
     }

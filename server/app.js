@@ -6,6 +6,7 @@ import bookRoute from "./routes/book.route.js";
 import connectDB from "./db/config.js";
 import session from "express-session";
 import cors from 'cors';
+import mongoStore from 'connect-mongo';
 
 dotenv.config();
 connectDB(); // connect to database
@@ -18,6 +19,10 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
+  store: mongoStore.create({ // study this 
+    mongoUrl: process.env.DB_URI,
+    collectionName: "sessions",
+  }),
   cookie: { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax", maxAge: 1000 * 60 * 60 * 24 }
 }));
 app.use(express.urlencoded({ extended: true }));
@@ -30,5 +35,6 @@ app.get("/", (req, res) => {
 
 app.use("/auth", authRoute);
 app.use("/books", bookRoute);
+app.use("/cart", cartRoute);
 
 app.listen(PORT, () => console.log(`Server running on port: ${PORT}`));

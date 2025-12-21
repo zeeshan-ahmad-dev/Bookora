@@ -126,6 +126,18 @@ export const resetPasswordController = async (req, res) => {
   }
 };
 
+export const logoutController = async (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({ message: "Logout failed" });
+    }
+
+    res.clearCookie("connect.sid");
+    return res.status(200).json({ message: "Logged out successfully" });
+  });
+};
+
 export const isAuthController = async (req, res) => {
   const { userId } = req.session;
   try {

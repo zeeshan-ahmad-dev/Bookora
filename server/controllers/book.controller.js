@@ -5,7 +5,7 @@ from "../services/book.service.js";
 export const fetchBooksController = async (req, res) => {
 	const limit = req.query.limit ? parseInt (req.query.limit): 0;
 	try {
-		const books = await fetchBooksService (limit);
+		const books = await fetchBooksService(limit);
 		res.status (200).json ({
 			success: true, message:"Books fetched successfully!", books
 		});
@@ -18,12 +18,9 @@ export const fetchBooksController = async (req, res) => {
 	}
 } 
 export const fetchBookByIdController = async (req, res) => {
-	const {
-		id
-	} 
-	= req.params;
+	const { id } = req.params;
 	try {
-		const book = await fetchBookByIdService (id);
+		const book = await fetchBookByIdService(id);
 		res.status (200).json ({
 			success: true, message:"Book fetched successfully!", book
 		});

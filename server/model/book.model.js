@@ -35,4 +35,4 @@ const bookSchema = new mongoose.Schema({
 
 bookSchema.index({ title: 1, author: 1 }, { unique: true })
 
-export default mongoose.model("book", bookSchema);
+export default mongoose.model("Book", bookSchema);

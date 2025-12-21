@@ -29,12 +29,7 @@ const ProductDetailPage = () => {
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
-
-    if (cart.some((book) => book._id === id)) { 
-      console.log(quantity)
-      return changeQuantity(id, quantity);
-    }
-
+    
     addBookToCart(id, quantity);
   };
 

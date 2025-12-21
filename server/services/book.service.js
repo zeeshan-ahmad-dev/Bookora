@@ -22,7 +22,6 @@ export const fetchBooksService = async (limit) => {
  * @returns {Promise<object>} A promise that resolves to an object of book
  */
 export const fetchBookByIdService = async (id) => {
-    console.log("ID: ", id)
     try {
         const book = await Book.findById(id);
         if (!book) throwErr("No book found", 404);

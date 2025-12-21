@@ -3,13 +3,32 @@ import { Link, useLocation } from "react-router-dom";
 import assets from "../assets/assets.js";
 import Hamburger from "hamburger-react";
 import { CartContext } from "../context/CartContext";
+import { UserContext } from "../context/UserContext.jsx";
+import api from "../api.js";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const { cart, subtotal, removeBookFromCart } = useContext(CartContext);
+  const { isLoggedIn, logoutUser, user } = useContext(UserContext);
+
   const [isOpen, setIsOpen] = useState(false);
 
   const location = useLocation();
   const pathName = location.pathname;
+  const navigate = useNavigate();
+
+  const logout = async () => {
+    try {
+      await api.post("/auth/logout");
+
+      navigate("/login");
+      logoutUser();
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
+  };
 
   return (
     <nav className="px-2 relative flex justify-between items-center xl:px-16">
@@ -92,19 +111,20 @@ const Navbar = () => {
         <div className="relative group">
           <Link className="border-2 group-hover relative p-2 block">
             <span className="absolute size-4 bg-black rounded-full text-sm font-semibold text-white center -right-1 -top-1">
-              {cart.length}
+              {cart?.length}
             </span>
             <img className="size-5" src={assets.cart_icon} alt="" />
           </Link>
 
           {/* Drop down */}
           <div className="absolute bg-white top-full right-0 w-fit pt-3 text-sm border border-black/15 text-center before:content-[''] before:size-2.5 before:absolute before:-top-1.5 before:right-2 before:rotate-45 before:bg-white before:border-t before:border-l before:border-black/15 invisible opacity-0 group-hover:opacity-100 group-hover:visible transition-all duration-500 z-50 min-w-68">
-            {cart.length > 0 && (
+            {cart?.length > 0 && (
               <div className="px-5 max-h-44 overflow-y-scroll mb-2">
-                {cart.map((book, index) => (
-                  <div key={index}
+                {cart?.map((book, index) => (
+                  <div
+                    key={index}
                     className={`flex gap-2 items-start py-2 border-black/10 ${
-                      cart.length - 1 === index ? "border-none" : "border-b"
+                      cart?.length - 1 === index ? "border-none" : "border-b"
                     }`}
                   >
                     <div>
@@ -112,9 +132,14 @@ const Navbar = () => {
                     </div>
                     <div className="flex-1 space-y-1 text-left">
                       <h6 className="text-sm">{book.title}</h6>
-                      <p className="text-xs">{book.quantity} x ${book.price}</p>
+                      <p className="text-xs">
+                        {book.quantity} x ${book.price}
+                      </p>
                     </div>
-                    <button onClick={(e) => removeBookFromCart} className="rounded-full border p-0.5 opacity-50 cursor-pointer">
+                    <button
+                      onClick={(e) => removeBookFromCart(book._id)}
+                      className="rounded-full border p-0.5 opacity-50 cursor-pointer"
+                    >
                       <img className="w-3.5" src={assets.remove_icon} alt="" />
                     </button>
                   </div>
@@ -122,16 +147,19 @@ const Navbar = () => {
               </div>
             )}
 
-            {cart.length > 0 && (
+            {cart?.length > 0 && (
               <div className="border-t border-b border-black/15 py-3 px-5 flex justify-between">
                 <p>Subtotal: </p>
                 <p className="text-sm text-black/70">${subtotal}</p>
               </div>
             )}
 
-            {cart.length > 0 && (
+            {cart?.length > 0 && (
               <div className="px-5 gap-1.5 my-3 flex flex-col">
-                <Link to="/cart" className="border text-nowrap border-primary text-primary px-10 py-4 font-bold cursor-pointer">
+                <Link
+                  to="/cart"
+                  className="border text-nowrap border-primary text-primary px-10 py-4 font-bold cursor-pointer"
+                >
                   View cart
                 </Link>
                 <button className="border-none text-nowrap bg-primary text-black px-10 py-4 font-bold cursor-pointer">
@@ -139,10 +167,13 @@ const Navbar = () => {
                 </button>
               </div>
             )}
-            {cart.length === 0 && (
+            {cart?.length === 0 && (
               <div className="px-5">
                 <p className="my-2 font-light">No products in the cart.</p>
-                <Link to="/product-category/all-books" className="border inline-block mb-4 mt-2 text-nowrap border-primary text-primary px-10 py-4 font-bold cursor-pointer">
+                <Link
+                  to="/product-category/all-books"
+                  className="border inline-block mb-4 mt-2 text-nowrap border-primary text-primary px-10 py-4 font-bold cursor-pointer"
+                >
                   Continue Shopping
                 </Link>
               </div>
@@ -151,9 +182,69 @@ const Navbar = () => {
         </div>
 
         {/* Account Icon */}
-        <Link className="p-2">
-          <img className="size-5" src={assets.account_icon} alt="" />
-        </Link>
+        <div className="relative group">
+          <Link className="border-2 group-hover relative p-2 block">
+            <img className="size-5" src={assets.account_icon} alt="account" />
+          </Link>
+
+          {/* Dropdown */}
+          <div
+            className="absolute bg-white top-full right-0 w-fit pt-3 text-sm border border-black/15 text-center
+            before:content-[''] before:size-2.5 before:absolute before:-top-1.5 before:right-2 before:rotate-45 
+            before:bg-white before:border-t before:border-l before:border-black/15
+            invisible opacity-0 group-hover:opacity-100 group-hover:visible transition-all duration-500 z-50 min-w-68"
+          >
+            {/* If NOT logged in */}
+            {!isLoggedIn && (
+              <div className="px-5 py-3 flex flex-col gap-2">
+                <Link
+                  to="/login"
+                  className="border text-nowrap border-primary text-primary px-10 py-3 font-bold cursor-pointer"
+                >
+                  Login
+                </Link>
+
+                <Link
+                  to="/login"
+                  className="bg-primary text-nowrap text-black px-10 py-3 font-bold cursor-pointer"
+                >
+                  Register
+                </Link>
+              </div>
+            )}
+
+            {/* Logged in UI */}
+            {isLoggedIn && (
+              <div className="px-5 text-left mb-3">
+                <p className="font-semibold mb-1">Hello, {user?.firstName}</p>
+                <p className="text-xs text-black/60 mb-3">Account Menu</p>
+
+                {/* Menu links */}
+                <div className="flex flex-col gap-1.5">
+                  {!user?.isVerified && (
+                    <button className="border border-primary text-primary px-10 py-3 font-bold text-center text-nowrap">
+                      Orders
+                    </button>
+                  )}
+
+                  <Link
+                    to="#"
+                    className="border border-primary text-primary px-10 py-3 font-bold text-center text-nowrap"
+                  >
+                    Orders
+                  </Link>
+
+                  <button
+                    onClick={logout}
+                    className="bg-primary text-black px-10 py-3 font-bold text-center text-nowrap cursor-pointer"
+                  >
+                    Logout
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
       {/* Menu */}

@@ -1,10 +1,11 @@
 import express from 'express';
-import { loginController, registerUserController, resetPasswordController, sendResetOtpController, sendVerficationOtpController, verifyAccountController, verifyResetOtpController, isAuthController } from '../controllers/auth.controller.js';
+import { loginController, logoutController, registerUserController, resetPasswordController, sendResetOtpController, sendVerficationOtpController, verifyAccountController, verifyResetOtpController, isAuthController } from '../controllers/auth.controller.js';
 
 const authRouter = express.Router();
 
 authRouter.post('/register', registerUserController)
 authRouter.post('/login', loginController)
+authRouter.post('/logout', logoutController)
 authRouter.post('/send-verify-otp', sendVerficationOtpController)
 authRouter.post('/verify-account', verifyAccountController)
 authRouter.get('/is-auth', isAuthController)

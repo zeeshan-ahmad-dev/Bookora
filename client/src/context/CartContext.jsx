@@ -9,13 +9,8 @@ export const CartContextProvider = ({ children }) => {
 
   const addBookToCart = async (bookId, quantity = 1) => {
     try {
-      // todo: Remove fetching here and pass only bookId into cart request and pass price everything there
-      const res = await api.get(`/books/${bookId}`);
-      const book = res.data.book;
-
       const cartRes = await api.post("/cart/add-book", {
         bookId,
-        price: book.price,
         quantity,
       });
 
@@ -33,7 +28,9 @@ export const CartContextProvider = ({ children }) => {
       });
 
       setCart(data.cart);
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const changeQuantity = async (bookId, quantity) => {
@@ -45,15 +42,23 @@ export const CartContextProvider = ({ children }) => {
     localStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
-  // todo: Use proper updated cart logic with backend
   const setUpdatedCart = async (updatedCart) => {
-    
-    setCart(updatedCart);
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    try {
+      const { data } = await api.post("/cart/update-cart", {
+        updatedCart
+      });
+
+      setCart(data.cart);
+      localStorage.setItem("cart", JSON.stringify(data.cart));
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const initializeCart = async () => {
     const { data } = await api.get("/cart");
+
+    if (!data.cart) data.cart = [];
     
     setCart(data.cart);
     localStorage.setItem("cart", JSON.stringify(data.cart));

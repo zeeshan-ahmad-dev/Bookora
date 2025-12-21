@@ -11,6 +11,18 @@ body {
     --color-hero: #FAE8CD;
     --color-secondary: #F8F8F8;
     --font-noto-serif: "Noto Serif", serif;
+    --animate-dotPing: dotPing .5s ease-in infinite;
+
+    @keyframes dotPing {
+        0% {
+            transform: scale(0.2);
+            opacity: 0;
+        } 
+        100% {
+            transform: scale(1.2);
+            opacity: 1;
+        }
+    }
 }
 
 @layer components {

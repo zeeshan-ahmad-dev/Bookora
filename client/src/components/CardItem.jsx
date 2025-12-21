@@ -6,11 +6,13 @@ import { CartContext } from "../context/CartContext";
 
 const CardItem = ({ imgUrl, title, price, id }) => {
   const navigate = useNavigate();
-  const { addBookToCart, removeBookFromCart, cart } = useContext(CartContext);
+  const { addBookToCart, removeBookFromCart, cart, updatingIds } =
+    useContext(CartContext);
 
   const handleAddToCartToggle = (e) => {
-    e.stopPropagation(); // stop it here
+    e.stopPropagation();
 
+    // If book found remove it
     if (cart?.some((book) => book._id === id)) {
       return removeBookFromCart(id);
     }
@@ -38,7 +40,11 @@ const CardItem = ({ imgUrl, title, price, id }) => {
               ? "Remove from cart"
               : "Add to cart"}
           </span>
-          <img src={assets.shopping_bag_icon} className="w-4" />
+          {updatingIds.has(id) ? (
+            <div className="size-4 animate-dotPing bg-black rounded-full"></div>
+          ) : (
+            <img src={assets.shopping_bag_icon} className="w-4" />
+          )}
           {/* <ShoppingCartPlus className="w-4" /> */}
         </span>
         <img

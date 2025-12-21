@@ -6,9 +6,12 @@ export const CartContext = createContext();
 export const CartContextProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const [subtotal, setSubtotal] = useState(0);
+  const [updatingIds, setUpdatingIds] = useState(new Set());
 
   const addBookToCart = async (bookId, quantity = 1) => {
     try {
+      setUpdatingIds((prev) => new Set(prev).add(bookId));
+
       const cartRes = await api.post("/cart/add-book", {
         bookId,
         quantity,
@@ -18,11 +21,24 @@ export const CartContextProvider = ({ children }) => {
       localStorage.setItem("cart", JSON.stringify(cartRes.data.cart));
     } catch (error) {
       console.error(error);
+    } finally {
+      setUpdatingIds((prev) => {
+        let s = new Set(prev);
+        s.delete(bookId);
+        return s;
+      })
     }
   };
 
   const removeBookFromCart = async (bookId) => {
     try {
+      setUpdatingIds((prev) => new Set(prev).add(bookId));
+
+      setCart((prev) => {
+        let updatedCart = prev.filter(book => book._id !== bookId);
+        return updatedCart;
+      });
+
       const { data } = await api.post("/cart/remove-book", {
         bookId,
       });
@@ -30,6 +46,12 @@ export const CartContextProvider = ({ children }) => {
       setCart(data.cart);
     } catch (error) {
       console.error(error);
+    } finally {
+      setUpdatingIds((prev) => {
+        let s = new Set(prev);
+        s.delete(bookId);
+        return s;
+      })
     }
   };
 
@@ -83,7 +105,9 @@ export const CartContextProvider = ({ children }) => {
     removeBookFromCart,
     changeQuantity,
     setUpdatedCart,
-    initializeCart
+    initializeCart,
+    updatingIds,
+    setUpdatingIds
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

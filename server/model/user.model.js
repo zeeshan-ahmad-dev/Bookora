@@ -1,15 +1,10 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-    firstName: {
+    name: {
         type: String,
-        required: true,
-        trim: true
-    },
-    lastName: {
-        type: String,
-        default: '',
-        trim: true
+        trim: true,
+        required: true
     },
     email: {
         type: String,
@@ -19,13 +14,15 @@ const userSchema = new mongoose.Schema({
     }, 
     password: {
         type: String,
-        required: true,
+        required: function () {
+            return this.authType === "local"
+        },
     },
     isAdmin: {
         type: Boolean,
         default: false
     },
-    profileImage: {
+    profilePicture: {
         type: String,
     },
     authType: {

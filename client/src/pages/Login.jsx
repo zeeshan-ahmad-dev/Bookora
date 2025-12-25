@@ -52,7 +52,7 @@ function Login() {
       registerUser(res.data.user);
       await initializeCart();
 
-      navigate('/');
+      navigate("/");
     } catch (error) {
       toast.error(error.message);
     }
@@ -193,10 +193,13 @@ function Login() {
                 <span className="text-sm text-gray-500">OR</span>
               </div>
 
-              <button className="w-full cursor-pointer py-3 rounded-lg border text-sm flex items-center justify-center gap-2 hover:bg-gray-100 transition-all">
+              <a
+                href="http://localhost:8000/auth/google"
+                className="w-full cursor-pointer py-3 rounded-lg border text-sm flex items-center justify-center gap-2 hover:bg-gray-100 transition-all"
+              >
                 <FaGoogle />
                 Continue with Google
-              </button>
+              </a>
             </form>
             {/* LOGIN FORM */}
             <div className="absolute lg:relative text-black z-[100] flex items-center">
@@ -268,10 +271,13 @@ function Login() {
                   <span className="text-sm text-gray-500">OR</span>
                 </div>
 
-                <button className="w-full py-3 cursor-pointer rounded-lg border text-sm flex items-center justify-center gap-2 hover:bg-gray-100 transition-all">
-                  <FaGoogle />
-                  Continue with Google
-                </button>
+                <a
+                href="http://localhost:8000/auth/google"
+                className="w-full cursor-pointer py-3 rounded-lg border text-sm flex items-center justify-center gap-2 hover:bg-gray-100 transition-all"
+              >
+                <FaGoogle />
+                Continue with Google
+              </a>
               </form>
             </div>
           </div>

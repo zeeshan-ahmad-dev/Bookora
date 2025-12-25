@@ -1,11 +1,8 @@
-import {
-  registerUserService,
-  loginService,
-  sendVerificationOtpService,
-  verifyAccountService,
-  sendResetOtpService,
-  verifyResetOtpService,
-} from "../services/auth.service.js";
+import { registerUserService, loginService, sendVerificationOtpService, verifyAccountService, sendResetOtpService, verifyResetOtpService } from "../services/auth.service.js";
+// import { OAuth2Client } from "google-auth-library";
+
+// const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
+
 
 export const registerUserController = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
@@ -21,6 +18,7 @@ export const registerUserController = async (req, res) => {
     req.session.isAdmin = user.isAdmin;
     req.session.save((err) => {
       if (err) console.log(err);
+      // res.redirect("http://localhost:5173/oauth-success")
       res.status(200).json({ success: true, message: "User created!", user });
     });
   } catch (error) {
@@ -29,6 +27,34 @@ export const registerUserController = async (req, res) => {
       .json({ success: false, message: error.message });
   }
 };
+
+// export const googleAuthController = async (req, res) => {
+//   const { credentials } = req.body; // credentials from google, recieved by client
+//   try {
+//     // verifies the token
+//     const ticket = await client.verifyIdToken({
+//       idToken: credentials,
+//       audience: process.env.GOOGLE_CLIENT_ID
+//     });
+
+//     // user info
+//     const payload = ticket.getPayload();
+
+//     const { email, name, picture, sub: googleId } = payload;
+//     const user = await registerUserService(name, email, googleId, picture); // Store user's data in database
+
+//     req.session.userId = user._id;
+//     req.session.isAdmin = user.isAdmin;
+//     req.session.save((err) => {
+//       if (err) console.log(err);
+//       res.status(200).json({ success: true, message: "User created!", user });
+//     });
+//   } catch (error) {
+//     res
+//       .status(error.status || 500)
+//       .json({ success: false, message: error.message });
+//   }
+// };
 
 export const loginController = async (req, res) => {
   const { email, password } = req.body;

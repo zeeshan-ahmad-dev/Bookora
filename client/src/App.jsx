@@ -15,6 +15,7 @@ import { UserContextProvider } from "./context/UserContext";
 import CartPage from "./pages/CartPage";
 import Login from "./pages/Login";
 import EmailVerify from "./pages/EmailVerify";
+import AuthSuccess from './pages/AuthSuccess'
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             <Route path="/verify-email" element={<EmailVerify />} />
             <Route element={<MainLayout />}>
               <Route path="/" element={<Home />} />
+              <Route path="/auth/success" element={<AuthSuccess />} />
               <Route
                 path="/product-category/all-books"
                 element={<AllBooks />}

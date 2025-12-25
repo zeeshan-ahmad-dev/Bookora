@@ -4,6 +4,7 @@ import { throwErr } from "../utils/error.utils.js";
 
 // Returns cart of the user
 export const getCartService = async (userId) => {
+  console.log("userId", userId)
   try {
     let populatedCart = await Cart.findOne({ user: userId }).populate("items.book").lean();
 

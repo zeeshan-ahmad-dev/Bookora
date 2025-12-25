@@ -7,11 +7,13 @@ import connectDB from "./db/config.js";
 import session from "express-session";
 import cors from 'cors';
 import mongoStore from 'connect-mongo';
+import passport from "./config/passport.js";
 
 dotenv.config();
 connectDB(); // connect to database
 
 const app = express();
+const PORT = process.env.PORT;
 
 app.use(express.json());
 app.use(cors({origin: ["http://localhost:5173"], credentials: true}))
@@ -26,12 +28,8 @@ app.use(session({
   cookie: { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax", maxAge: 1000 * 60 * 60 * 24 }
 }));
 app.use(express.urlencoded({ extended: true }));
-
-const PORT = process.env.PORT;
-
-app.get("/", (req, res) => {
-  res.send("Hi, you idiot");
-});
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use("/auth", authRoute);
 app.use("/books", bookRoute);

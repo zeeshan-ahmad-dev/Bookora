@@ -122,11 +122,8 @@ export const sendVerificationOtpService = async (userId) => {
  * @returns {Promise<{success: true}>} Indicates whether the account was verified successfully
  * @throws {Error} Throws an error if verification failed
  */
-export const verifyAccountService = async (userId, verificationOtp) => {
-  console.log(verificationOtp);
+export const verifyAccountService = async (user, verificationOtp) => {
   try {
-    const user = await User.findById(userId);
-
     if (!user) throwErr("User not found", 404);
 
     if (verificationOtp !== String(user.verificationOtp))

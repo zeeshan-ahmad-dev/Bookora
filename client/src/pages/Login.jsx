@@ -34,7 +34,6 @@ function Login() {
         setShowOtpModal(true);
         registerUser(res.data.user);
       }
-      console.log(res.data);
     } catch (error) {
       toast.error(error.message);
     }

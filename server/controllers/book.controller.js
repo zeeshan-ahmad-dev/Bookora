@@ -2,21 +2,23 @@ import {
 	addBookService, fetchBooksService, fetchBookByIdService
 } 
 from "../services/book.service.js";
+
 export const fetchBooksController = async (req, res) => {
 	const limit = req.query.limit ? parseInt (req.query.limit): 0;
 	try {
 		const books = await fetchBooksService(limit);
 		res.status (200).json ({
-			success: true, message:"Books fetched successfully!", books
+			success: true, message:"Books fetched successfully!", books 
 		});
-	} 
+	}
 	catch (error) {
 		console.error (error);
 		res.status (error.status || 500).json ({
 			success: false, message: error.message
 		});
 	}
-} 
+}
+
 export const fetchBookByIdController = async (req, res) => {
 	const { id } = req.params;
 	try {
@@ -32,6 +34,7 @@ export const fetchBookByIdController = async (req, res) => {
 		});
 	}
 } 
+
 export const addBookController = async (req, res) => {
 	try {
 		const {

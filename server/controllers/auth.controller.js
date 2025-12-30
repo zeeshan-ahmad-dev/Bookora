@@ -1,8 +1,13 @@
-import { registerUserService, loginService, sendVerificationOtpService, verifyAccountService, sendResetOtpService, verifyResetOtpService } from "../services/auth.service.js";
+import {
+  registerUserService,
+  sendVerificationOtpService,
+  verifyAccountService,
+  sendResetOtpService,
+  verifyResetOtpService,
+} from "../services/auth.service.js";
 // import { OAuth2Client } from "google-auth-library";
 
 // const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
-
 
 export const registerUserController = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
@@ -14,12 +19,14 @@ export const registerUserController = async (req, res) => {
       password
     );
 
-    req.session.userId = user._id;
-    req.session.isAdmin = user.isAdmin;
-    req.session.save((err) => {
-      if (err) console.log(err);
-      // res.redirect("http://localhost:5173/oauth-success")
-      res.status(200).json({ success: true, message: "User created!", user });
+    req.login(user, (err) => {
+      if (err) return next(err);
+
+      return res.status(201).json({
+        success: true,
+        message: "User registered & logged in",
+        user: req.user,
+      });
     });
   } catch (error) {
     res
@@ -28,55 +35,10 @@ export const registerUserController = async (req, res) => {
   }
 };
 
-// export const googleAuthController = async (req, res) => {
-//   const { credentials } = req.body; // credentials from google, recieved by client
-//   try {
-//     // verifies the token
-//     const ticket = await client.verifyIdToken({
-//       idToken: credentials,
-//       audience: process.env.GOOGLE_CLIENT_ID
-//     });
-
-//     // user info
-//     const payload = ticket.getPayload();
-
-//     const { email, name, picture, sub: googleId } = payload;
-//     const user = await registerUserService(name, email, googleId, picture); // Store user's data in database
-
-//     req.session.userId = user._id;
-//     req.session.isAdmin = user.isAdmin;
-//     req.session.save((err) => {
-//       if (err) console.log(err);
-//       res.status(200).json({ success: true, message: "User created!", user });
-//     });
-//   } catch (error) {
-//     res
-//       .status(error.status || 500)
-//       .json({ success: false, message: error.message });
-//   }
-// };
-
-export const loginController = async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    const user = await loginService(email, password);
-
-    req.session.userId = user._id;
-    req.session.isAdmin = user.isAdmin;
-    res
-      .status(200)
-      .json({ success: true, message: "User loged in successfully!", user });
-  } catch (error) {
-    res
-      .status(error.status || 500)
-      .json({ success: false, message: error.message });
-  }
-};
-
 export const sendVerficationOtpController = async (req, res) => {
-  const { userId } = req.session;
+  const user = req.session.user;
   try {
-    await sendVerificationOtpService(userId);
+    await sendVerificationOtpService(user);
 
     res
       .status(200)
@@ -90,11 +52,10 @@ export const sendVerficationOtpController = async (req, res) => {
 
 export const verifyAccountController = async (req, res) => {
   const { verificationOtp } = req.body;
-  const { userId } = req.session;
-  console.log(`User id: ${userId}`, req.session);
+  const user = req.session.user;
 
   try {
-    await verifyAccountService(userId, verificationOtp);
+    await verifyAccountService(user, verificationOtp);
 
     res
       .status(200)
@@ -152,33 +113,25 @@ export const resetPasswordController = async (req, res) => {
   }
 };
 
+// Ask ChatGPT for explanation
 export const logoutController = async (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.log(err);
-      return res.status(500).json({ message: "Logout failed" });
-    }
+  req.logout((err) => {
+    if (err) return next(err);
 
-    res.clearCookie("connect.sid");
-    return res.status(200).json({ message: "Logged out successfully" });
+    req.session.destroy(() => {
+      res.clearCookie("connect.sid");
+      res.status(200).json({ message: "Logged out successfully" });
+    })
   });
 };
 
 export const isAuthController = async (req, res) => {
-  const { userId } = req.session;
-  try {
-    if (!req.session || !req.session.userId)
-      return res.status(401).json({
-        success: false,
-        message: "Session expired. Please log in again.",
-      });
-
-    await isAuthService(userId);
-
-    res.status(200).json({ success: true, message: "User is logged in!" });
-  } catch (error) {
-    res
-      .status(error.status || 500)
-      .json({ success: false, message: error.message });
+  if (!req.isAuthenticated) {
+    return res.status(401).json({
+      success: false,
+      message: "Session expired. Please log in again.",
+    });
   }
+
+  res.status(200).json({ success: true, message: "User is logged in!", user: req.user });
 };

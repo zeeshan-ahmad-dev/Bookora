@@ -1,29 +1,53 @@
-import express from 'express';
-import passport from 'passport';
-import { loginController, logoutController, registerUserController, resetPasswordController, sendResetOtpController, sendVerficationOtpController, verifyAccountController, verifyResetOtpController, isAuthController } from '../controllers/auth.controller.js';
+import express from "express";
+import passport from "passport";
+import {
+  logoutController,
+  registerUserController,
+  resetPasswordController,
+  sendResetOtpController,
+  sendVerficationOtpController,
+  verifyAccountController,
+  verifyResetOtpController,
+  isAuthController,
+} from "../controllers/auth.controller.js";
 
 const authRouter = express.Router();
 
-authRouter.post('/register', registerUserController)
-authRouter.post('/login', loginController)
-authRouter.post('/logout', logoutController)
-authRouter.post('/send-verify-otp', sendVerficationOtpController)
-authRouter.post('/verify-account', verifyAccountController)
-authRouter.get('/is-auth', isAuthController)
-authRouter.post('/send-reset-otp', sendResetOtpController)
-authRouter.post('/verify-reset-otp', verifyResetOtpController)
-authRouter.post('/reset-password', resetPasswordController)
+authRouter.post("/register", registerUserController);
+authRouter.post("/logout", logoutController);
+authRouter.post("/send-verify-otp", sendVerficationOtpController);
+authRouter.post("/verify-account", verifyAccountController);
+authRouter.get("/is-auth", isAuthController);
+authRouter.post("/send-reset-otp", sendResetOtpController);
+authRouter.post("/verify-reset-otp", verifyResetOtpController);
+authRouter.post("/reset-password", resetPasswordController);
 
-authRouter.get("/google", 
-    passport.authenticate("google", {
-        scope: ["profile", "email"]
-    })
+authRouter.post(
+  "/login",
+  passport.authenticate("local", { failureMessage: true, failWithError: true }),
+  (req, res) => {
+    res.status(200).json({ success: true, message: "Logged in successfully", user: req.user });
+  }
 );
-authRouter.get('/google/callback', 
-    passport.authenticate("google", {failureRedirect: "http://localhost:5173/login"}), 
-    (req, res) => {
-        res.redirect("http://localhost:5173/auth/success")
-    }
+
+authRouter.get(
+  "/google",
+  // redirects to google account chooser
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+    prompt: "select_account",
+  })
+);
+
+authRouter.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: "http://localhost:5173/login",
+  }), // middleware
+  (req, res) => {
+    console.log("/auth/google/callback");
+    res.redirect("http://localhost:5173/auth/success");
+  }
 );
 
 export default authRouter;

@@ -28,7 +28,7 @@ function Login() {
   const onSubmitRegister = async (data) => {
     try {
       const res = await api.post("/auth/register", data);
-
+      
       if (res.data.success) {
         await api.post("/auth/send-verify-otp");
         setShowOtpModal(true);

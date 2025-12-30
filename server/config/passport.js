@@ -33,12 +33,14 @@ passport.use(
       console.log("passport.googleStrategy");
       try {
         const email = profile.emails[0].value;
+        console.log(profile)
 
         let user = await User.findOne({ email });
 
         if (!user) {
           user = await User.create({
-            name: profile.displayName,
+            firstName: profile.name.familyName,
+            lastName: profile.name.givenName,
             email,
             authType: "google",
             isVerified: true,

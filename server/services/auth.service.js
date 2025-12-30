@@ -6,14 +6,15 @@ import jwt from "jsonwebtoken";
 
 /**
  * Registers a new user to database
- * @param {string} name User's name
+ * @param {string} firstName User's first name
+ * @param {string} lastName User's last name
  * @param {email} email User's email
  * @param {password} password User's password
  * @param {googleId} googleId Id from google OAuth
  * @returns {Promise<object>} Returns user's object
  * @throws {Error} Throws an error if failed to create user
  */
-export const registerUserService = async (name, email, password, googleId, pfp) => {
+export const registerUserService = async (firstName, lastName, email, password, googleId, pfp) => {
   try {
     const prevUser = await User.findOne({ email });
 
@@ -23,7 +24,8 @@ export const registerUserService = async (name, email, password, googleId, pfp) 
 
     if (googleId) {
       user = await User.create({
-        name,
+        firstName,
+        lastName,
         email,
         authType: "google",
         isVerified: true,
@@ -33,7 +35,8 @@ export const registerUserService = async (name, email, password, googleId, pfp) 
       const hashedPassword = await hashPassword(password);
       
       user = await User.create({
-        name,
+        firstName,
+        lastName,
         email,
         password: hashedPassword,
       });

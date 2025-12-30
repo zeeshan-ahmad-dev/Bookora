@@ -5,9 +5,6 @@ import {
   sendResetOtpService,
   verifyResetOtpService,
 } from "../services/auth.service.js";
-// import { OAuth2Client } from "google-auth-library";
-
-// const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
 
 export const registerUserController = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
@@ -36,9 +33,10 @@ export const registerUserController = async (req, res) => {
 };
 
 export const sendVerficationOtpController = async (req, res) => {
-  const user = req.session.user;
+  const user = req.user;
+  console.log(user)
   try {
-    await sendVerificationOtpService(user);
+    await sendVerificationOtpService(user._id);
 
     res
       .status(200)

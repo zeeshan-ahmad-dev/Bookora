@@ -1,4 +1,5 @@
 import {
+  fetchUserService,
   registerUserService,
   sendVerificationOtpService,
   verifyAccountService,
@@ -32,9 +33,26 @@ export const registerUserController = async (req, res) => {
   }
 };
 
+export const fetachUserController = async (req, res) => {
+  const { userId } = req.user;
+  try {
+    const user = await registerUserService(userId);
+
+    return res.status(201).json({
+      success: true,
+      message: "User data fetched",
+      user: user,
+    });
+  } catch (error) {
+    res
+      .status(error.status || 500)
+      .json({ success: false, message: error.message });
+  }
+};
+
 export const sendVerficationOtpController = async (req, res) => {
   const user = req.user;
-  console.log(user)
+  console.log(user);
   try {
     await sendVerificationOtpService(user._id);
 
@@ -50,10 +68,11 @@ export const sendVerficationOtpController = async (req, res) => {
 
 export const verifyAccountController = async (req, res) => {
   const { verificationOtp } = req.body;
-  const user = req.session.user;
+  const user = req.user;
+  console.log(user);
 
   try {
-    await verifyAccountService(user, verificationOtp);
+    await verifyAccountService(user._id, verificationOtp);
 
     res
       .status(200)
@@ -119,7 +138,7 @@ export const logoutController = async (req, res) => {
     req.session.destroy(() => {
       res.clearCookie("connect.sid");
       res.status(200).json({ message: "Logged out successfully" });
-    })
+    });
   });
 };
 
@@ -131,5 +150,7 @@ export const isAuthController = async (req, res) => {
     });
   }
 
-  res.status(200).json({ success: true, message: "User is logged in!", user: req.user });
+  res
+    .status(200)
+    .json({ success: true, message: "User is logged in!", user: req.user });
 };

@@ -1,15 +1,17 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 // import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 // import axios from "axios";
 import api from "../api.js";
 import LoaderOverlay from "../components/LoaderOverlay.jsx";
+import { UserContext } from "../context/UserContext.jsx";
 
 const EmailVerify = () => {
   const navigate = useNavigate();
   const [isVerified, setIsVerified] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { fetchUser } = useContext(UserContext)
 
   const inputRefs = useRef([]);
 
@@ -49,6 +51,7 @@ const EmailVerify = () => {
       console.log(data)
       if (data.success) {
         setIsVerified(true);
+        fetchUser();
         toast.success(data.message);
       } else {
         toast.error(data.message);
@@ -59,12 +62,6 @@ const EmailVerify = () => {
       setIsLoading(false);
     }
   };
-
-  // useEffect(() => {
-  //   if (!isLoggedin && !userData && !userData?.isAccountVerified) {
-  //     navigate('/');
-  //   }
-  // }, [isLoggedin, userData]);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-hero px-4">

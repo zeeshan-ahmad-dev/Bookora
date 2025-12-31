@@ -1,6 +1,7 @@
 import express from "express";
 import passport from "passport";
 import {
+  fetachUserController,
   logoutController,
   registerUserController,
   resetPasswordController,
@@ -13,6 +14,7 @@ import {
 
 const authRouter = express.Router();
 
+authRouter.get("/user", fetachUserController);
 authRouter.post("/register", registerUserController);
 authRouter.post("/logout", logoutController);
 authRouter.post("/send-verify-otp", sendVerficationOtpController);

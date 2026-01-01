@@ -49,7 +49,7 @@ function Login() {
     try {
       const res = await api.post("/auth/login", data);
       registerUser(res.data.user);
-      await initializeCart();
+      if (res.data.success) await initializeCart();
 
       navigate("/");
     } catch (error) {

@@ -47,7 +47,6 @@ authRouter.get(
     failureRedirect: "http://localhost:5173/login",
   }), // middleware
   (req, res) => {
-    console.log("/auth/google/callback");
     res.redirect("http://localhost:5173/auth/success");
   }
 );

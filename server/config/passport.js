@@ -8,8 +8,6 @@ passport.use(
   new LocalStrategy({ usernameField: "email", passwordField: "password"},async (email, password, done) => {
     try {
       const user = await User.findOne({ email: email });
-      console.log("User.password: ", user.password);
-      console.log("password: ", password);
       if (!user) return done(null, false);
 
       const isMatch = await bcrypt.compare(password, user.password);
@@ -30,7 +28,6 @@ passport.use(
       callbackURL: "http://localhost:8000/auth/google/callback",
     },
     async (accessToken, refreshToken, profile, done) => {
-      console.log("passport.googleStrategy");
       try {
         const email = profile.emails[0].value;
         console.log(profile)
@@ -57,12 +54,10 @@ passport.use(
 );
 
 passport.serializeUser((user, done) => {
-  console.log("passport.serializeUser", user);
   done(null, user._id);
 });
 
 passport.deserializeUser(async (id, done) => {
-  console.log("passport.deserializeUser", id);
   const user = await User.findById(id);
   done(null, user);
 });

@@ -34,9 +34,10 @@ export const registerUserController = async (req, res) => {
 };
 
 export const fetachUserController = async (req, res) => {
-  const { userId } = req.user;
+  const { _id } = req.user;
+  console.log("req.user from fetchUserController", req.user)
   try {
-    const user = await registerUserService(userId);
+    const user = await fetchUserService(_id);
 
     return res.status(201).json({
       success: true,
@@ -44,6 +45,7 @@ export const fetachUserController = async (req, res) => {
       user: user,
     });
   } catch (error) {
+    console.log(error)
     res
       .status(error.status || 500)
       .json({ success: false, message: error.message });

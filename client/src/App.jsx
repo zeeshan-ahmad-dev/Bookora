@@ -16,6 +16,8 @@ import CartPage from "./pages/CartPage";
 import Login from "./pages/Login";
 import EmailVerify from "./pages/EmailVerify";
 import AuthSuccess from './pages/AuthSuccess'
+import Checkout from "./pages/Checkout";
+import CheckoutLayout from "./layouts/CheckoutLayout";
 
 function App() {
   return (
@@ -26,6 +28,9 @@ function App() {
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/verify-email" element={<EmailVerify />} />
+            <Route element={<CheckoutLayout />}>
+              <Route path="/checkout" element={<Checkout />} />
+            </Route>
             <Route element={<MainLayout />}>
               <Route path="/" element={<Home />} />
               <Route path="/auth/success" element={<AuthSuccess />} />

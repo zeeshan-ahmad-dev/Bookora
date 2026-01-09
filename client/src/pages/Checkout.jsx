@@ -115,10 +115,10 @@ const Checkout = () => {
         </div>
       </section>
 
-      <div className="flex justify-evenly border-y border-black/10 no-scrollbar">
+      <div className="block lg:flex lg:bg-white justify-evenly border-y border-black/10 no-scrollbar">
         <form
           onSubmit={handleCheckoutSubmit(onSubmitCheckout)}
-          className="hide-scrollbar p-5 md:p-8 lg:pl-20 lg:py-10 space-y-8 flex-1"
+          className="hide-scrollbar bg-secondary border-r border-black/10 p-5 md:p-8 lg:pl-20 lg:py-10 space-y-8 flex-1"
         >
           <div className="space-y-5">
             <h2 className="text-xl font-noto-serif font-bold capitalize">
@@ -546,44 +546,48 @@ const Checkout = () => {
           </button>
         </form>
 
-        <section className="hidden lg:block border-l border-black/10 p-5 lg:p-12 lg:pr-15 space-y-6 flex-[0.9] bg-white">
-          <div className="space-y-6">
-            {cart &&
-              cart.map((item) => (
-                <Item
-                  key={item._id}
-                  quantity={item.quantity}
-                  cover={item.cover}
-                  title={item.title}
-                  price={item.price}
-                />
-              ))}
-          </div>
-          <div className="lg:flex justify-center items-center gap-3">
-            <input
-              className="w-full h-full px-4 py-4 flex-1 text-sm outline-none border-black/10 border-1 rounded-md focus-within:border-primary focus-within:border-2 transition-all duration-300"
-              type="text"
-              placeholder="Coupon Code"
-            />
-            <button
-              type="submit"
-              disabled={isCheckoutSubmitting}
-              className="flex-[0.4] cursor-pointer bg-primary py-3.5 font-semibold text-black rounded-sm hover:bg-primary/90 transition-all"
-            >
-              Apply
-            </button>
-          </div>
-          <div className="space-y-3">
-            <div className="flex justify-between text-sm">
-              <span>Subtotal:</span>
-              <span>${subtotal}</span>
+
+        {/* Todo: Learn about CSS positions  */}
+        <div className="flex-[0.9] h-[100%] ">
+          <section className="hidden sticky lg:block p-12 pr-15 space-y-6  bg-white">
+            <div className="space-y-6">
+              {cart &&
+                cart.map((item) => (
+                  <Item
+                    key={item._id}
+                    quantity={item.quantity}
+                    cover={item.cover}
+                    title={item.title}
+                    price={item.price}
+                  />
+                ))}
             </div>
-            <div className="flex justify-between text-xl">
-              <span>Total:</span>
-              <span>${subtotal}</span>
+            <div className="lg:flex justify-center items-center gap-3">
+              <input
+                className="w-full h-full px-4 py-4 flex-1 text-sm outline-none border-black/10 border-1 rounded-md focus-within:border-primary focus-within:border-2 transition-all duration-300"
+                type="text"
+                placeholder="Coupon Code"
+              />
+              <button
+                type="submit"
+                disabled={isCheckoutSubmitting}
+                className="flex-[0.4] cursor-pointer bg-primary py-3.5 font-semibold text-black rounded-sm hover:bg-primary/90 transition-all"
+              >
+                Apply
+              </button>
             </div>
-          </div>
-        </section>
+            <div className="space-y-3">
+              <div className="flex justify-between text-sm">
+                <span>Subtotal:</span>
+                <span>${subtotal}</span>
+              </div>
+              <div className="flex justify-between text-xl">
+                <span>Total:</span>
+                <span>${subtotal}</span>
+              </div>
+            </div>
+          </section>
+        </div>
       </div>
     </div>
   );

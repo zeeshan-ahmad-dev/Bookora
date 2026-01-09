@@ -1,7 +1,8 @@
 import { addItemToCartService, removeItemToCartService, getCartService, updateCartService } from "../services/cart.service.js";
 
 export const getCartController = async (req, res) => {
-  const { userId } = req.session;
+  const userId = req.user._id;
+  console.log("req.user", req.user)
 
   try {
     const cart = await getCartService(userId);
@@ -17,7 +18,7 @@ export const getCartController = async (req, res) => {
 };
 
 export const addItemToCartController = async (req, res) => {
-  const { userId } = req.session;
+  const userId = req.user._id;
   const { bookId, quantity } = req.body;
 
   try {
@@ -34,7 +35,7 @@ export const addItemToCartController = async (req, res) => {
 };
 
 export const removeItemToCartController = async (req, res) => {
-  const { userId } = req.session;
+  const userId = req.user._id;
   const { bookId } = req.body;
 
   try {
@@ -51,7 +52,7 @@ export const removeItemToCartController = async (req, res) => {
 };
 
 export const updateCartController = async (req, res) => {
-  const { userId } = req.session;
+  const userId = req.user._id;
   const { updatedCart } = req.body;
 
   try {

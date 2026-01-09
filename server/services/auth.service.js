@@ -6,14 +6,22 @@ import jwt from "jsonwebtoken";
 
 /**
  * Registers a new user to database
- * @param {string} name User's name
+ * @param {string} firstName User's first name
+ * @param {string} lastName User's last name
  * @param {email} email User's email
  * @param {password} password User's password
  * @param {googleId} googleId Id from google OAuth
  * @returns {Promise<object>} Returns user's object
  * @throws {Error} Throws an error if failed to create user
  */
-export const registerUserService = async (name, email, password, googleId, pfp) => {
+export const registerUserService = async (
+  firstName,
+  lastName,
+  email,
+  password,
+  googleId,
+  pfp
+) => {
   try {
     const prevUser = await User.findOne({ email });
 
@@ -23,46 +31,23 @@ export const registerUserService = async (name, email, password, googleId, pfp) 
 
     if (googleId) {
       user = await User.create({
-        name,
+        firstName,
+        lastName,
         email,
         authType: "google",
         isVerified: true,
-        profilePicture: pfp
-      })
+        profilePicture: pfp,
+      });
     } else {
       const hashedPassword = await hashPassword(password);
-      
+
       user = await User.create({
-        name,
+        firstName,
+        lastName,
         email,
         password: hashedPassword,
       });
     }
-
-    return user;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
-
-/**
- * Logs in a user
- *
- * @param {string} email The user's email address
- * @param {string} password The user's password
- * @returns {Promise<object>} Returns the user object if login is successful
- * @throws {Error} Throws an error if login fails
- */
-export const loginService = async (email, password) => {
-  try {
-    const user = await User.findOne({ email });
-
-    if (!user) throwErr("Incorrect email or password!");
-
-    const isMatched = await comparePassword(password, user.password);
-
-    if (!isMatched) throwErr("Incorrect email or password!");
 
     const safeUser = {
       _id: user._id,
@@ -74,6 +59,36 @@ export const loginService = async (email, password) => {
       authType: user.authType,
     };
 
+    return safeUser;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+/**
+ * Fetches user data
+ *
+ * @param {string} userId The userId
+ * @returns {Promise<object>} Returns the user object if login is successful
+ * @throws {Error} Throws an error if login fails
+ */
+export const fetchUserService = async (userId) => {
+  try {
+    const user = await User.findOne({ _id: userId });
+
+    if (!user) throwErr("No user found!");
+
+    const safeUser = {
+      _id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      isVerified: user.isVerified,
+      authType: user.authType,
+    };
+    console.log("safeUser:", safeUser)
     return safeUser;
   } catch (error) {
     console.error(error);
@@ -123,11 +138,10 @@ export const sendVerificationOtpService = async (userId) => {
  * @throws {Error} Throws an error if verification failed
  */
 export const verifyAccountService = async (userId, verificationOtp) => {
-  console.log(verificationOtp);
   try {
     const user = await User.findById(userId);
 
-    if (!user) throwErr("User not found", 404);
+    if (!userId) throwErr("User not found", 404);
 
     if (verificationOtp !== String(user.verificationOtp))
       return throwErr("incorrect OTP!", 401);

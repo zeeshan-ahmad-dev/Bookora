@@ -32,6 +32,13 @@ body {
     .hide-overflow-settings {
         -ms-overflow-style: none;
     }
+    .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
     .cta-btn {
         @apply bg-primary hover:bg-primary-hover cursor-pointer transition duration-200 font-semibold px-8 mt-8 py-4;
     }

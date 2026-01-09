@@ -4,19 +4,18 @@ import { throwErr } from "../utils/error.utils.js";
 
 // Returns cart of the user
 export const getCartService = async (userId) => {
-  console.log("userId", userId)
   try {
-    let populatedCart = await Cart.findOne({ user: userId }).populate("items.book").lean();
+    let cart = await Cart.findOne({ user: userId }).populate("items.book").lean();
 
-    populatedCart = populatedCart.items.map((item) => ({
+    if (!cart || !cart.items || cart.items.length === 0) return [];
+
+    cart = cart.items.map((item) => ({
       ...item.book,
       quantity: item.quantity,
       price: item.price,
     }));
 
-    if (!populatedCart) return [];
-
-    return populatedCart;
+    return cart;
   } catch (error) {
     console.error(error);
     throwErr("Error fetching cart", 500);

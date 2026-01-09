@@ -1,7 +1,5 @@
-export const isAuthenticated = (req, res, next) => {
-    if (!req.session.userId) {
-        return res.status(401).json({success: false, message: "Not authorized"})
-    }
+export const isAuth = (req, res, next) => {
+    if (req.isAuthenticated) next();
 
-    next();
+    return res.status(401).json({success: false, message: "Not authorized"})
 }

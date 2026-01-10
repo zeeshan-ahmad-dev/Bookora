@@ -3,6 +3,8 @@ import { CartContext } from "../context/CartContext";
 import { useForm } from "react-hook-form";
 import { useContext, useEffect, useState } from "react";
 import Item from "../components/checkout/Item";
+import { loadStripe } from "@stripe/stripe-js";
+import api from "../api";
 
 const Checkout = () => {
   const [showOrderSummary, setShowOrderSummary] = useState(false);
@@ -27,6 +29,7 @@ const Checkout = () => {
     StateValue,
     postalCodeValue,
     phoneValue,
+    infoValue
   ] = watch([
     "email",
     "firstName",
@@ -38,10 +41,33 @@ const Checkout = () => {
     "State",
     "postalCode",
     "phone",
+    "info",
   ]);
 
   const onSubmitCheckout = (data) => {
     console.log(data);
+  };
+
+  // Payment Integration
+  const makePayment = async () => {
+    try {
+      // Call backend to create stripe session
+      console.log("ran")
+      const response = await api.post("payment/create-checkout-session", {
+        products: cart,
+      });
+      console.log("response", response);
+
+      const stripe = await loadStripe(
+        "pk_test_51SnpVF90s5HCyBqaQfZvwWFpVwO4Fm468EQrinLjQXVID2iYzSphTFIkt70XCYdA9Skm1Kx279keZ2Z420NL5vpP00IKIotMOR"
+      );
+      console.log(`stripe: ${stripe}`);
+
+      // Redirect to stripe checkout
+      window.location.href = response.data.url;
+    } catch (error) {
+      console.error("Payment error:", error);
+    }
   };
 
   const errorMsg = "text-red-400 text-start text-xs my-2 ml-1";
@@ -91,14 +117,14 @@ const Checkout = () => {
         </div>
         <div className="space-y-1">
           <input
-            className="w-full px-4 py-3 text-sm outline-none border-black/10 border-1 rounded-md"
+            className="w-full px-4 py-3 text-sm rounded-md outline-none border-black/10 border-1"
             type="text"
             placeholder="Coupon Code"
           />
           <button
             type="submit"
             disabled={isCheckoutSubmitting}
-            className="w-full cursor-pointer bg-primary py-3 mt-2 text-lg font-semibold text-black rounded-sm hover:bg-primary/90 transition-all"
+            className="w-full py-3 mt-2 text-lg font-semibold text-black transition-all rounded-sm cursor-pointer bg-primary hover:bg-primary/90"
           >
             Apply
           </button>
@@ -117,11 +143,11 @@ const Checkout = () => {
 
       <div className="block lg:flex lg:bg-white justify-evenly border-y border-black/10 no-scrollbar">
         <form
-          onSubmit={handleCheckoutSubmit(onSubmitCheckout)}
-          className="hide-scrollbar bg-secondary border-r border-black/10 p-5 md:p-8 lg:pl-20 lg:py-10 space-y-8 flex-1"
+          onSubmit={handleCheckoutSubmit(makePayment)}
+          className="flex-1 p-5 space-y-8 border-r hide-scrollbar bg-secondary border-black/10 md:p-8 lg:pl-20 lg:py-10"
         >
           <div className="space-y-5">
-            <h2 className="text-xl font-noto-serif font-bold capitalize">
+            <h2 className="text-xl font-bold capitalize font-noto-serif">
               Contact
             </h2>
             <div>
@@ -162,81 +188,82 @@ const Checkout = () => {
             </div>
           </div>
           <div className="space-y-3">
-            <h2 className="text-xl mb-5 font-noto-serif font-bold capitalize">
+            <h2 className="mb-5 text-xl font-bold capitalize font-noto-serif">
               Billing details
             </h2>
-            {/* First Name */}
-            <div>
-              <label
-                htmlFor="firstName"
-                className={`bg-white border border-black/10 cursor-text flex flex-col w-full px-3 py-4 rounded-sm group focus-within:border-primary focus-within:border text-sm relative ${
-                  checkoutErrors.firstName
-                    ? "outline outline-red-700 border-none"
-                    : ""
-                }`}
-              >
-                <span
-                  className={`absolute transition-all -translate-y-3 text-gray-500 text-xs ${
-                    firstNameValue?.length > 0 ? "opacity-100" : "opacity-0"
+            <div className="space-y-3 lg:flex justify-stretch lg:gap-3">
+              <div className="flex-1">
+                <label
+                  htmlFor="firstName"
+                  className={`bg-white border border-black/10 cursor-text flex flex-col w-full px-3 py-4 rounded-sm group focus-within:border-primary focus-within:border text-sm relative ${
+                    checkoutErrors.firstName
+                      ? "outline outline-red-700 border-none"
+                      : ""
                   }`}
                 >
-                  First Name
-                </span>
+                  <span
+                    className={`absolute transition-all -translate-y-3 text-gray-500 text-xs ${
+                      firstNameValue?.length > 0 ? "opacity-100" : "opacity-0"
+                    }`}
+                  >
+                    First Name
+                  </span>
 
-                <input
-                  className={`outline-none bg-transparent border-none transition-all ${
-                    firstNameValue?.length > 0
-                      ? "text-xs translate-y-2"
-                      : "translate-y-0"
-                  }`}
-                  type="text"
-                  placeholder="First Name *"
-                  id="firstName"
-                  {...checkout("firstName", {
-                    required: "First Name is required",
-                  })}
-                />
-              </label>
-              {checkoutErrors.firstName && (
-                <p className={errorMsg}>{checkoutErrors.firstName.message}</p>
-              )}
-            </div>
+                  <input
+                    className={`outline-none bg-transparent border-none transition-all ${
+                      firstNameValue?.length > 0
+                        ? "text-xs translate-y-2"
+                        : "translate-y-0"
+                    }`}
+                    type="text"
+                    placeholder="First Name *"
+                    id="firstName"
+                    {...checkout("firstName", {
+                      required: "First Name is required",
+                    })}
+                  />
+                </label>
+                {checkoutErrors.firstName && (
+                  <p className={errorMsg}>{checkoutErrors.firstName.message}</p>
+                )}
+              </div>
 
-            {/* Last Name */}
-            <div>
-              <label
-                htmlFor="lastName"
-                className={`bg-white border border-black/10 cursor-text flex flex-col w-full px-3 py-4 rounded-sm group focus-within:border-primary focus-within:border text-sm relative ${
-                  checkoutErrors.lastName
-                    ? "outline outline-red-700 border-none"
-                    : ""
-                }`}
-              >
-                <span
-                  className={`absolute transition-all -translate-y-3 text-gray-500 text-xs ${
-                    lastNameValue?.length > 0 ? "opacity-100" : "opacity-0"
+              {/* Last Name */}
+              <div className="flex-1">
+                <label
+                  htmlFor="lastName"
+                  className={`bg-white border border-black/10 cursor-text flex flex-col w-full px-3 py-4 rounded-sm group focus-within:border-primary focus-within:border text-sm relative ${
+                    checkoutErrors.lastName
+                      ? "outline outline-red-700 border-none"
+                      : ""
                   }`}
                 >
-                  Last Name
-                </span>
+                  <span
+                    className={`absolute transition-all -translate-y-3 text-gray-500 text-xs ${
+                      lastNameValue?.length > 0 ? "opacity-100" : "opacity-0"
+                    }`}
+                  >
+                    Last Name
+                  </span>
 
-                <input
-                  className={`outline-none bg-transparent border-none transition-all ${
-                    lastNameValue?.length > 0
-                      ? "text-xs translate-y-2"
-                      : "translate-y-0"
-                  }`}
-                  type="text"
-                  placeholder="Last Name *"
-                  id="lastName"
-                  {...checkout("lastName", {
-                    required: "Last Name is required",
-                  })}
-                />
-              </label>
-              {checkoutErrors.lastName && (
-                <p className={errorMsg}>{checkoutErrors.lastName.message}</p>
-              )}
+                  <input
+                    className={`outline-none bg-transparent border-none transition-all ${
+                      lastNameValue?.length > 0
+                        ? "text-xs translate-y-2"
+                        : "translate-y-0"
+                    }`}
+                    type="text"
+                    placeholder="Last Name *"
+                    id="lastName"
+                    {...checkout("lastName", {
+                      required: "Last Name is required",
+                    })}
+                  />
+                </label>
+                {checkoutErrors.lastName && (
+                  <p className={errorMsg}>{checkoutErrors.lastName.message}</p>
+                )}
+              </div>
             </div>
 
             {/* Country */}
@@ -350,113 +377,117 @@ const Checkout = () => {
               )}
             </div>
 
-            {/* Town / City */}
-            <div>
-              <label
-                htmlFor="TownCity"
-                className={`bg-white border border-black/10 cursor-text flex flex-col w-full px-3 py-4 rounded-sm group focus-within:border-primary focus-within:border text-sm relative ${
-                  checkoutErrors.TownCity
-                    ? "outline outline-red-700 border-none"
-                    : ""
-                }`}
-              >
-                <span
-                  className={`absolute transition-all -translate-y-3 text-gray-500 text-xs ${
-                    TownCityValue?.length > 0 ? "opacity-100" : "opacity-0"
+            <div className="space-y-3 lg:flex justify-stretch lg:gap-3">
+              {/* Town / City */}
+              <div className="flex-1">
+                <label
+                  htmlFor="TownCity"
+                  className={`bg-white border border-black/10 cursor-text flex flex-col w-full px-3 py-4 rounded-sm group focus-within:border-primary focus-within:border text-sm relative ${
+                    checkoutErrors.TownCity
+                      ? "outline outline-red-700 border-none"
+                      : ""
                   }`}
                 >
-                  Town / City
-                </span>
+                  <span
+                    className={`absolute transition-all -translate-y-3 text-gray-500 text-xs ${
+                      TownCityValue?.length > 0 ? "opacity-100" : "opacity-0"
+                    }`}
+                  >
+                    Town / City
+                  </span>
 
-                <input
-                  className={`outline-none bg-transparent border-none transition-all ${
-                    TownCityValue?.length > 0
-                      ? "text-xs translate-y-2"
-                      : "translate-y-0"
-                  }`}
-                  type="text"
-                  placeholder="Town / City *"
-                  id="TownCity"
-                  {...checkout("TownCity", {
-                    required: "Town / City is required",
-                  })}
-                />
-              </label>
-              {checkoutErrors.TownCity && (
-                <p className={errorMsg}>{checkoutErrors.TownCity.message}</p>
-              )}
-            </div>
+                  <input
+                    className={`outline-none bg-transparent border-none transition-all ${
+                      TownCityValue?.length > 0
+                        ? "text-xs translate-y-2"
+                        : "translate-y-0"
+                    }`}
+                    type="text"
+                    placeholder="Town / City *"
+                    id="TownCity"
+                    {...checkout("TownCity", {
+                      required: "Town / City is required",
+                    })}
+                  />
+                </label>
+                {checkoutErrors.TownCity && (
+                  <p className={errorMsg}>{checkoutErrors.TownCity.message}</p>
+                )}
+              </div>
 
-            {/* State */}
-            <div>
-              <label
-                htmlFor="State"
-                className={`bg-white border border-black/10 cursor-text flex flex-col w-full px-3 py-4 rounded-sm group focus-within:border-primary focus-within:border text-sm relative ${
-                  checkoutErrors.State
-                    ? "outline outline-red-700 border-none"
-                    : ""
-                }`}
-              >
-                <span
-                  className={`absolute transition-all -translate-y-3 text-gray-500 text-xs ${
-                    StateValue?.length > 0 ? "opacity-100" : "opacity-0"
-                  }`}
-                >
-                  State
-                </span>
-
-                <input
-                  className={`outline-none bg-transparent border-none transition-all ${
-                    StateValue?.length > 0
-                      ? "text-xs translate-y-2"
-                      : "translate-y-0"
-                  }`}
-                  type="text"
-                  placeholder="State *"
-                  id="State"
-                  {...checkout("State", { required: "State is required" })}
-                />
-              </label>
-              {checkoutErrors.State && (
-                <p className={errorMsg}>{checkoutErrors.State.message}</p>
-              )}
-            </div>
-
-            {/* Postal Code */}
-            <div>
-              <label
-                htmlFor="postalCode"
-                className={`bg-white border border-black/10 cursor-text flex flex-col w-full px-3 py-4 rounded-sm group focus-within:border-primary focus-within:border text-sm relative ${
-                  checkoutErrors.postalCode
-                    ? "outline outline-red-700 border-none"
-                    : ""
-                }`}
-              >
-                <span
-                  className={`absolute transition-all -translate-y-3 text-gray-500 text-xs ${
-                    postalCodeValue?.length > 0 ? "opacity-100" : "opacity-0"
+              {/* State */}
+              <div className="flex-1">
+                <label
+                  htmlFor="State"
+                  className={`bg-white border border-black/10 cursor-text flex flex-col w-full px-3 py-4 rounded-sm group focus-within:border-primary focus-within:border text-sm relative ${
+                    checkoutErrors.State
+                      ? "outline outline-red-700 border-none"
+                      : ""
                   }`}
                 >
-                  Postal Code
-                </span>
+                  <span
+                    className={`absolute transition-all -translate-y-3 text-gray-500 text-xs ${
+                      StateValue?.length > 0 ? "opacity-100" : "opacity-0"
+                    }`}
+                  >
+                    State
+                  </span>
 
-                <input
-                  className={`outline-none bg-transparent border-none transition-all ${
-                    postalCodeValue?.length > 0
-                      ? "text-xs translate-y-2"
-                      : "translate-y-0"
+                  <input
+                    className={`outline-none bg-transparent border-none transition-all ${
+                      StateValue?.length > 0
+                        ? "text-xs translate-y-2"
+                        : "translate-y-0"
+                    }`}
+                    type="text"
+                    placeholder="State *"
+                    id="State"
+                    {...checkout("State", { required: "State is required" })}
+                  />
+                </label>
+                {checkoutErrors.State && (
+                  <p className={errorMsg}>{checkoutErrors.State.message}</p>
+                )}
+              </div>
+
+              {/* Postal Code */}
+              <div className="flex-1">
+                <label
+                  htmlFor="postalCode"
+                  className={`bg-white border border-black/10 cursor-text flex flex-col w-full px-3 py-4 rounded-sm group focus-within:border-primary focus-within:border text-sm relative ${
+                    checkoutErrors.postalCode
+                      ? "outline outline-red-700 border-none"
+                      : ""
                   }`}
-                  type="text"
-                  placeholder="Postal Code *"
-                  id="postalCode"
-                  {...checkout("postalCode", {
-                    required: "Postal Code is required",
-                  })}
-                />
-              </label>
-              {checkoutErrors.postalCode && (
-                <p className={errorMsg}>{checkoutErrors.postalCode.message}</p>
-              )}
+                >
+                  <span
+                    className={`absolute transition-all -translate-y-3 text-gray-500 text-xs ${
+                      postalCodeValue?.length > 0 ? "opacity-100" : "opacity-0"
+                    }`}
+                  >
+                    Postal Code
+                  </span>
+
+                  <input
+                    className={`outline-none bg-transparent border-none transition-all ${
+                      postalCodeValue?.length > 0
+                        ? "text-xs translate-y-2"
+                        : "translate-y-0"
+                    }`}
+                    type="text"
+                    placeholder="Postal Code *"
+                    id="postalCode"
+                    {...checkout("postalCode", {
+                      required: "Postal Code is required",
+                    })}
+                  />
+                </label>
+                {checkoutErrors.postalCode && (
+                  <p className={errorMsg}>
+                    {checkoutErrors.postalCode.message}
+                  </p>
+                )}
+              </div>
             </div>
 
             {/* Phone */}
@@ -496,22 +527,22 @@ const Checkout = () => {
           </div>
 
           <div className="space-y-3">
-            <h2 className="text-xl mb-5 font-noto-serif font-bold capitalize">
+            <h2 className="mb-5 text-xl font-bold capitalize font-noto-serif">
               Additional Information
             </h2>
             {/* Additional Info */}
             <div>
               <label
-                htmlFor="email"
+                htmlFor="info"
                 className={`bg-white border border-black/10 cursor-text flex flex-col w-full px-3 py-4 rounded-sm group focus-within:border-primary focus-within:border text-sm relative ${
-                  checkoutErrors.email
+                  checkoutErrors.info
                     ? "outline outline-red-700 border-none"
                     : ""
                 }`}
               >
                 <span
                   className={`absolute transition-all -translate-y-3 text-gray-500 text-xs ${
-                    emailValue?.length > 0 ? "opacity-100" : "opacity-0"
+                    infoValue?.length > 0 ? "opacity-100" : "opacity-0"
                   }`}
                 >
                   Order notes(optional)
@@ -519,37 +550,37 @@ const Checkout = () => {
 
                 <textarea
                   className={`outline-none bg-transparent border-none transition-all ${
-                    emailValue?.length > 0
+                    infoValue?.length > 0
                       ? "text-xs translate-y-2"
                       : "translate-y-0"
                   }`}
-                  type="email"
+                  type="text"
                   placeholder="Note about your order, e.g. special notes for delivery."
-                  id="email"
-                  {...checkout("email", {
-                    required: "Email is required",
-                  })}
+                  id="info"
+                  {...checkout("info")}
                 ></textarea>
               </label>
-              {checkoutErrors.email && (
-                <p className={errorMsg}>{checkoutErrors.email.message}</p>
+              {checkoutErrors.info && (
+                <p className={errorMsg}>{checkoutErrors.info.message}</p>
               )}
             </div>
           </div>
 
           <button
+            onClick={makePayment}
             type="submit"
             disabled={isCheckoutSubmitting}
-            className="w-full cursor-pointer bg-primary py-3 mt-2 text-lg font-semibold text-black rounded-sm hover:bg-primary/90 transition-all"
+            className="w-full py-3 mt-2 text-lg font-semibold text-black transition-all rounded-sm cursor-pointer bg-primary hover:bg-primary/90"
           >
-            {isCheckoutSubmitting ? "Placing Order..." : "Place Order $40.00"}
+            {isCheckoutSubmitting
+              ? "Placing Order..."
+              : `Place Order $${subtotal}`}
           </button>
         </form>
 
-
         {/* Todo: Learn about CSS positions  */}
         <div className="flex-[0.9] h-[100%] ">
-          <section className="hidden sticky lg:block p-12 pr-15 space-y-6  bg-white">
+          <section className="sticky hidden p-12 space-y-6 bg-white lg:block pr-15">
             <div className="space-y-6">
               {cart &&
                 cart.map((item) => (
@@ -562,9 +593,9 @@ const Checkout = () => {
                   />
                 ))}
             </div>
-            <div className="lg:flex justify-center items-center gap-3">
+            <div className="items-center justify-center gap-3 lg:flex">
               <input
-                className="w-full h-full px-4 py-4 flex-1 text-sm outline-none border-black/10 border-1 rounded-md focus-within:border-primary focus-within:border-2 transition-all duration-300"
+                className="flex-1 w-full h-full px-4 py-4 text-sm transition-all duration-300 rounded-md outline-none border-black/10 border-1 focus-within:border-primary focus-within:border-2"
                 type="text"
                 placeholder="Coupon Code"
               />

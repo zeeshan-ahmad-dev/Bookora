@@ -31,7 +31,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="px-2 relative flex justify-between items-center xl:px-16">
+    <nav className="relative flex items-center justify-between px-2 xl:px-16">
       <Link to="/">
         <img className="w-40 py-2" src={assets.nav_logo} alt="" />
       </Link>
@@ -47,7 +47,7 @@ const Navbar = () => {
 
       {/* Bigger screens */}
       {/* Links */}
-      <div className="space-x-2 hidden md:flex xl:space-x-6 text-sm text-nowrap">
+      <div className="hidden space-x-2 text-sm md:flex xl:space-x-6 text-nowrap">
         <Link
           to="/product-category/all-books"
           className={`hover:text-primary transition py-8 px-2 ${
@@ -106,11 +106,11 @@ const Navbar = () => {
         </Link>
       </div>
       {/* icons */}
-      <div className="center hidden md:flex gap-4 lg:mr-2 xl:mr-6 relative">
+      <div className="relative hidden gap-4 center md:flex lg:mr-2 xl:mr-6">
         {/* Cart Icon */}
         <div className="relative group">
-          <Link className="border-2 group-hover relative p-2 block">
-            <span className="absolute size-4 bg-black rounded-full text-sm font-semibold text-white center -right-1 -top-1">
+          <Link className="relative block p-2 border-2 group-hover">
+            <span className="absolute text-sm font-semibold text-white bg-black rounded-full size-4 center -right-1 -top-1">
               {cart?.length}
             </span>
             <img className="size-5" src={assets.cart_icon} alt="" />
@@ -119,7 +119,7 @@ const Navbar = () => {
           {/* Drop down */}
           <div className="absolute bg-white top-full right-0 w-fit pt-3 text-sm border border-black/15 text-center before:content-[''] before:size-2.5 before:absolute before:-top-1.5 before:right-2 before:rotate-45 before:bg-white before:border-t before:border-l before:border-black/15 invisible opacity-0 group-hover:opacity-100 group-hover:visible transition-all duration-500 z-50 min-w-68">
             {cart?.length > 0 && (
-              <div className="px-5 max-h-44 overflow-y-scroll mb-2">
+              <div className="px-5 mb-2 overflow-y-scroll max-h-44">
                 {cart?.map((book, index) => (
                   <div
                     key={index}
@@ -137,7 +137,7 @@ const Navbar = () => {
                       </p>
                     </div>
                     <button
-                      onClick={(e) => removeBookFromCart(book._id)}
+                      onClick={() => removeBookFromCart(book._id)}
                       className="rounded-full border p-0.5 opacity-50 cursor-pointer"
                     >
                       <img className="w-3.5" src={assets.remove_icon} alt="" />
@@ -148,7 +148,7 @@ const Navbar = () => {
             )}
 
             {cart?.length > 0 && (
-              <div className="border-t border-b border-black/15 py-3 px-5 flex justify-between">
+              <div className="flex justify-between px-5 py-3 border-t border-b border-black/15">
                 <p>Subtotal: </p>
                 <p className="text-sm text-black/70">${subtotal}</p>
               </div>
@@ -158,13 +158,13 @@ const Navbar = () => {
               <div className="px-5 gap-1.5 my-3 flex flex-col">
                 <Link
                   to="/cart"
-                  className="border text-nowrap border-primary text-primary px-10 py-4 font-bold cursor-pointer"
+                  className="px-10 py-4 font-bold border cursor-pointer text-nowrap border-primary text-primary"
                 >
                   View cart
                 </Link>
-                <button className="border-none text-nowrap bg-primary text-black px-10 py-4 font-bold cursor-pointer">
+                <Link to="/checkout" className="px-10 py-4 font-bold text-black border-none cursor-pointer text-nowrap bg-primary">
                   Checkout
-                </button>
+                </Link>
               </div>
             )}
             {cart?.length === 0 && (
@@ -172,7 +172,7 @@ const Navbar = () => {
                 <p className="my-2 font-light">No products in the cart.</p>
                 <Link
                   to="/product-category/all-books"
-                  className="border inline-block mb-4 mt-2 text-nowrap border-primary text-primary px-10 py-4 font-bold cursor-pointer"
+                  className="inline-block px-10 py-4 mt-2 mb-4 font-bold border cursor-pointer text-nowrap border-primary text-primary"
                 >
                   Continue Shopping
                 </Link>
@@ -183,7 +183,7 @@ const Navbar = () => {
 
         {/* Account Icon */}
         <div className="relative group">
-          <Link className="border-2 group-hover relative p-2 block">
+          <Link className="relative block p-2 border-2 group-hover">
             <img className="size-5" src={assets.account_icon} alt="account" />
           </Link>
 
@@ -196,17 +196,17 @@ const Navbar = () => {
           >
             {/* If NOT logged in */}
             {!isLoggedIn && (
-              <div className="px-5 py-3 flex flex-col gap-2">
+              <div className="flex flex-col gap-2 px-5 py-3">
                 <Link
                   to="/login"
-                  className="border text-nowrap border-primary text-primary px-10 py-3 font-bold cursor-pointer"
+                  className="px-10 py-3 font-bold border cursor-pointer text-nowrap border-primary text-primary"
                 >
                   Login
                 </Link>
 
                 <Link
                   to="/login"
-                  className="bg-primary text-nowrap text-black px-10 py-3 font-bold cursor-pointer"
+                  className="px-10 py-3 font-bold text-black cursor-pointer bg-primary text-nowrap"
                 >
                   Register
                 </Link>
@@ -215,28 +215,28 @@ const Navbar = () => {
 
             {/* Logged in UI */}
             {isLoggedIn && (
-              <div className="px-5 text-left mb-3">
-                <p className="font-semibold mb-1">Hello, {user?.firstName}</p>
-                <p className="text-xs text-black/60 mb-3">Account Menu</p>
+              <div className="px-5 mb-3 text-left">
+                <p className="mb-1 font-semibold">Hello, {user?.firstName}</p>
+                <p className="mb-3 text-xs text-black/60">Account Menu</p>
 
                 {/* Menu links */}
                 <div className="flex flex-col gap-1.5">
                   {!user?.isVerified && (
-                    <button className="border border-primary text-primary px-10 py-3 font-bold text-center text-nowrap">
+                    <button className="px-10 py-3 font-bold text-center border border-primary text-primary text-nowrap">
                       Orders
                     </button>
                   )}
 
                   <Link
                     to="#"
-                    className="border border-primary text-primary px-10 py-3 font-bold text-center text-nowrap"
+                    className="px-10 py-3 font-bold text-center border border-primary text-primary text-nowrap"
                   >
                     Orders
                   </Link>
 
                   <button
                     onClick={logout}
-                    className="bg-primary text-black px-10 py-3 font-bold text-center text-nowrap cursor-pointer"
+                    className="px-10 py-3 font-bold text-center text-black cursor-pointer bg-primary text-nowrap"
                   >
                     Logout
                   </button>

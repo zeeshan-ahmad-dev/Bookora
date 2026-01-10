@@ -55,19 +55,19 @@ const CartPage = () => {
   }, [cart]);
 
   return (
-    <main className="bg-secondary py-6">
+    <main className="py-6 bg-secondary">
       <section className="px-5 lg:px-20">
-        <h2 className="text-2xl font-noto-serif font-bold">Cart</h2>
+        <h2 className="text-2xl font-bold font-noto-serif">Cart</h2>
         {cart.length > 0 && (
-          <table className="flex border border-black/10 lg:block my-4 relative">
-            <thead className="flex-1 lg:flex hidden border-b text-black/70 border-black/10 bg-white/40">
+          <table className="relative flex my-4 border border-black/10 lg:block">
+            <thead className="flex-1 hidden border-b lg:flex text-black/70 border-black/10 bg-white/40">
               <tr className="flex justify-between w-full text-left">
                 <th className="min-h-8 py-2 px-4 flex-[0.4] "></th>
-                <th className="min-h-8 py-2 px-4 flex-1 "></th>
-                <th className="min-h-8 py-2 px-4 flex-1 ">Product</th>
-                <th className="min-h-8 py-2 px-4 flex-1 ">Price</th>
-                <th className="min-h-8 py-2 px-4 flex-1 ">Quantity</th>
-                <th className="min-h-8 py-2 px-4 flex-1 ">Subtotal</th>
+                <th className="flex-1 px-4 py-2 min-h-8 "></th>
+                <th className="flex-1 px-4 py-2 min-h-8 ">Product</th>
+                <th className="flex-1 px-4 py-2 min-h-8 ">Price</th>
+                <th className="flex-1 px-4 py-2 min-h-8 ">Quantity</th>
+                <th className="flex-1 px-4 py-2 min-h-8 ">Subtotal</th>
               </tr>
             </thead>
             <tbody className="flex-1 lg:block lg:w-full">
@@ -89,11 +89,11 @@ const CartPage = () => {
                         />
                       </button>
                     </td>
-                    <td className="lg:flex-1 py-3 border-b border-black/15 px-4 flex justify-center lg:justify-start items-center">
+                    <td className="flex items-center justify-center px-4 py-3 border-b lg:flex-1 border-black/15 lg:justify-start">
                       <img className="w-17" src={book.cover} alt="Book Cover" />
                     </td>
-                    <td className="lg:flex-1 py-3 border-b border-black/15 px-4 flex justify-between lg:items-center">
-                      <h6 className="lg:hidden font-bold text-sm lg:text-base text-black/80">
+                    <td className="flex justify-between px-4 py-3 border-b lg:flex-1 border-black/15 lg:items-center">
+                      <h6 className="text-sm font-bold lg:hidden lg:text-base text-black/80">
                         Product:
                       </h6>
                       <Link
@@ -103,20 +103,20 @@ const CartPage = () => {
                         {book.title}
                       </Link>
                     </td>
-                    <td className="lg:flex-1 py-3 border-b border-black/15 px-4 flex justify-between lg:items-center">
-                      <h6 className="lg:hidden font-bold text-sm lg:text-base text-black/80">
+                    <td className="flex justify-between px-4 py-3 border-b lg:flex-1 border-black/15 lg:items-center">
+                      <h6 className="text-sm font-bold lg:hidden lg:text-base text-black/80">
                         Price:
                       </h6>
                       <span className="text-sm lg:text-base text-black/80">
                         ${book.price?.toFixed(2)}
                       </span>
                     </td>
-                    <td className="lg:flex-1 py-3 border-b border-black/15 px-4 flex justify-between lg:items-center">
-                      <h6 className="lg:hidden font-bold text-sm lg:text-base text-black/80">
+                    <td className="flex justify-between px-4 py-3 border-b lg:flex-1 border-black/15 lg:items-center">
+                      <h6 className="text-sm font-bold lg:hidden lg:text-base text-black/80">
                         Quantity:
                       </h6>
                       <input
-                        className="bg-white text-sm lg:text-base text-black/70 border border-gray-300 outline-none w-12 text-center py-1"
+                        className="w-12 py-1 text-sm text-center bg-white border border-gray-300 outline-none lg:text-base text-black/70"
                         type="number"
                         name="quantity"
                         id="quantity"
@@ -126,8 +126,8 @@ const CartPage = () => {
                         max="1000"
                       />
                     </td>
-                    <td className="lg:flex-1 py-3 border-b border-black/15 px-4 flex justify-between lg:items-center">
-                      <h6 className="lg:hidden font-bold text-sm lg:text-base text-black/80">
+                    <td className="flex justify-between px-4 py-3 border-b lg:flex-1 border-black/15 lg:items-center">
+                      <h6 className="text-sm font-bold lg:hidden lg:text-base text-black/80">
                         Subtotal:
                       </h6>
                       <span className="text-sm lg:text-base text-black/80">
@@ -137,7 +137,7 @@ const CartPage = () => {
                   </tr>
                 ))}
 
-              <tr className="p-4 flex justify-end">
+              <tr className="flex justify-end p-4">
                 <td className="w-full lg:w-fit">
                   <button
                     onClick={updateCart}
@@ -157,34 +157,34 @@ const CartPage = () => {
 
         {/* Cart Total */}
         {cart.length > 0 && (
-          <div className="my-6 lg:flex justify-end">
+          <div className="justify-end my-6 lg:flex">
             <div className="border border-black/15 lg:flex-[0.4]">
-              <div className="bg-white/70 px-4 py-2 border-b border-black/15">
-                <h3 className="text-base font-noto-serif font-bold">
+              <div className="px-4 py-2 border-b bg-white/70 border-black/15">
+                <h3 className="text-base font-bold font-noto-serif">
                   Cart totals
                 </h3>
               </div>
               <div className="px-4 py-6 text-sm text-black/60">
-                <div className="flex justify-between border-b py-3 px-4 border-black/15">
+                <div className="flex justify-between px-4 py-3 border-b border-black/15">
                   <p className="font-bold text-black/70">Subtotal:</p>
                   <span>${tempSubTotal}</span>
                 </div>
-                <div className="flex justify-between border-b py-3 px-4 border-black/15">
+                <div className="flex justify-between px-4 py-3 border-b border-black/15">
                   <p className="font-bold text-black/70">Total:</p>
                   <span>${tempSubTotal}</span>
                 </div>
-                <button className="cta-btn font-bold text-black text-base w-full mt-5">
+                <Link to="/checkout" className="w-full mt-5 text-base font-bold text-black cta-btn">
                   Proceed to checkout
-                </button>
+                </Link>
               </div>
             </div>
           </div>
         )}
 
         {cart.length < 1 && (
-          <div className="my-6 border-t-4 border-primary pt-4">
-            <h4 className="text-gray-600 text-sm"> Your cart is currently empty.</h4>
-            <Link to="/product-category/all-books" className="cta-btn font-bold text-black text-sm mt-5">
+          <div className="pt-4 my-6 border-t-4 border-primary">
+            <h4 className="text-sm text-gray-600"> Your cart is currently empty.</h4>
+            <Link to="/product-category/all-books" className="mt-5 text-sm font-bold text-black cta-btn">
               Return to shop
             </Link>
           </div>

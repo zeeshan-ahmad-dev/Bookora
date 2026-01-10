@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cartRoute from "./routes/cart.route.js";
 import authRoute from "./routes/auth.route.js";
 import bookRoute from "./routes/book.route.js";
+import paymentRoute from "./routes/payment.route.js"
 import connectDB from "./db/config.js";
 import session from "express-session";
 import cors from 'cors';
@@ -34,5 +35,6 @@ app.use(passport.session());
 app.use("/auth", authRoute);
 app.use("/books", bookRoute);
 app.use("/cart", cartRoute);
+app.use("/payment", paymentRoute);
 
 app.listen(PORT, () => console.log(`Server running on port: ${PORT}`));

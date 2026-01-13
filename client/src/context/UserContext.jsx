@@ -21,7 +21,6 @@ export const UserContextProvider = ({ children }) => {
 
     const fetchUser = async () => {
         const { data } = await api.get('/auth/user');
-        console.log(data)
 
         setUser(data.user);
         setIsLoggedIn(true);
@@ -32,7 +31,6 @@ export const UserContextProvider = ({ children }) => {
         const userData = JSON.parse(localStorage.getItem("user")) || null;
         setIsLoggedIn(userData !== null ? true : false);
         setUser(userData);
-        console.log("useEffect")
         fetchUser();
     }, []);
 

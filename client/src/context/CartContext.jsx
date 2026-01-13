@@ -39,7 +39,7 @@ export const CartContextProvider = ({ children }) => {
         return updatedCart;
       });
 
-      const { data } = await api.post("/cart/remove-book", {
+      const { data } = await api.delete("/cart/remove-book", {
         bookId,
       });
 
@@ -54,6 +54,19 @@ export const CartContextProvider = ({ children }) => {
       })
     }
   };
+
+  const clearCart = async () => {
+    try {
+      const res = await api.delete("/cart/clear");
+      if (res.status === 200 || res.status === 204) {
+        console.log("Cart cleared");
+        setCart([]);
+        localStorage.setItem("cart", JSON.stringify([]));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const changeQuantity = async (bookId, quantity) => {
     const updatedCart = cart.map((book) =>
@@ -103,11 +116,12 @@ export const CartContextProvider = ({ children }) => {
     subtotal,
     addBookToCart,
     removeBookFromCart,
+    clearCart,
     changeQuantity,
     setUpdatedCart,
     initializeCart,
     updatingIds,
-    setUpdatingIds
+    setUpdatingIds,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

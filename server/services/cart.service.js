@@ -37,7 +37,7 @@ export const addItemToCartService = async (userId, bookId, quantity) => {
     if (!cart) {
       cart = await Cart.create({
         user: userId,
-        items: [{ book: bookId, price: book.price, quantity }],
+        items: [{ book: bookId, price: book.price.toFixed(2), quantity }],
       });
     } else {
       const itemIndex = cart.items.findIndex(
@@ -47,7 +47,7 @@ export const addItemToCartService = async (userId, bookId, quantity) => {
       if (itemIndex > -1) {
         cart.items[itemIndex].quantity += quantity;
       } else {
-        cart.items.push({ book: bookId, price: book.price, quantity });
+        cart.items.push({ book: bookId, price: book.price.toFixed(2), quantity });
       }
 
       await cart.save();
@@ -122,5 +122,24 @@ export const updateCartService = async (userId, updatedCartArray) => {
   } catch (error) {
     console.error(error);
     throwErr("Error updating cart", 500);
+  }
+};
+
+// Clears cart items
+export const clearCartService = async (userId) => {
+  try {
+    let cart = await Cart.findOne({ user: userId });
+
+    if (!cart) {
+      throwErr("Cart not found for the user", 404);
+    }
+    
+    cart.items = [];
+    await cart.save();
+
+    return cart;
+  } catch (error) {
+    console.error(error);
+    throwErr(error.message || "Error updating cart", error.status || 500);
   }
 };

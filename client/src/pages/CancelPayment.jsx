@@ -12,7 +12,7 @@ export const CancelPayment = () => {
         </h1>
 
         <p className="mb-6 text-sm text-gray-600">
-          Your payment was not completed. Don’t worry — no money was charged.
+          Your payment was not completed. Don't worry — no money was charged.
           You can try again anytime.
         </p>
 

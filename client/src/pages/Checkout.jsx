@@ -44,27 +44,24 @@ const Checkout = () => {
     "info",
   ]);
 
-  const onSubmitCheckout = (data) => {
-    console.log(data);
-  };
-
   // Payment Integration
   const makePayment = async () => {
+    console.log("it ran")
     try {
       // Call backend to create stripe session
-      console.log("ran")
       const response = await api.post("payment/create-checkout-session", {
         products: cart,
       });
-      console.log("response", response);
 
-      const stripe = await loadStripe(
+      localStorage.setItem("orderId", response.data.orderId);
+      
+      await loadStripe(
         "pk_test_51SnpVF90s5HCyBqaQfZvwWFpVwO4Fm468EQrinLjQXVID2iYzSphTFIkt70XCYdA9Skm1Kx279keZ2Z420NL5vpP00IKIotMOR"
       );
-      console.log(`stripe: ${stripe}`);
+
 
       // Redirect to stripe checkout
-      window.location.href = response.data.url;
+        window.location.href = response.data.url;
     } catch (error) {
       console.error("Payment error:", error);
     }
@@ -567,7 +564,6 @@ const Checkout = () => {
           </div>
 
           <button
-            onClick={makePayment}
             type="submit"
             disabled={isCheckoutSubmitting}
             className="w-full py-3 mt-2 text-lg font-semibold text-black transition-all rounded-sm cursor-pointer bg-primary hover:bg-primary/90"

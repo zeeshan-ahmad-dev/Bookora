@@ -20,6 +20,7 @@ import Checkout from "./pages/Checkout";
 import CheckoutLayout from "./layouts/CheckoutLayout";
 import { SuccessPayment } from "./pages/SuccessPayment";
 import { CancelPayment } from "./pages/CancelPayment";
+import Order from "./pages/Order";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
               <Route path="/auth/success" element={<AuthSuccess />} />
               <Route path="/payment/success" element={<SuccessPayment />} />
               <Route path="/payment/cancel" element={<CancelPayment />} />
+              <Route path="/orders" element={<Order />} />
               <Route
                 path="/product-category/all-books"
                 element={<AllBooks />}

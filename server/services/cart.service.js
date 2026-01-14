@@ -18,7 +18,7 @@ export const getCartService = async (userId) => {
     return cart;
   } catch (error) {
     console.error(error);
-    throwErr("Error fetching cart", 500);
+    throwErr("Error fetching cart", error.status || 500);
   }
 };
 
@@ -58,7 +58,7 @@ export const addItemToCartService = async (userId, bookId, quantity) => {
     return populatedCart;
   } catch (error) {
     console.error(error);
-    throwErr("Error adding item to cart", 500);
+    throwErr("Error adding item to cart", error.status || 500);
   }
 };
 
@@ -86,7 +86,7 @@ export const removeItemToCartService = async (userId, bookId) => {
     return populatedCart;
   } catch (error) {
     console.error(error);
-    throwErr("Error removing item from cart", 500);
+    throwErr("Error removing item from cart", error.status || 500);
   }
 };
 
@@ -121,7 +121,7 @@ export const updateCartService = async (userId, updatedCartArray) => {
     return populatedCart;
   } catch (error) {
     console.error(error);
-    throwErr("Error updating cart", 500);
+    throwErr("Error updating cart", error.status || 500);
   }
 };
 
@@ -140,6 +140,6 @@ export const clearCartService = async (userId) => {
     return cart;
   } catch (error) {
     console.error(error);
-    throwErr(error.message || "Error updating cart", error.status || 500);
+    throwErr(error.message || "Error updating cart", error.status || error.status || 500);
   }
 };

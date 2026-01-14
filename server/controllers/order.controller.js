@@ -1,4 +1,5 @@
 import Order from '../model/order.model.js';
+import { fetchOrdersService } from '../services/order.service.js';
 
 // create service file
 export const getOrderStatus = async (req, res) => {
@@ -10,5 +11,18 @@ export const getOrderStatus = async (req, res) => {
     } catch (error) {
         console.log("Error fetching status for an order", error.message);
         res.status(500).json(error);
+    }
+}
+
+// create service file
+export const fetchOrdersController = async (req, res) => {
+    const userId = req.user._id;
+    try {
+        const orders = await fetchOrdersService(userId);
+
+        res.status(200).json({ orders });
+    } catch (error) {
+        console.log("Error fetching orders", error.message);
+        res.status(error.status || 500).json(error);
     }
 }

@@ -14,8 +14,8 @@ export const SuccessPayment = () => {
 
       console.log("OrderId", orderId);
 
-      const res = await api.get(`/order/status/${orderId}`);
-
+      const res = await api.get(`/orders/status/${orderId}`);
+      console.log(res)
       if (res.data.payment_status === "paid") {
         console.log("Clearing cart");
 
@@ -23,7 +23,7 @@ export const SuccessPayment = () => {
         localStorage.clear("orderId");
       }
     })();
-  })
+  }, [])
   return (
     <div className="flex items-center justify-center min-h-screen px-4 bg-hero">
       <div className="w-full max-w-md p-10 text-center bg-white shadow-xl rounded-2xl">

@@ -47,6 +47,6 @@ app.use("/auth", authRoute);
 app.use("/books", bookRoute);
 app.use("/cart", cartRoute);
 app.use("/payment", paymentRoute);
-app.use("/order", orderRoute);
+app.use("/orders", orderRoute);
 
 app.listen(PORT, () => console.log(`Server running on port: ${PORT}`));

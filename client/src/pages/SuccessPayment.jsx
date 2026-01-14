@@ -9,20 +9,22 @@ export const SuccessPayment = () => {
   const { clearCart } = useContext(CartContext);
 
   useEffect(() => {
-    (async () => {
+    const fetchOrderStatus = async () => {
+    try {
       const orderId = localStorage.getItem("orderId");
-
-      console.log("OrderId", orderId);
+      if (!orderId) return;
 
       const res = await api.get(`/orders/status/${orderId}`);
-      console.log(res)
       if (res.data.payment_status === "paid") {
-        console.log("Clearing cart");
-
         clearCart();
-        localStorage.clear("orderId");
+        localStorage.removeItem("orderId");
       }
-    })();
+    } catch (err) {
+      console.error("Error fetching order status:", err);
+    }
+  };
+
+  fetchOrderStatus();
   }, [])
   return (
     <div className="flex items-center justify-center min-h-screen px-4 bg-hero">

@@ -86,9 +86,10 @@ export const fetchUserService = async (userId) => {
       email: user.email,
       isAdmin: user.isAdmin,
       isVerified: user.isVerified,
+      profilePicture: user.profilePicture,
       authType: user.authType,
     };
-    console.log("safeUser:", safeUser)
+
     return safeUser;
   } catch (error) {
     console.error(error);

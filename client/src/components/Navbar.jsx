@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import assets from "../assets/assets.js";
 import Hamburger from "hamburger-react";
@@ -162,7 +162,10 @@ const Navbar = () => {
                 >
                   View cart
                 </Link>
-                <Link to="/checkout" className="px-10 py-4 font-bold text-black border-none cursor-pointer text-nowrap bg-primary">
+                <Link
+                  to="/checkout"
+                  className="px-10 py-4 font-bold text-black border-none cursor-pointer text-nowrap bg-primary"
+                >
                   Checkout
                 </Link>
               </div>
@@ -216,27 +219,56 @@ const Navbar = () => {
             {/* Logged in UI */}
             {isLoggedIn && (
               <div className="px-5 mb-3 text-left">
-                <p className="mb-1 font-semibold">Hello, {user?.firstName}</p>
-                <p className="mb-3 text-xs text-black/60">Account Menu</p>
+                {/* Profile picture */}
+                <div className="flex items-center gap-3 mb-2">
+                  {user?.profilePicture ? (
+                    <img
+                      src={user?.profilePicture}
+                      alt="Profile"
+                      className="size-14 rounded-full object-cover border border-black/10"
+                    />
+                  ) : (
+                    <div
+                      src={user?.profilePicture} // fallback if no pfp
+                      alt="Profile"
+                      className="size-14 rounded-full flex justify-center items-center text-3xl font-semibold text-white font-noto-serif bg-primary"
+                    >
+                      {user?.firstName.split("")[0]}
+                    </div>
+                  )}
+                  <div>
+                    <p className="font-semibold">Hello, {user?.firstName}</p>
+                    <p className="text-xs text-black/60">Account Menu</p>
+                  </div>
+                </div>
 
                 {/* Menu links */}
                 <div className="flex flex-col gap-1.5">
                   {!user?.isVerified && (
                     <button className="px-10 py-3 font-bold text-center border border-primary text-primary text-nowrap">
-                      Orders
+                      Verify Account
                     </button>
                   )}
 
                   <Link
-                    to="#"
+                    to="/orders"
                     className="px-10 py-3 font-bold text-center border border-primary text-primary text-nowrap"
                   >
                     Orders
                   </Link>
 
+                  {user?.isAdmin && (
+                    <Link
+                      to="/books/add"
+                      className="px-10 py-3 font-bold text-center border border-primary text-primary text-nowrap"
+                    >
+                      Add book
+                    </Link>
+                  )}
+
                   <button
                     onClick={logout}
-                    className="px-10 py-3 font-bold text-center text-black cursor-pointer bg-primary text-nowrap"
+                    className="px-10 py-3 font-bold text-center text-white bg-primary rounded text-nowrap"
                   >
                     Logout
                   </button>

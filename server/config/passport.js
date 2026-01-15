@@ -1,23 +1,37 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import { Strategy as LocalStrategy} from "passport-local";
+import { Strategy as LocalStrategy } from "passport-local";
 import User from "../model/user.model.js";
 import bcrypt from "bcrypt";
 
 passport.use(
-  new LocalStrategy({ usernameField: "email", passwordField: "password"},async (email, password, done) => {
-    try {
-      const user = await User.findOne({ email: email });
-      if (!user) return done(null, false);
+  new LocalStrategy(
+    { usernameField: "email", passwordField: "password" },
+    async (email, password, done) => {
+      try {
+        const user = await User.findOne({ email: email });
+        if (!user) return done(null, false);
 
-      const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch) return done(null, false);
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) return done(null, false);
 
-      return done(null, user);
-    } catch (error) {
+        const safeUser = {
+          _id: user._id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          isAdmin: user.isAdmin,
+          isVerified: user.isVerified,
+          profilePicture: user.profilePicture,
+          authType: user.authType,
+        };
+
+        return done(null, safeUser);
+      } catch (error) {
         return done(error);
+      }
     }
-  })
+  )
 );
 
 passport.use(
@@ -30,7 +44,7 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       try {
         const email = profile.emails[0].value;
-        console.log(profile)
+        console.log(profile);
 
         let user = await User.findOne({ email });
 
@@ -45,7 +59,18 @@ passport.use(
           });
         }
 
-        return done(null, user);
+        const safeUser = {
+          _id: user._id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          isAdmin: user.isAdmin,
+          isVerified: user.isVerified,
+          profilePicture: user.profilePicture,
+          authType: user.authType,
+        };
+
+        return done(null, safeUser);
       } catch (error) {
         return done(error, null);
       }

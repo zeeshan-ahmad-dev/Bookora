@@ -33,7 +33,7 @@ export const registerUserController = async (req, res) => {
   }
 };
 
-export const fetachUserController = async (req, res) => {
+export const fetchUserController = async (req, res) => {
   const { _id } = req.user;
   console.log("req.user from fetchUserController", req.user)
   try {

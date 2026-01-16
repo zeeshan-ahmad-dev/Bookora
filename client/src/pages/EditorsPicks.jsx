@@ -9,7 +9,7 @@ const AllBooks = () => {
 
   const fetchBooks = async () => {
     try {
-      const res = await api.get("/books");   
+      const res = await api.get("/books?limit=8");   
 
       setBooks(res.data.books);
       toast.success(res.data.message)

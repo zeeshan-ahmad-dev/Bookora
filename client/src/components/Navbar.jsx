@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import assets from "../assets/assets.js";
 import Hamburger from "hamburger-react";

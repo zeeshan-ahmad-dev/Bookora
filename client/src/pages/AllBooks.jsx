@@ -9,13 +9,12 @@ const AllBooks = () => {
 
   const fetchBooks = async () => {
     try {
-      const res = await api.get("/books?limit=5");   
+      const res = await api.get("/books?type=all");   
 
       setBooks(res.data.books);
       toast.success(res.data.message)
     } catch (error) {
       toast.error(error.message);
-      console.log(res);
     }
   }
 

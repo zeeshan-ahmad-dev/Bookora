@@ -5,9 +5,11 @@ import {
 } from "../services/book.service.js";
 
 export const fetchBooksController = async (req, res) => {
-  const limit = req.query.limit ? parseInt(req.query.limit) : 0;
+  const { limit, type, sort } = req.query;
+
   try {
-    const books = await fetchBooksService(limit);
+    console.log(limit, type, sort)
+    const books = await fetchBooksService(limit, type, sort);
     res.status(200).json({
       success: true,
       message: "Books fetched successfully!",

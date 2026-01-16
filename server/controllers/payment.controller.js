@@ -1,5 +1,6 @@
 import Stripe from "stripe";
 import Order from "../model/order.model.js";
+import Book from "../model/book.model.js";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET);
 
@@ -65,6 +66,14 @@ export const stripeWebHook = async (req, res) => {
 
     if (event.type === "checkout.session.completed") {
       const session = event.data.object;
+
+      const order = await Order.findById(session.metadata.orderId);
+
+      order.products.forEach(async (book) => {
+        await Book.findByIdAndUpdate(book._id, {
+          $inc: {sales: book.quantity || 1}
+        })
+      });
 
       await Order.findByIdAndUpdate(
         session.metadata.orderId,

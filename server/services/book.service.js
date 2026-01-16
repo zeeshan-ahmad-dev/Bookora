@@ -7,8 +7,23 @@ import { throwErr } from "../utils/error.utils.js";
  * @param {number} limit Total books to be retrieved
  * @returns {Promise<object[]>} A promise that resolves to an array of book objects
  */
-export const fetchBooksService = async (limit) => {
+export const fetchBooksService = async (limit = 0, type = 'all', sort = 'default') => {
     try {
+        if (type === 'all') {
+            const books = await Book.find().limit(limit);
+            return books;
+        }
+
+        if (type === 'new') {
+            const books = await Book.find().sort({ createdAt: -1 }).limit(limit);
+            return books;
+        }
+
+        if (type = 'bestseller') {
+            const books = await Book.find().sort({ sales: -1 }).limit(limit);
+            return books;
+        }
+
         const books = await Book.find().limit(limit);
         return books;
     } catch (error) {

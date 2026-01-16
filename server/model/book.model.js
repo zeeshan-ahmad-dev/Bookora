@@ -20,6 +20,10 @@ const bookSchema = new mongoose.Schema({
             stars: {type: Number, min: 0, max: 5}
         }
     ],
+    sales: {
+        type: Number,
+        default: 0
+    },
     author: {
         type: String,
         required: true

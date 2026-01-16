@@ -3,7 +3,7 @@ import assets from "../assets/assets";
 
 const SubscribeEmail = () => {
   return (
-    <section className="py-16 md:py-20 xl:py-20 px-10 md:px-0 xl:px-20 md:mx-0 bg-hero md:flex md:items-center">
+    <section className="py-16 md:py-20 xl:py-20 px-10 md:px-10 xl:px-20 md:mx-0 bg-hero md:flex md:items-center">
       <div className="md:flex-[0.7] realtive">
         <h1 className="text-[1.7rem] md:text-5xl md:text-left md:pr-40 leading-9 md:leading-14 text-center font-noto-serif font-bold mb-11">
           Join Book Lovers Comunity and Get Latest Updates

@@ -1,12 +1,11 @@
-import React from "react";
 import assets from "../assets/assets";
 import {Link} from 'react-router-dom';
-import { FaFacebook, FaFacebookSquare, FaInstagram, FaInstagramSquare, FaTwitter } from "react-icons/fa";
+import { FaFacebookSquare, FaInstagramSquare, FaTwitter } from "react-icons/fa";
 
 const Footer = () => {
   return (
     <footer className="text-center space-y-20 pt-16 bg-black text-white">
-      <div className="flex text-center md:px-0 xl:px-24 flex-col md:flex-row items-center md:items-start md:gap-48 xl:gap-28">
+      <div className="flex text-center md:pl-2 md:pr-6 xl:px-24 flex-col md:flex-row items-center md:items-start md:gap-10 xl:gap-28">
         <div className="size-fit">
           <img className="w-58 py-2" src={assets.footer_logo} alt="" />
         </div>
@@ -46,8 +45,8 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="border-t border-white/70 px-16 md:px-0 xl:px-24 py-6 flex flex-col md:flex-row md:justify-between items-center space-y-3">
-        <p className="text-xs md:w-80 md:text-left">Copyright © 2025 Book Worms | Powered by Book Worms</p>
+      <div className="border-t border-white/70 px-16 md:px-0 xl:px-24 py-6 flex flex-col md:flex-row md:justify-around lg:justify-between items-center space-y-3">
+        <p className="text-xs md:w-60 lg:w-80 lg:text-left">Copyright © 2025 Book Worms | Powered by Book Worms</p>
         <div className="w-fit md:mr-36">
           <img src={assets.cards_image} className="w-fit" alt="" />
         </div>

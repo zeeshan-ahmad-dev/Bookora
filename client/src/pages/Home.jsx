@@ -122,11 +122,11 @@ const Home = () => {
       </section>
 
       {/* Author of the Month */}
-      <section className="py-8 md:py-14 xl:py-24 px-10 md:px-0 xl:px-20 md:mx-0 bg-secondary">
+      <section className="py-8 md:py-14 xl:py-24 px-10 md:px-10 xl:px-20 md:mx-0 bg-secondary">
         <h1 className="text-2xl lg:text-4xl font-noto-serif font-semibold text-center md:text-left py-12 lg:mt-5">
           Author of the Month
         </h1>
-        <div className="md:grid grid-cols-3 md:items-center">
+        <div className="lg:grid grid-cols-3 md:items-center">
           <div className="relative">
             <img src={assets.author_image} className="relative z-50" alt="" />
             <img
@@ -135,7 +135,7 @@ const Home = () => {
               alt=""
             />
           </div>
-          <div className="py-14 space-y-5 relative md:px-9">
+          <div className="py-14 space-y-5 relative lg:px-9">
             <h1 className="text-2xl md:text-4xl font-noto-serif font-bold">
               Melissa Miner
             </h1>
@@ -146,7 +146,7 @@ const Home = () => {
             </p>
             <button className="cta-btn">READ MORE</button>
           </div>
-          <div className="flex md:flex-col justify-center">
+          <div className="flex lg:flex-col justify-center md:justify-start lg:justify-center">
             <div className="grid grid-cols-1 md:grid-cols-1 md:grid-rows-3 gap-4 text-left">
               {[
                 {
@@ -165,12 +165,12 @@ const Home = () => {
                   price: [16, 18],
                 },
               ].map((book, index) => (
-                <div key={index} className="md:flex items-center md:gap-4">
+                <div key={index} className="md:flex md:items-center md:gap-10 lg:gap-4">
                   <div className="relative">
-                    <img src={book.cover} alt="" />
+                    <img className="md:w-[115%] lg:w-auto" src={book.cover} alt="" />
                   </div>
                   <div className="py-2 md:space-y-2">
-                    <h6 className="text-sm md:text-2xl font-noto-serif font-bold">
+                    <h6 className="text-sm md:text-xl lg:text-2xl font-noto-serif font-bold">
                       {book.title}
                     </h6>
                     <p className="text-xs md:text-base font-bold text-black/70">
@@ -192,13 +192,13 @@ const Home = () => {
           Congue, gravida placeat nibh sunt semper elementum anim Integer lectus
           debitis auctor.
         </p>
-        <div className="py-6 pt-10 text-center">
+        <div className="py-6 md:px-10 pt-10 text-center">
           <CardContainer books={editorBooks} />
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-16 md:py-14 xl:py-20 px-2 md:px-0 xl:px-20 md:mx-0 bg-hero">
+      <section className="py-16 md:py-14 xl:py-20 px-2 md:px-10 xl:px-20 md:mx-0 bg-hero">
         <div className="flex flex-col md:flex-row space-y-4 md:space-x-8">
           <div className="space-y-1 md:space-y-3 flex flex-col items-center md:items-start md:justify-start text-left">
             <FaTruck className="text-3xl md:text-5xl w-fit" />
@@ -240,7 +240,7 @@ const Home = () => {
       </section>
 
       {/* Publisher's Section */}
-      <section className="py-16 md:py-14 xl:py-20 px-10 md:px-16 xl:px-32 md:mx-0 bg-secondary md:flex md:items-center">
+      <section className="py-16 md:py-14 xl:py-20 px-10 xl:px-32 md:mx-0 bg-secondary md:flex md:items-center">
         <div className="md:px-6">
           <img src={assets.publisher_image} alt="" />
         </div>

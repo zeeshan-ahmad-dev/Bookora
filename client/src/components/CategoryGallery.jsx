@@ -3,7 +3,7 @@ import assets from "../assets/assets";
 
 const CategoryGallery = () => {
   return (
-    <div className="flex flex-col md:flex-row justify-stretch gap-2">
+    <div className="flex flex-col lg:flex-row justify-stretch gap-2">
       {/* Left Cards */}
       <div className="flex-[1] flex flex-col gap-2">
         <div className="flex gap-2 flex-col md:flex-row">

@@ -43,7 +43,7 @@ const Hero = () => {
 
       {/* carousel */}
       <div className="pt-20 lg:grow lg:pl-20 xl:pl-0 ml-4 md:ml-12 relative -right-4 w-[115%] xl:w-[115%] lg:-right-20 overflow-hidden flex items-center">
-        <div className="w-full md:w-[150%] xl:w-full lg:scale-">
+        <div className="w-full md:w-[90%] lg:w-[150%] xl:w-full lg:scale-">
         <Carousel
           swipeable={true}
           draggable={true}
@@ -59,7 +59,7 @@ const Hero = () => {
           containerClass="carousel-container p-0 m-0"
           itemClass="px-2"
           customRightArrow={
-            <button className="absolute right-24  top-1/2 -translate-y-1/2 bg-transparent text-white/80 font-bold text-xl p-2 rounded-full transition cursor-pointer">
+            <button className="absolute right-24 top-1/2 -translate-y-1/2 bg-transparent text-white/80 font-bold text-xl p-2 rounded-full transition cursor-pointer">
               <ChevronRight size={30} strokeWidth={3} />
             </button>
           }

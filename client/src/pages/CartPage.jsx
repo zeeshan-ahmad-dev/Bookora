@@ -15,7 +15,6 @@ const CartPage = () => {
 
     const newQuantity = parseInt(e.target.value);
 
-    console.log(e);
     setTempCart((prev) => {
       const updatedCart = [...prev];
       updatedCart[index] = { ...updatedCart[index], quantity: newQuantity };
@@ -46,7 +45,7 @@ const CartPage = () => {
     );
     setSubTotal(total?.toFixed(2));
     console.log(tempCart);
-  }, [tempCart, RemoveBook]);
+  }, [tempCart]);
 
   useEffect(() => {
     console.log("From my end", cart);

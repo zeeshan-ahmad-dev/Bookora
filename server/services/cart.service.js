@@ -140,6 +140,6 @@ export const clearCartService = async (userId) => {
     return cart;
   } catch (error) {
     console.error(error);
-    throwErr(error.message || "Error updating cart", error.status || error.status || 500);
+    throwErr(error.message || "Error updating cart", error.status || 500);
   }
 };

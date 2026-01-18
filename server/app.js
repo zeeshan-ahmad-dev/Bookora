@@ -10,6 +10,7 @@ import session from "express-session";
 import cors from "cors";
 import mongoStore from "connect-mongo";
 import passport from "./config/passport.js";
+import { errorHandler } from "./middlewares/error.middleware.js";
 import { stripeWebHook } from "./controllers/payment.controller.js";
 
 dotenv.config();
@@ -48,5 +49,7 @@ app.use("/books", bookRoute);
 app.use("/cart", cartRoute);
 app.use("/payment", paymentRoute);
 app.use("/orders", orderRoute);
+
+app.use(errorHandler);
 
 app.listen(PORT, () => console.log(`Server running on port: ${PORT}`));

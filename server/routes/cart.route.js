@@ -5,7 +5,7 @@ const cartRouter = express.Router();
 
 cartRouter.get('/', getCartController);
 cartRouter.post('/add-book', addItemToCartController);
-cartRouter.delete('/remove-book', removeItemToCartController);
+cartRouter.delete('/remove-book/:bookId', removeItemToCartController);
 cartRouter.post('/update-cart', updateCartController);
 cartRouter.delete('/clear', clearCartController);
 

@@ -39,13 +39,11 @@ export const CartContextProvider = ({ children }) => {
         return updatedCart;
       });
 
-      const { data } = await api.delete("/cart/remove-book", {
-        bookId,
-      });
+      const { data } = await api.delete(`/cart/remove-book/${bookId}`);
 
       setCart(data.cart);
     } catch (error) {
-      console.error(error);
+      console.log(error);
     } finally {
       setUpdatingIds((prev) => {
         let s = new Set(prev);
@@ -59,7 +57,6 @@ export const CartContextProvider = ({ children }) => {
     try {
       const res = await api.delete("/cart/clear");
       if (res.status === 200 || res.status === 204) {
-        console.log("Cart cleared");
         setCart([]);
         localStorage.setItem("cart", JSON.stringify([]));
       }

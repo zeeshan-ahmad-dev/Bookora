@@ -34,7 +34,6 @@ authRouter.post(
 
 authRouter.get(
   "/google",
-  // redirects to google account chooser
   passport.authenticate("google", {
     scope: ["profile", "email"],
     prompt: "select_account",
@@ -45,7 +44,7 @@ authRouter.get(
   "/google/callback",
   passport.authenticate("google", {
     failureRedirect: "http://localhost:5173/login",
-  }), // middleware
+  }),
   (req, res) => {
     res.redirect("http://localhost:5173/auth/success");
   }

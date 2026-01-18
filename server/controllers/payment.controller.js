@@ -5,7 +5,7 @@ import Book from "../model/book.model.js";
 const stripe = new Stripe(process.env.STRIPE_SECRET);
 
 // todo: Create service file 
-export const createCheckoutSession =  async (req, res) => {
+export const createCheckoutSession =  async (req, res, next) => {
   try {
     const userId = req.user._id
     const { products } = req.body;
@@ -44,12 +44,9 @@ export const createCheckoutSession =  async (req, res) => {
       },
     });
 
-    console.log("sesion url: ", session.url);
-
     res.json({ url: session.url, orderId: order._id });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 }
 
@@ -57,6 +54,7 @@ export const createCheckoutSession =  async (req, res) => {
 export const stripeWebHook = async (req, res) => {
   const sig = req.headers["stripe-signature"];
   let event;
+
   try {
     event = stripe.webhooks.constructEvent(
       req.body,
@@ -86,7 +84,6 @@ export const stripeWebHook = async (req, res) => {
 
     res.json({ received: true });
   } catch (error) {
-    console.log("Webhook signature verification failed: ", error.message);
     return res.status(400).send(`Webhook Error ${error.message}`);
   }
 }

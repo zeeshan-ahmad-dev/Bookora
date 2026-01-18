@@ -7,14 +7,14 @@ import {
   verifyResetOtpService,
 } from "../services/auth.service.js";
 
-export const registerUserController = async (req, res) => {
+export const registerUserController = async (req, res, next) => {
   const { firstName, lastName, email, password } = req.body;
   try {
     const user = await registerUserService(
       firstName,
       lastName,
       email,
-      password
+      password,
     );
 
     req.login(user, (err) => {
@@ -27,15 +27,12 @@ export const registerUserController = async (req, res) => {
       });
     });
   } catch (error) {
-    res
-      .status(error.status || 500)
-      .json({ success: false, message: error.message });
+    next(error);
   }
 };
 
-export const fetchUserController = async (req, res) => {
+export const fetchUserController = async (req, res, next) => {
   const { _id } = req.user;
-  console.log("req.user from fetchUserController", req.user)
   try {
     const user = await fetchUserService(_id);
 
@@ -45,16 +42,13 @@ export const fetchUserController = async (req, res) => {
       user: user,
     });
   } catch (error) {
-    console.log(error)
-    res
-      .status(error.status || 500)
-      .json({ success: false, message: error.message });
+    next(error);
   }
 };
 
-export const sendVerficationOtpController = async (req, res) => {
+export const sendVerficationOtpController = async (req, res, next) => {
   const user = req.user;
-  console.log(user);
+
   try {
     await sendVerificationOtpService(user._id);
 
@@ -62,16 +56,13 @@ export const sendVerficationOtpController = async (req, res) => {
       .status(200)
       .json({ success: true, message: "Verification otp sent to your email!" });
   } catch (error) {
-    res
-      .status(error.status || 500)
-      .json({ success: false, message: error.message });
+    next(error);
   }
 };
 
-export const verifyAccountController = async (req, res) => {
+export const verifyAccountController = async (req, res, next) => {
   const { verificationOtp } = req.body;
   const user = req.user;
-  console.log(user);
 
   try {
     await verifyAccountService(user._id, verificationOtp);
@@ -80,14 +71,13 @@ export const verifyAccountController = async (req, res) => {
       .status(200)
       .json({ success: true, message: "Your account has been verified!" });
   } catch (error) {
-    res
-      .status(error.status || 500)
-      .json({ success: false, message: error.message });
+    next(error);
   }
 };
 
-export const sendResetOtpController = async (req, res) => {
+export const sendResetOtpController = async (req, res, next) => {
   const { email } = req.body;
+
   try {
     await sendResetOtpService(email);
 
@@ -96,14 +86,13 @@ export const sendResetOtpController = async (req, res) => {
       message: "Reset Password otp sent to your email!",
     });
   } catch (error) {
-    res
-      .status(error.status || 500)
-      .json({ success: false, message: error.message });
+    next(error);
   }
 };
 
-export const verifyResetOtpController = async (req, res) => {
+export const verifyResetOtpController = async (req, res, next) => {
   const { resetOtp, email } = req.body;
+
   try {
     const token = await verifyResetOtpService(email, resetOtp);
 
@@ -111,14 +100,13 @@ export const verifyResetOtpController = async (req, res) => {
       .status(200)
       .json({ success: true, message: "Enter your new password!", token });
   } catch (error) {
-    res
-      .status(error.status || 500)
-      .json({ success: false, message: error.message });
+    next(error);
   }
 };
 
-export const resetPasswordController = async (req, res) => {
+export const resetPasswordController = async (req, res, next) => {
   const { token, newPassword } = req.body;
+
   try {
     await resetPasswordService(token, newPassword);
 
@@ -126,14 +114,11 @@ export const resetPasswordController = async (req, res) => {
       .status(200)
       .json({ success: true, message: "Password reset successfully!" });
   } catch (error) {
-    res
-      .status(error.status || 500)
-      .json({ success: false, message: error.message });
+    next(error);
   }
 };
 
-// Ask ChatGPT for explanation
-export const logoutController = async (req, res) => {
+export const logoutController = async (req, res, next) => {
   req.logout((err) => {
     if (err) return next(err);
 
@@ -144,7 +129,7 @@ export const logoutController = async (req, res) => {
   });
 };
 
-export const isAuthController = async (req, res) => {
+export const isAuthController = async (req, res, next) => {
   if (!req.isAuthenticated) {
     return res.status(401).json({
       success: false,

@@ -4,48 +4,42 @@ import {
   fetchBookByIdService,
 } from "../services/book.service.js";
 
-export const fetchBooksController = async (req, res) => {
+export const fetchBooksController = async (req, res, next) => {
   const { limit, type, sort } = req.query;
 
   try {
-    console.log(limit, type, sort)
     const books = await fetchBooksService(limit, type, sort);
+
     res.status(200).json({
       success: true,
       message: "Books fetched successfully!",
       books,
     });
   } catch (error) {
-    console.error(error);
-    res.status(error.status || 500).json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   }
 };
 
-export const fetchBookByIdController = async (req, res) => {
+export const fetchBookByIdController = async (req, res, next) => {
   const { id } = req.params;
+
   try {
     const book = await fetchBookByIdService(id);
+
     res.status(200).json({
       success: true,
       message: "Book fetched successfully!",
       book,
     });
   } catch (error) {
-    console.error(error);
-    res.status(error.status || 500).json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   }
 };
 
-export const addBookController = async (req, res) => {
-	console.log("From my side friend", req.user)
+export const addBookController = async (req, res, next) => {
+  const { title, description, price, author, categories } = req.body;
+
   if (!req.user.isAdmin) {
-	console.log("It ran?")
     return res.status(405).json({
       success: false,
       message: "You are not admin!",
@@ -53,8 +47,6 @@ export const addBookController = async (req, res) => {
   }
 
   try {
-    const { title, description, price, author, categories } = req.body;
-	console.log("File", req.file)
     if (req.file) {
       await addBookService(
         title,
@@ -64,6 +56,7 @@ export const addBookController = async (req, res) => {
         categories,
         req.file
       );
+      
       return res.status(201).json({
         success: true,
         message: "Book added successfully",

@@ -1,7 +1,6 @@
 import Order from '../model/order.model.js';
 import { fetchOrdersService } from '../services/order.service.js';
 
-// create service file
 export const getOrderStatus = async (req, res, next) => {
     const { orderId } = req.params;
     try {
@@ -13,7 +12,6 @@ export const getOrderStatus = async (req, res, next) => {
     }
 }
 
-// create service file
 export const fetchOrdersController = async (req, res, next) => {
     const userId = req.user._id;
     try {

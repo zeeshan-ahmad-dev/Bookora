@@ -1,6 +1,5 @@
 import { createCheckoutSessionService, stripeWebHookService } from "../services/payment.service.js";
 
-// todo: Create service file 
 export const createCheckoutSession =  async (req, res, next) => {
   const userId = req.user._id
   const { products } = req.body;

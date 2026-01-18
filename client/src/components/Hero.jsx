@@ -52,7 +52,7 @@ const Hero = () => {
           ssr={true}
           infinite={true}
           autoPlay={true}
-          autoPlaySpeed={7000}
+          autoPlaySpeed={4000}
           keyBoardControl={true}
           customTransition=""
           transitionDuration={500}

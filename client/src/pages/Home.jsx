@@ -10,13 +10,17 @@ import api from "../api";
 
 const Home = () => {
   const [discoverBooks, setDiscoverBooks] = useState([]);
+  const [editorBooks, setEditorBooks] = useState([]);
   
     const fetchBooks = async () => {
       try {
         const res = await api.get("/books?limit=8");   
+
+        let shuffledArr = [...res.data.books].sort(() => 0.3 - Math.random());
   
         setDiscoverBooks(res.data.books);
-        toast.success(res.data.message)
+        setEditorBooks(shuffledArr.slice(0, 4));
+        console.log(res.data.message)
       } catch (error) {
         toast.error(error.message);
       }
@@ -26,28 +30,9 @@ const Home = () => {
       fetchBooks();
     }, []);
 
-  const editorBooks = [
-    {
-      cover: assets.book9,
-      title: "This Dark Road To Mercy",
-      price: "17.15",
-    },
-    {
-      cover: assets.book10,
-      title: "Into The Wild",
-      price: "14.35",
-    },
-    {
-      cover: assets.book11,
-      title: "I'll Catch You",
-      price: "21.55",
-    },
-    {
-      cover: assets.book12,
-      title: "Game Of Spades",
-      price: "19.25",
-    },
-  ];
+    useEffect(() => {
+      console.log(editorBooks);
+    }, [editorBooks]);
 
   return (
     <>

@@ -164,16 +164,16 @@ const CartPage = () => {
                   Cart totals
                 </h3>
               </div>
-              <div className="px-4 py-6 text-sm text-black/60">
-                <div className="flex justify-between px-4 py-3 border-b border-black/15">
+              <div className="px-4 py-6 text-sm flex flex-col items-center text-black/60">
+                <div className="flex-1 w-full flex justify-between px-4 py-3 border-b border-black/15">
                   <p className="font-bold text-black/70">Subtotal:</p>
                   <span>${tempSubTotal}</span>
                 </div>
-                <div className="flex justify-between px-4 py-3 border-b border-black/15">
+                <div className="flex-1 w-full flex justify-between px-4 py-3 border-b border-black/15">
                   <p className="font-bold text-black/70">Total:</p>
                   <span>${tempSubTotal}</span>
                 </div>
-                <Link to="/checkout" className="w-full mt-5 text-base font-bold text-black cta-btn">
+                <Link to="/checkout" className="w-full mt-5 text-base  text-center font-bold text-black cta-btn">
                   Proceed to checkout
                 </Link>
               </div>

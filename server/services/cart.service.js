@@ -2,7 +2,13 @@ import Cart from "../model/cart.model.js";
 import Book from "../model/book.model.js";
 import { throwErr } from "../utils/error.utils.js";
 
-// Returns cart of the user
+/**
+ * Fetches the user's cart with populated book details
+ *
+ * @param {string} userId The user's ID
+ * @returns {Promise<Array<Object>>} List of cart items
+ * @throws {Error} Throws an error if cart retrieval fails
+ */
 export const getCartService = async (userId) => {
   try {
     let cart = await Cart.findOne({ user: userId }).populate("items.book").lean();
@@ -17,12 +23,19 @@ export const getCartService = async (userId) => {
 
     return cart;
   } catch (error) {
-    console.error(error);
     throwErr("Error fetching cart", error.status || 500);
   }
 };
 
-// Adds Item to cart and returns updated Cart
+/**
+ * Adds item to cart
+ *
+ * @param {string} userId The user's ID
+ * @param {string} userId The books's ID
+ * @param {number} userId The number of books to be added
+ * @returns {Promise<Array<Object>>} List of cart items
+ * @throws {Error} Throws an error if cart retrieval fails
+ */
 export const addItemToCartService = async (userId, bookId, quantity) => {
   try {
     quantity = Number(quantity);
@@ -57,12 +70,18 @@ export const addItemToCartService = async (userId, bookId, quantity) => {
 
     return populatedCart;
   } catch (error) {
-    console.error(error);
     throwErr("Error adding item to cart", error.status || 500);
   }
 };
 
-// Removes Item to cart and returns updated Cart
+/**
+ * Removes item to cart
+ *
+ * @param {string} userId The user's ID
+ * @param {string} userId The books's ID
+ * @returns {Promise<Array<Object>>} List of cart items
+ * @throws {Error} Throws an error if cart retrieval fails
+ */
 export const removeItemToCartService = async (userId, bookId) => {
   try {
     let cart = await Cart.findOne({ user: userId });
@@ -85,12 +104,18 @@ export const removeItemToCartService = async (userId, bookId) => {
 
     return populatedCart;
   } catch (error) {
-    console.error(error);
     throwErr("Error removing item from cart", error.status || 500);
   }
 };
 
-// Removes Item to cart and returns updated Cart
+/**
+ * Updates cart by adding or removing books
+ *
+ * @param {string} userId The user's ID
+ * @param {object} updateCartArray Array of updated books
+ * @returns {Promise<Array<Object>>} List of cart items
+ * @throws {Error} Throws an error if cart retrieval fails
+ */
 export const updateCartService = async (userId, updatedCartArray) => {
   try {
     let cart = await Cart.findOne({ user: userId });
@@ -120,12 +145,17 @@ export const updateCartService = async (userId, updatedCartArray) => {
 
     return populatedCart;
   } catch (error) {
-    console.error(error);
     throwErr("Error updating cart", error.status || 500);
   }
 };
 
-// Clears cart items
+/**
+ * Clears cart of the user
+ *
+ * @param {string} userId The user's ID
+ * @returns {Promise<Array>} An empty array
+ * @throws {Error} Throws an error if cart retrieval fails
+ */
 export const clearCartService = async (userId) => {
   try {
     let cart = await Cart.findOne({ user: userId });
@@ -139,7 +169,6 @@ export const clearCartService = async (userId) => {
 
     return cart;
   } catch (error) {
-    console.error(error);
     throwErr(error.message || "Error updating cart", error.status || 500);
   }
 };

@@ -222,6 +222,7 @@ export const verifyResetOtpService = async (email, resetOtp) => {
 };
 
 /**
+ * Reset's password
  *
  * @param {string} token Temporaray token for verifiication
  * @param {string} newPassword The new password for account
@@ -240,23 +241,6 @@ export const resetPasswordService = async (token, newPassword) => {
     const hashedPassword = await hashPassword(newPassword);
     user.password = hashedPassword;
     await user.save();
-
-    return { success: true };
-  } catch (error) {
-    throw error;
-  }
-};
-
-/**
- *
- * @param {string} userId The id of the user
- * @returns {Promise<{success: boolean>}} Indicates if user's logged in
- * @throws {Error} Throws an error if not logged in
- */
-const isAuthService = async (userId) => {
-  try {
-    const user = await User.findById(userId);
-    if (!user) throwErr("You are not logged in", 401);
 
     return { success: true };
   } catch (error) {

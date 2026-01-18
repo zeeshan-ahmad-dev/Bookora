@@ -3,11 +3,13 @@ import cloudinary from "../config/cloudinary.js";
 import { throwErr } from "../utils/error.utils.js";
 
 /**
+ * Fetche's books according to type and limit
  * 
  * @param {number} limit Total books to be retrieved
+ * @param {number} type The type of sorting needed
  * @returns {Promise<object[]>} A promise that resolves to an array of book objects
  */
-export const fetchBooksService = async (limit = 0, type = 'all', sort = 'default') => {
+export const fetchBooksService = async (limit = 0, type = 'all') => {
     try {
         if (type === 'all') {
             const books = await Book.find().limit(limit);
@@ -32,9 +34,11 @@ export const fetchBooksService = async (limit = 0, type = 'all', sort = 'default
 }
 
 /**
+ * Fetche's books by id
+ * 
  * @param {string} id The book id
+ * @returns {Promise<object>} A promise that resolves to an object of books
  * @throws throws error if book not found
- * @returns {Promise<object>} A promise that resolves to an object of book
  */
 export const fetchBookByIdService = async (id) => {
     try {

@@ -61,7 +61,6 @@ export const registerUserService = async (
 
     return safeUser;
   } catch (error) {
-    console.error(error);
     throw error;
   }
 };
@@ -92,7 +91,6 @@ export const fetchUserService = async (userId) => {
 
     return safeUser;
   } catch (error) {
-    console.error(error);
     throw error;
   }
 };
@@ -125,7 +123,6 @@ export const sendVerificationOtpService = async (userId) => {
 
     return { success: true };
   } catch (error) {
-    console.error(error);
     throw error;
   }
 };
@@ -156,7 +153,6 @@ export const verifyAccountService = async (userId, verificationOtp) => {
 
     return { success: true };
   } catch (error) {
-    console.log("Error during verifying email", error);
     throw error;
   }
 };
@@ -189,7 +185,6 @@ export const sendResetOtpService = async (email) => {
 
     return { success: true };
   } catch (error) {
-    console.error(error);
     throw error;
   }
 };
@@ -222,7 +217,6 @@ export const verifyResetOtpService = async (email, resetOtp) => {
     });
     return token;
   } catch (error) {
-    console.log("Error during verifying email", error);
     throw error;
   }
 };
@@ -249,7 +243,6 @@ export const resetPasswordService = async (token, newPassword) => {
 
     return { success: true };
   } catch (error) {
-    console.log("Token expired or invalid", error);
     throw error;
   }
 };
@@ -267,7 +260,6 @@ const isAuthService = async (userId) => {
 
     return { success: true };
   } catch (error) {
-    console.log("User not logged in", error);
     throw error;
   }
 };

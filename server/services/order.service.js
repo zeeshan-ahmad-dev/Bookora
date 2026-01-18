@@ -4,8 +4,7 @@ import { throwErr } from "../utils/error.utils.js";
 // Returns cart of the user
 export const fetchOrdersService = async (userId) => {
   try {
-    console.log("UserId from FetchORders", userId)
-    let orders = await Order.find({ user: userId });
+    let orders = await Order.find({ user: userId }).sort({ createdAt: -1 });
 
     if (!orders.length) return [];
 

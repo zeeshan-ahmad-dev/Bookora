@@ -1,5 +1,3 @@
-import React from "react";
-
 const Item = ({ quantity, cover, title, price }) => {
   return (
     <div className="flex justify-between items-center">

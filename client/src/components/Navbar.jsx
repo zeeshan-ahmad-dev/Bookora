@@ -39,6 +39,7 @@ const Navbar = () => {
 
       {/* Hamburger (mobile) */}
       <div className="flex items-center"> 
+        {/* Cart Icon */}
         <Link to="/cart" className="relative lg:hidden block p-2 border-2 group-hover">
           <span className="absolute text-sm font-semibold text-white bg-black rounded-full size-4 center -right-1 -top-1">
             {cart?.length}

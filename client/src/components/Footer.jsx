@@ -6,10 +6,13 @@ const Footer = () => {
   return (
     <footer className="text-center space-y-20 pt-16 bg-black text-white">
       <div className="flex text-center md:pl-2 md:pr-6 xl:px-24 flex-col md:flex-row items-center md:items-start md:gap-10 xl:gap-28">
+        {/* Logo */}
         <div className="size-fit">
           <img className="w-58 py-2" src={assets.footer_logo} alt="" />
         </div>
+        {/* Links */}
         <div className="space-y-10 md:flex justify-between md:gap-40 xl:gap-48 md:text-left">
+          {/* Quick Links */}
           <div className="space-y-6">
               <h4 className="text-xl font-semibold font-noto-serif">Quick Links</h4>
               <ul className="text-primary text-sm md:text-base">
@@ -45,6 +48,8 @@ const Footer = () => {
           </div>
         </div>
       </div>
+
+      {/* bottom */}
       <div className="border-t border-white/70 px-16 md:px-0 xl:px-24 py-6 flex flex-col md:flex-row md:justify-around lg:justify-between items-center space-y-3">
         <p className="text-xs md:w-60 lg:w-80 lg:text-left">Copyright © 2025 Book Worms | Powered by Book Worms</p>
         <div className="w-fit md:mr-36">

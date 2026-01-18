@@ -6,14 +6,15 @@ import { CartContext } from "../context/CartContext";
 
 const CardItem = ({ imgUrl, title, price, id }) => {
   const navigate = useNavigate();
-  const { addBookToCart, removeBookFromCart, cart, updatingIds } =
-    useContext(CartContext);
+  const { addBookToCart, removeBookFromCart, cart, updatingIds } = useContext(CartContext);
+
+  const isInCart = cart?.some((book) => book._id === id);
 
   const handleAddToCartToggle = (e) => {
     e.stopPropagation();
 
-    // If book found remove it
-    if (cart?.some((book) => book._id === id)) {
+    // If book found remove it else add
+    if (isInCart) {
       return removeBookFromCart(id);
     }
 
@@ -24,9 +25,7 @@ const CardItem = ({ imgUrl, title, price, id }) => {
     <div className="z-40">
       <div
         className={`relative group ${
-          cart?.some((book) => book._id === id)
-            ? "cursor-pointer"
-            : "cursor-pointer"
+          isInCart ? "cursor-pointer" : "cursor-pointer"
         }`}
       >
         <span
@@ -36,9 +35,7 @@ const CardItem = ({ imgUrl, title, price, id }) => {
           <span
             className={`opacity-0 invisible group-hover/item:opacity-100 group-hover/item:visible bg-black absolute right-10 text-xs px-2 rounded-sm py-2 text-white w-max after:content-[''] after:absolute after:size-3 after:bg-black after:top-2.5 after:rotate-45 after:z-50`}
           >
-            {cart?.some((book) => book._id === id)
-              ? "Remove from cart"
-              : "Add to cart"}
+            {isInCart ? "Remove from cart" : "Add to cart"}
           </span>
           {updatingIds.has(id) ? (
             <div className="size-4 animate-dotPing bg-black rounded-full"></div>
@@ -54,6 +51,7 @@ const CardItem = ({ imgUrl, title, price, id }) => {
           alt=""
         />
       </div>
+
       <div className="py-2">
         <h6
           onClick={() => navigate(`/books/${id}`)}

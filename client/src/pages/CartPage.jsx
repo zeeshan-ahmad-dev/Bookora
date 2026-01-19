@@ -11,7 +11,7 @@ const CartPage = () => {
   const [tempSubTotal, setSubTotal] = useState(0);
 
   const handleChange = (e, index) => {
-    if (!isChange) setIsChange(true); // Sets true to isChange
+    if (!isChange) setIsChange(true);
 
     const newQuantity = parseInt(e.target.value);
 
@@ -44,11 +44,9 @@ const CartPage = () => {
       0
     );
     setSubTotal(total?.toFixed(2));
-    console.log(tempCart);
   }, [tempCart]);
 
   useEffect(() => {
-    console.log("From my end", cart);
     setTempCart(cart);
     setSubTotal(subtotal);
   }, [cart]);

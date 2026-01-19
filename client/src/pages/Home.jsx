@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import Hero from "../components/Hero";
+import { FaTruck, FaRecycle, FaDivide, FaGift } from "react-icons/fa";
+import { toast } from "react-toastify";
 import assets from "../assets/assets";
+import api from "../api";
+import Hero from "../components/Hero";
 import CardContainer from "../components/CardContainer";
 import CategoryGallery from "../components/CategoryGallery";
-import { FaTruck, FaRecycle, FaDivide, FaGift } from "react-icons/fa";
 import SubscribeEmail from "../components/SubscribeEmail";
-import { toast } from "react-toastify";
-import api from "../api";
 
 const Home = () => {
   const [discoverBooks, setDiscoverBooks] = useState([]);
@@ -20,7 +20,6 @@ const Home = () => {
   
         setDiscoverBooks(res.data.books);
         setEditorBooks(shuffledArr.slice(0, 4));
-        console.log(res.data.message)
       } catch (error) {
         toast.error(error.message);
       }
@@ -29,10 +28,6 @@ const Home = () => {
     useEffect(() => {
       fetchBooks();
     }, []);
-
-    useEffect(() => {
-      console.log(editorBooks);
-    }, [editorBooks]);
 
   return (
     <>
@@ -169,6 +164,7 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Editors Pick Section */}
       <section className="py-8 md:py-14 xl:py-24 px-10 md:px-0 xl:px-20 md:mx-0 bg-secondary">
         <h1 className="text-3xl md:text-5xl font-noto-serif font-semibold text-center py-2 lg:mt-5">
           Picked By Editors

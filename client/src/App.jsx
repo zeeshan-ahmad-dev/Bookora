@@ -40,22 +40,10 @@ function App() {
               <Route path="/payment/success" element={<SuccessPayment />} />
               <Route path="/payment/cancel" element={<CancelPayment />} />
               <Route path="/orders" element={<Order />} />
-              <Route
-                path="/product-category/all-books"
-                element={<AllBooks />}
-              />
-              <Route
-                path="/product-category/new-arrival/"
-                element={<NewArrival />}
-              />
-              <Route
-                path="/product-category/best-seller"
-                element={<BestSeller />}
-              />
-              <Route
-                path="/product-category/editors-pick"
-                element={<EditorsPicks />}
-              />
+              <Route path="/product-category/all-books" element={<AllBooks />} />
+              <Route path="/product-category/new-arrival/" element={<NewArrival />} />
+              <Route path="/product-category/best-seller" element={<BestSeller />} />
+              <Route path="/product-category/editors-pick" element={<EditorsPicks />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/cart" element={<CartPage />} />

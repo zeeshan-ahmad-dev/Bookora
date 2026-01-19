@@ -29,7 +29,7 @@ const Checkout = () => {
     StateValue,
     postalCodeValue,
     phoneValue,
-    infoValue
+    infoValue,
   ] = watch([
     "email",
     "firstName",
@@ -46,7 +46,6 @@ const Checkout = () => {
 
   // Payment Integration
   const makePayment = async () => {
-    console.log("it ran")
     try {
       // Call backend to create stripe session
       const response = await api.post("payment/create-checkout-session", {
@@ -54,14 +53,13 @@ const Checkout = () => {
       });
 
       localStorage.setItem("orderId", response.data.orderId);
-      
+
       await loadStripe(
-        "pk_test_51SnpVF90s5HCyBqaQfZvwWFpVwO4Fm468EQrinLjQXVID2iYzSphTFIkt70XCYdA9Skm1Kx279keZ2Z420NL5vpP00IKIotMOR"
+        "pk_test_51SnpVF90s5HCyBqaQfZvwWFpVwO4Fm468EQrinLjQXVID2iYzSphTFIkt70XCYdA9Skm1Kx279keZ2Z420NL5vpP00IKIotMOR",
       );
 
-
       // Redirect to stripe checkout
-        window.location.href = response.data.url;
+      window.location.href = response.data.url;
     } catch (error) {
       console.error("Payment error:", error);
     }
@@ -69,11 +67,8 @@ const Checkout = () => {
 
   const errorMsg = "text-red-400 text-start text-xs my-2 ml-1";
 
-  useEffect(() => {
-    console.log(showOrderSummary);
-  }, [showOrderSummary]);
-
   return (
+    // TODO: clean this whole componenet with modularity
     <div className="bg-secondary">
       <div className="lg:hidden flex justify-between border-y border-black/10 p-5 md:p-8 bg-[$555]">
         <button
@@ -574,7 +569,6 @@ const Checkout = () => {
           </button>
         </form>
 
-        {/* Todo: Learn about CSS positions  */}
         <div className="flex-[0.9] h-[100%] ">
           <section className="sticky hidden p-12 space-y-6 bg-white lg:block pr-15">
             <div className="space-y-6">

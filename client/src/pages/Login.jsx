@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import api from "../api.js";
 import VerifyOtpModal from "../components/login/VerifyOtpModal.jsx";
-import { toast } from "react-toastify";
 import LoaderOverlay from "../components/LoaderOverlay.jsx";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
@@ -200,6 +200,7 @@ function Login() {
                 Continue with Google
               </a>
             </form>
+
             {/* LOGIN FORM */}
             <div className="absolute lg:relative text-black z-[100] flex items-center">
               <form
@@ -222,7 +223,6 @@ function Login() {
               >
                 <h2 className="text-4xl font-bold mb-7 text-gray-800">Login</h2>
 
-                {/* <div className="w-full"> */}
                 {loginErrors.email && (
                   <p className={errorMsg}>*{loginErrors.email.message}</p>
                 )}

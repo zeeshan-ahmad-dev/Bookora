@@ -1,4 +1,3 @@
-import React from "react";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import api from "../api";
@@ -25,7 +24,7 @@ export const SuccessPayment = () => {
   };
 
   fetchOrderStatus();
-  }, [])
+  }, []);
   return (
     <div className="flex items-center justify-center min-h-screen px-4 bg-hero">
       <div className="w-full max-w-md p-10 text-center bg-white shadow-xl rounded-2xl">

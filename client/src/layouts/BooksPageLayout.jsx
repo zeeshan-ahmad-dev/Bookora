@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import SubscribeEmail from "../components/SubscribeEmail";
 import CardContainer from "../components/CardContainer";
 import { Link } from "react-router-dom";

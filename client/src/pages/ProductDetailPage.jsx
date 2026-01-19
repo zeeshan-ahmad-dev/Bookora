@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../api";
@@ -7,7 +7,7 @@ import SubscribeEmail from "../components/SubscribeEmail";
 import { CartContext } from "../context/CartContext";
 
 const ProductDetailPage = () => {
-  const { addBookToCart, cart, changeQuantity } = useContext(CartContext);
+  const { addBookToCart } = useContext(CartContext);
 
   const { id } = useParams();
 
@@ -15,7 +15,8 @@ const ProductDetailPage = () => {
   const [quantity, setQuantity] = useState(1);
   const [books, setBooks] = useState([]);
 
-  const fetchBook = async () => {
+  const fetchBook = useCallback(async () => {
+    if (!id) return;
     try {
       const res = await api.get(`/books/${id}`);
       if (res.data.book) {
@@ -25,7 +26,7 @@ const ProductDetailPage = () => {
       console.error(error);
       toast.error(error.message);
     }
-  };
+  }, [id]);
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
@@ -33,17 +34,17 @@ const ProductDetailPage = () => {
     addBookToCart(id, quantity);
   };
 
-  const fetchRelatedBooks = async () => {
+  const fetchRelatedBooks = useCallback( async () => {
+    if (!id) return;
+
     try {
       const res = await api.get("/books?limit=4");
 
       setBooks(res.data.books);
-      toast.success(res.data.message);
     } catch (error) {
       toast.error(error.message);
-      console.log(res);
     }
-  };
+  }, [id]);
 
   const handleChange = (e) => {
     if (e.target.value < 1) {
@@ -54,9 +55,11 @@ const ProductDetailPage = () => {
   };
 
   useEffect(() => {
+    if (!id) return;
+    
     fetchBook();
     fetchRelatedBooks();
-  }, [id]);
+  }, [id, fetchBook, fetchRelatedBooks]);
 
   return (
     <main className="bg-secondary">

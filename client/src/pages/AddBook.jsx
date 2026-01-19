@@ -47,7 +47,7 @@ const AddBook = () => {
 
       setFormData((prev) => ({
         ...prev,
-        [name]: categories.map((category, _) => category.trim()),
+        [name]: categories.map((category) => category.trim()),
       }));
     } else {
       setFormData((prev) => ({

@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import assets from "../assets/assets.js";
 import Hamburger from "hamburger-react";
@@ -9,12 +9,18 @@ import api from "../api.js";
 import { toast } from "react-toastify";
 
 const Navbar = () => {
+  // contexts
   const { cart, subtotal, removeBookFromCart } = useContext(CartContext);
   const { isLoggedIn, logoutUser, user } = useContext(UserContext);
 
+  // states
   const [isOpen, setIsOpen] = useState(false);
   const [showCartMobile, setShowCartMobile] = useState(false);
   const [showAccountMobile, setShowAccountMobile] = useState(false);
+
+  // refs
+  const navRef = useRef(null);
+  const hamburgerRef = useRef(null);
 
   const location = useLocation();
   const pathName = location.pathname;
@@ -30,23 +36,51 @@ const Navbar = () => {
     }
   };
 
+  const closeNav = () => {
+    setIsOpen(false);
+  };
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleClickOutside = (e) => {
+      if (
+        navRef.current &&
+        !navRef.current.contains(e.target) &&
+        hamburgerRef.current &&
+        !hamburgerRef.current.contains(e.target)
+      ) {
+        closeNav();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
+
   return (
     <nav className="relative flex items-center justify-between px-2 xl:px-16 bg-white/95">
       {/* Logo */}
-      <Link to="/">
+      <Link onClick={closeNav} to="/">
         <img className="w-40 py-2" src={assets.nav_logo} alt="Logo" />
       </Link>
 
       {/* Hamburger (mobile) */}
-      <div className="flex items-center"> 
+      <div className="flex items-center">
         {/* Cart Icon */}
-        <Link to="/cart" className="relative lg:hidden block p-2 border-2 group-hover">
+        <Link
+          to="/cart"
+          className="relative lg:hidden block p-2 border-2 group-hover"
+        >
           <span className="absolute text-sm font-semibold text-white bg-black rounded-full size-4 center -right-1 -top-1">
             {cart?.length}
           </span>
           <img className="size-4" src={assets.cart_icon} alt="Cart" />
         </Link>
-        <div className="mr-2 lg:hidden">
+        <div ref={hamburgerRef} className="mr-2 lg:hidden">
           <Hamburger
             size={25}
             color="#FFC46B"
@@ -116,7 +150,7 @@ const Navbar = () => {
         </Link>
       </div>
 
-      {/* Desktop Icons */}
+      {/* Desktop Icons on right */}
       <div className="relative hidden gap-4 center lg:flex lg:mr-2 xl:mr-6">
         {/* Cart Icon */}
         <div className="relative group">
@@ -277,7 +311,8 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       <div
-        className={`absolute transition-all duration-300 z-50 top-full left-0 bg-secondary px-3 py-3 w-full h-fit lg:hidden ${
+        ref={navRef}
+        className={`absolute transition-all duration-300 z-50 top-full left-0 bg-secondary px-5 py-3 w-full h-fit lg:hidden ${
           isOpen
             ? "opacity-100 translate-y-0"
             : "opacity-0 -translate-y-5 pointer-events-none"
@@ -286,22 +321,50 @@ const Navbar = () => {
         <ul className="text-base text-primary flex flex-col gap-3">
           {/* Page Links */}
           <li>
-            <Link to="/product-category/all-books">All Books</Link>
+            <Link
+              to="/product-category/all-books"
+              onClick={closeNav}
+              className="w-full block"
+            >
+              All Books
+            </Link>
           </li>
           <li>
-            <Link to="/product-category/new-arrival">New Arrival</Link>
+            <Link
+              to="/product-category/new-arrival"
+              onClick={closeNav}
+              className="w-full block"
+            >
+              New Arrival
+            </Link>
           </li>
           <li>
-            <Link to="/product-category/best-seller">Best Seller</Link>
+            <Link
+              to="/product-category/best-seller"
+              onClick={closeNav}
+              className="w-full block"
+            >
+              Best Seller
+            </Link>
           </li>
           <li>
-            <Link to="/product-category/editors-pick">Editors Pick</Link>
+            <Link
+              to="/product-category/editors-pick"
+              onClick={closeNav}
+              className="w-full block"
+            >
+              Editors Pick
+            </Link>
           </li>
           <li>
-            <Link to="/about">About</Link>
+            <Link to="/about" onClick={closeNav} className="w-full block">
+              About
+            </Link>
           </li>
           <li>
-            <Link to="/contact">Contact</Link>
+            <Link to="/contact" onClick={closeNav} className="w-full block">
+              Contact
+            </Link>
           </li>
 
           <hr className="my-2 border-black/10" />
@@ -309,7 +372,7 @@ const Navbar = () => {
           {/* Cart (mobile) */}
           <li>
             <button
-              className="w-full text-left flex items-center justify-between text-base"
+              className="w-full text-left flex items-center justify-between text-base cursor-pointer"
               onClick={() => setShowCartMobile(!showCartMobile)}
             >
               Cart ({cart?.length})
@@ -343,7 +406,7 @@ const Navbar = () => {
           {/* Account (mobile) */}
           <li>
             <button
-              className="w-full text-left flex items-center justify-between text-base"
+              className="w-full text-left flex items-center justify-between text-base cursor-pointer"
               onClick={() => setShowAccountMobile(!showAccountMobile)}
             >
               {isLoggedIn ? user.firstName : "Account"}
@@ -360,7 +423,7 @@ const Navbar = () => {
                 {!isLoggedIn ? (
                   <>
                     <Link to="/login">Login</Link>
-                    <Link to="/register">Register</Link>
+                    <Link to="/login">Register</Link>
                   </>
                 ) : (
                   <>

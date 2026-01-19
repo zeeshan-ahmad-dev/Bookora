@@ -5,6 +5,7 @@ import {
   verifyAccountService,
   sendResetOtpService,
   verifyResetOtpService,
+  resetPasswordService,
 } from "../services/auth.service.js";
 
 export const registerUserController = async (req, res, next) => {
@@ -77,7 +78,6 @@ export const verifyAccountController = async (req, res, next) => {
 
 export const sendResetOtpController = async (req, res, next) => {
   const { email } = req.body;
-
   try {
     await sendResetOtpService(email);
 
@@ -95,6 +95,12 @@ export const verifyResetOtpController = async (req, res, next) => {
 
   try {
     const token = await verifyResetOtpService(email, resetOtp);
+
+    if (!token) {
+      return res
+        .status(401)
+        .json({ success: false, message: "IncorrectOtp!" });
+    }
 
     res
       .status(200)

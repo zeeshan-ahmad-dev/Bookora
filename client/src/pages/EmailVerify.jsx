@@ -40,7 +40,7 @@ const EmailVerify = () => {
 
     try {
       e.preventDefault();
-
+      console.log(otpArray)
       const otpArray = inputRefs.current.map((e) => e.value);
       const otp = otpArray.join("");
 

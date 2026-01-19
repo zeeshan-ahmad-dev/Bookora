@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import api from "../api.js";
 import VerifyOtpModal from "../components/login/VerifyOtpModal.jsx";
 import LoaderOverlay from "../components/LoaderOverlay.jsx";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext.jsx";
 import { CartContext } from "../context/CartContext.jsx";
@@ -255,9 +255,9 @@ function Login() {
                 />
                 {/* </div> */}
 
-                <a href="#" className="text-gray-600 text-sm">
+                <Link to="/reset-password" className="text-gray-600 text-sm">
                   Forgot password?
-                </a>
+                </Link>
 
                 <button
                   disabled={isLoginSubmitting}

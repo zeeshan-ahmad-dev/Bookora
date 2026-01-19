@@ -21,6 +21,7 @@ import CheckoutLayout from "./layouts/CheckoutLayout";
 import { SuccessPayment } from "./pages/SuccessPayment";
 import { CancelPayment } from "./pages/CancelPayment";
 import Order from "./pages/Order";
+import ResetPassword from "./pages/ResetPassword"
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/verify-email" element={<EmailVerify />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route element={<CheckoutLayout />}>
               <Route path="/checkout" element={<Checkout />} />
             </Route>

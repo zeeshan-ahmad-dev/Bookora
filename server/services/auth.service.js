@@ -170,7 +170,7 @@ export const sendResetOtpService = async (email) => {
 
     if (!user) throwErr("User not found", 404);
 
-    const otp = Math.floor(1000 + Math.random() * 9000);
+    const otp = Math.floor(1000 + Math.random() * 900000);
 
     await transporter.sendMail({
       from: `Bookora Store`,
@@ -203,8 +203,9 @@ export const verifyResetOtpService = async (email, resetOtp) => {
 
     if (!user) throwErr("User not found", 404);
 
-    if (resetOtp !== user.resetPasswordOtp)
-      return throwErr("incorrect otp!", 401);
+    if (Number(resetOtp) !== Number(user.resetPasswordOtp))
+      return false;
+
     if (Date.now() > user.resetPasswordOtpExpiry)
       return throwErr("The otp is expired otp is expired!", 401);
 

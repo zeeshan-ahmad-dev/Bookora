@@ -4,10 +4,11 @@ import api from "../api";
 import LoaderOverlay from "../components/LoaderOverlay.jsx";
 
 const ResetPassword = () => {
-  const [step, setStep] = useState("verifyOtp"); // verifyEmail | otpSent | verifyOtp | otpVerified | success
+  const [step, setStep] = useState("verifyEmail"); // verifyEmail | otpSent | verifyOtp | otpVerified | success
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const [emailError, setEmailError] = useState(false);
   const [wrongOtpError, setWrongOtpError] = useState(false);
   const [token, setToken] = useState("");
@@ -88,7 +89,7 @@ const ResetPassword = () => {
   };
 
   const handleResetPassword = async () => {
-    if (!password) return;
+    if (!password || password.length < 6) return setPasswordError(true);
 
     setIsLoading(true);
     try {
@@ -228,6 +229,11 @@ const ResetPassword = () => {
               Choose a strong password for your account.
             </p>
 
+            {passwordError && (
+              <p className="text-red-500 text-sm text-left mb-2">
+                *Minimum 6 characters
+              </p>
+            )}
             <input
               type="password"
               value={password}

@@ -23,6 +23,7 @@ import { CancelPayment } from "./pages/CancelPayment";
 import Order from "./pages/Order";
 import ResetPassword from "./pages/ResetPassword"
 
+// TODO: Setup a centralize loader
 function App() {
   return (
     <>

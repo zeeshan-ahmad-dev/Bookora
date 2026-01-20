@@ -6,25 +6,25 @@ import api from "../api";
 
 const AllBooks = () => {
   const [books, setBooks] = useState([]);
-  
+  const [isLoading, setIsLoading] = useState([]);
+
+  useEffect(() => {
     const fetchBooks = async () => {
+      setIsLoading(true);
       try {
-        const res = await api.get("/books?type=new");   
-  
+        const res = await api.get("/books?type=new");
+
         setBooks(res.data.books);
-        toast.success(res.data.message)
       } catch (error) {
         toast.error(error.message);
+      } finally {
+        setIsLoading(false);
       }
-    }
-  
-    useEffect(() => {
-      fetchBooks();
-    }, []);
-  
-  return (
-    <BookPageLayout title={"New Arrival"} books={books} />
-  );
+    };
+    fetchBooks();
+  }, []);
+
+  return <BookPageLayout title={"New Arrival"} books={books} isLoading={isLoading} />;
 };
 
 export default AllBooks;

@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 const Navbar = () => {
   // contexts
   const { cart, subtotal, removeBookFromCart } = useContext(CartContext);
-  const { isLoggedIn, logoutUser, user } = useContext(UserContext);
+  const { isLoggedIn, logoutUser, user, setIsLoading } = useContext(UserContext);
 
   // states
   const [isOpen, setIsOpen] = useState(false);
@@ -27,10 +27,10 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const logout = async () => {
+    navigate("/login");
     try {
       await api.post("/auth/logout");
       logoutUser();
-      navigate("/login");
     } catch (error) {
       toast.error(error.message);
     }
@@ -298,7 +298,7 @@ const Navbar = () => {
                   )}
                   <button
                     onClick={logout}
-                    className="px-10 py-3 font-bold text-center text-white bg-primary rounded text-nowrap"
+                    className="px-10 py-3 font-bold text-center text-white bg-primary rounded text-nowrap cursor-pointer"
                   >
                     Logout
                   </button>
@@ -429,7 +429,7 @@ const Navbar = () => {
                   <>
                     <Link to="/orders">Orders</Link>
                     {user?.isAdmin && <Link to="/books/add">Add Book</Link>}
-                    <button onClick={logout}>Logout</button>
+                    <button onClick={logout} className="cursor-pointer">Logout</button>
                   </>
                 )}
               </div>

@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import SubscribeEmail from "../components/SubscribeEmail";
 import CardContainer from "../components/CardContainer";
 import { Link } from "react-router-dom";
+import SmallLoader from "../components/SmallLoader";
 
-const BookPageLayout = ({ title, books }) => {
+const BookPageLayout = ({ title, books, isLoading }) => {
   const [sortedBooks, setSortedBooks] = useState([]);
 
   const handleChangeSorting = (e) => {
@@ -32,10 +33,6 @@ const BookPageLayout = ({ title, books }) => {
   useEffect(() => {
     setSortedBooks([...books]);
   }, [books]);
-
-  useEffect(() => {
-    console.log(sortedBooks)
-  }, [sortedBooks]);
 
   return (
     <main className="bg-secondary">
@@ -76,8 +73,13 @@ const BookPageLayout = ({ title, books }) => {
               </option>
             </select>
           </div>
-          <div className="pb-8">
-            <CardContainer books={sortedBooks} />
+          <div>
+            { !isLoading && <CardContainer books={sortedBooks} />}
+            { isLoading && (
+              <div className="h-50 mt-0 py-0 flex justify-center items-center">
+                <SmallLoader text="Fetching Books..." className="" /> 
+              </div>
+            )}
           </div>
         </div>
       </section>

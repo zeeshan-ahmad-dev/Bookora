@@ -7,46 +7,57 @@ import Hero from "../components/Hero";
 import CardContainer from "../components/CardContainer";
 import CategoryGallery from "../components/CategoryGallery";
 import SubscribeEmail from "../components/SubscribeEmail";
+import SmallLoader from "../components/SmallLoader";
 
 const Home = () => {
   const [discoverBooks, setDiscoverBooks] = useState([]);
   const [editorBooks, setEditorBooks] = useState([]);
-  
+  const [isLoading, setIsLoading] = useState([]);
+
+  useEffect(() => {
     const fetchBooks = async () => {
+      setIsLoading(true);
       try {
-        const res = await api.get("/books?limit=8");   
+        const res = await api.get("/books?limit=8");
 
         let shuffledArr = [...res.data.books].sort(() => 0.3 - Math.random());
-  
+
         setDiscoverBooks(res.data.books);
         setEditorBooks(shuffledArr.slice(0, 4));
       } catch (error) {
         toast.error(error.message);
+      } finally {
+        setIsLoading(false);
       }
-    }
-  
-    useEffect(() => {
-      fetchBooks();
-    }, []);
+    };
+    fetchBooks();
+  }, []);
 
   return (
     <>
       <Hero />
 
       {/* Discover Books Section */}
-      <section className="py-8 px-8 xl:px-16 bg-secondary">
-        <h1 className="text-3xl md:text-5xl font-noto-serif font-semibold text-center py-2 lg:mt-5">
-          Discover Your New Book
-        </h1>
-        <p className="text-sm lg:text-base px-1 text-black/90 leading-4 text-center py-2 lg:mt-5">
-          Congue, gravida placeat nibh sunt semper elementum anim Integer lectus
-          debitis auctor.
-        </p>
-        <div className="py-6 pt-10 text-center">
-          <CardContainer books={discoverBooks} />
-          <button className="cta-btn">DISCOVER MORE BOOKS</button>
-        </div>
-      </section>
+      {
+        <section className="py-8 px-8 xl:px-16 bg-secondary">
+          <h1 className="text-3xl md:text-5xl font-noto-serif font-semibold text-center py-2 lg:mt-5">
+            Discover Your New Book
+          </h1>
+          <p className="text-sm lg:text-base px-1 text-black/90 leading-4 text-center py-2 lg:mt-5">
+            Congue, gravida placeat nibh sunt semper elementum anim Integer
+            lectus debitis auctor.
+          </p>
+          <div className="py-6 pt-10 text-center">
+            {!isLoading && <CardContainer books={discoverBooks} />}
+            {isLoading && (
+              <div className="h-50 mt-0 py-0 flex justify-center items-center">
+                <SmallLoader text="Fetching Books..." className="" />
+              </div>
+            )}
+            <button className="cta-btn">DISCOVER MORE BOOKS</button>
+          </div>
+        </section>
+      }
 
       {/* Category Section */}
       <section className="py-8 px-0 md:px-5 bg-secondary">
@@ -145,9 +156,16 @@ const Home = () => {
                   price: [16, 18],
                 },
               ].map((book, index) => (
-                <div key={index} className="md:flex md:items-center md:gap-10 lg:gap-4">
+                <div
+                  key={index}
+                  className="md:flex md:items-center md:gap-10 lg:gap-4"
+                >
                   <div className="relative">
-                    <img className="md:w-[115%] lg:w-auto" src={book.cover} alt="" />
+                    <img
+                      className="md:w-[115%] lg:w-auto"
+                      src={book.cover}
+                      alt=""
+                    />
                   </div>
                   <div className="py-2 md:space-y-2">
                     <h6 className="text-sm md:text-xl lg:text-2xl font-noto-serif font-bold">
@@ -174,7 +192,12 @@ const Home = () => {
           debitis auctor.
         </p>
         <div className="py-6 md:px-10 pt-10 text-center">
-          <CardContainer books={editorBooks} />
+          {!isLoading && <CardContainer books={editorBooks} />}
+          {isLoading && (
+            <div className="h-50 mt-0 py-0 flex justify-center items-center">
+              <SmallLoader text="Fetching Books..." className="" />
+            </div>
+          )}
         </div>
       </section>
 
@@ -242,7 +265,7 @@ const Home = () => {
       </section>
 
       {/* Subscribe to Email Section */}
-        <SubscribeEmail />
+      <SubscribeEmail />
     </>
   );
 };

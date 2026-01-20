@@ -19,8 +19,8 @@ connectDB(); // connect to database
 const app = express();
 const PORT = process.env.PORT;
 
+app.use(cors({ origin: ["http://localhost:5173", "https://bookora-z.vercel.app"], credentials: true }));
 app.use("/payment/webhook", express.raw({ type: "application/json" }), stripeWebHook); // for stripe webhook
-app.use(cors({ origin: ["http://localhost:5173", "https://bookora-z.vercel.app/"], credentials: true }));
 app.use(express.json());
 app.use(
   session({
@@ -34,7 +34,7 @@ app.use(
     cookie: {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: "none",
       maxAge: 1000 * 60 * 60 * 24,
     },
   })

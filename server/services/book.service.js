@@ -4,52 +4,52 @@ import { throwErr } from "../utils/error.utils.js";
 
 /**
  * Fetche's books according to type and limit
- * 
+ *
  * @param {number} limit Total books to be retrieved
  * @param {number} type The type of sorting needed
  * @returns {Promise<object[]>} A promise that resolves to an array of book objects
  */
-export const fetchBooksService = async (limit = 0, type = 'all') => {
-    try {
-        if (type === 'all') {
-            const books = await Book.find().limit(limit);
-            return books;
-        }
-
-        if (type === 'new') {
-            const books = await Book.find().sort({ createdAt: -1 }).limit(limit);
-            return books;
-        }
-
-        if (type = 'bestseller') {
-            const books = await Book.find().sort({ sales: -1 }).limit(limit);
-            return books;
-        }
-
-        const books = await Book.find().limit(limit);
-        return books;
-    } catch (error) {
-        throwErr("Error fetching books", 404);
+export const fetchBooksService = async (limit = 0, type = "all") => {
+  try {
+    if (type === "all") {
+      const books = await Book.find().limit(limit);
+      return books;
     }
-}
+
+    if (type === "new") {
+      const books = await Book.find().sort({ createdAt: -1 }).limit(limit);
+      return books;
+    }
+
+    if ((type = "bestseller")) {
+      const books = await Book.find().sort({ sales: -1 }).limit(limit);
+      return books;
+    }
+
+    const books = await Book.find().limit(limit);
+    return books;
+  } catch (error) {
+    throwErr("Error fetching books", 404);
+  }
+};
 
 /**
  * Fetche's books by id
- * 
+ *
  * @param {string} id The book id
  * @returns {Promise<object>} A promise that resolves to an object of books
  * @throws throws error if book not found
  */
 export const fetchBookByIdService = async (id) => {
-    try {
-        const book = await Book.findById(id);
-        if (!book) throwErr("No book found", 404);
+  try {
+    const book = await Book.findById(id);
+    if (!book) throwErr("No book found", 404);
 
-        return book;
-    } catch (error) {
-        throwErr("Error fetching book", 500);
-    }
-}
+    return book;
+  } catch (error) {
+    throwErr("Error fetching book", 500);
+  }
+};
 
 /**
  * Store book cover in cloudinary and add book to database
@@ -62,25 +62,37 @@ export const fetchBookByIdService = async (id) => {
  * @param {object} file file object containing buffer of the book's cover
  * @returns {Promise<object>} newBook
  */
-export const addBookService = async (title, description, price, author, categories, file) => {
-    const book = await Book.findOne({title, author});
-
-    if (book) return throwErr("Book with this title already exist", 401)
-
-    return new Promise(async (resolve, reject) => {
-      cloudinary.uploader
-        .upload_stream({ folder: "bookora/books" }, async (error, uploadResult) => {
+export const addBookService = async (
+  title,
+  description,
+  price,
+  author,
+  categories,
+  file,
+) => {
+  return new Promise(async (resolve, reject) => {
+    cloudinary.uploader
+      .upload_stream(
+        { folder: "bookora/books" },
+        async (error, uploadResult) => {
           if (error) return reject(throwErr("Cloud upload failed", 500));
 
           try {
-            const coverUrl = uploadResult.secure_url;
-            const newBook = await Book.create({ title, description, price, author, categories, cover: coverUrl });
-            
-            return resolve(newBook);
-        } catch (error) {
-            return reject(throwErr(error.message))
-        }
-        })
-        .end(file.buffer);
-    })
+            const newBook = await Book.create({
+              title,
+              description,
+              price,
+              author,
+              categories,
+              cover: uploadResult.secure_url,
+            });
+
+            resolve(newBook);
+          } catch (error) {
+            reject(error);
+          }
+        },
+      )
+      .end(file.buffer);
+  });
 };

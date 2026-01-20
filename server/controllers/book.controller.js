@@ -68,6 +68,12 @@ export const addBookController = async (req, res, next) => {
       });
     }
   } catch (error) {
+    if (error.code === 11000) {
+      return res.status(409).json({
+      success: false,
+      message: "Book with this title already exists",
+    });
+    }
     console.log(error);
     return res.status(error.status || 500).json({
       success: false,

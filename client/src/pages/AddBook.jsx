@@ -2,9 +2,12 @@ import React, { useContext, useEffect } from "react";
 import { useState } from "react";
 import { useRef } from "react";
 import api from "../api";
+import { toast } from "react-toastify";
 import { UserContext } from "../context/UserContext";
 
 const AddBook = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const { user } = useContext(UserContext);
 
   const [ formData, setFormData ] = useState({
@@ -20,6 +23,7 @@ const AddBook = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     const form = new FormData();
     form.append("title", formData.title);
@@ -35,10 +39,20 @@ const AddBook = () => {
           "Content-Type": "multipart/form-data",
         },
       });
+
+      toast.success("New Book added!")
     } catch (error) {
       console.error(error);
+      if (error.status) {
+        toast.error("Book with that title already exist!");
+      } else {
+        toast.error(error.message)
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -61,9 +75,6 @@ const AddBook = () => {
     e.preventDefault();
     fileRef.current.click();
   };
-  useEffect(() => {
-    console.log(formData)
-  }, [formData])
 
   if (user === undefined || user === null) {
     return <div className="text-center mt-20">Loading...</div>;
@@ -181,9 +192,9 @@ const AddBook = () => {
 
             <button
               type="submit"
-              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2.5 rounded-lg font-medium transition-all duration-200"
+              className={`w-full text-white py-2.5 rounded-lg font-medium transition-all duration-200 ${ isLoading ? "cursor-no-drop bg-indigo-400" : "cursor-pointer bg-indigo-600 hover:bg-indigo-700" }`}
             >
-              Submit
+              { isLoading ? "Submitting..." : "Submit"}
             </button>
           </form>
         </div>

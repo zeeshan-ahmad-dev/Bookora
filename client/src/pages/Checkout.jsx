@@ -1,10 +1,11 @@
-import { ChevronDown } from "lucide-react";
-import { CartContext } from "../context/CartContext";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useContext, useEffect, useState } from "react";
+import { CartContext } from "../context/CartContext";
 import Item from "../components/checkout/Item";
-import { loadStripe } from "@stripe/stripe-js";
-import api from "../api";
+import { ChevronDown } from "lucide-react";
+import CheckoutInput from "../components/checkout/CheckoutInput";
+import OrderSummary from "../components/checkout/OrderSummary";
+import { makePayment } from "../services/payment";
 
 const Checkout = () => {
   const [showOrderSummary, setShowOrderSummary] = useState(false);
@@ -44,31 +45,9 @@ const Checkout = () => {
     "info",
   ]);
 
-  // Payment Integration
-  const makePayment = async () => {
-    try {
-      // Call backend to create stripe session
-      const response = await api.post("payment/create-checkout-session", {
-        products: cart,
-      });
-
-      localStorage.setItem("orderId", response.data.orderId);
-
-      await loadStripe(
-        "pk_test_51SnpVF90s5HCyBqaQfZvwWFpVwO4Fm468EQrinLjQXVID2iYzSphTFIkt70XCYdA9Skm1Kx279keZ2Z420NL5vpP00IKIotMOR",
-      );
-
-      // Redirect to stripe checkout
-      window.location.href = response.data.url;
-    } catch (error) {
-      console.error("Payment error:", error);
-    }
-  };
-
-  const errorMsg = "text-red-400 text-start text-xs my-2 ml-1";
+  const handleCheckout = () => makePayment(cart);
 
   return (
-    // TODO: clean this whole componenet with modularity
     <div className="bg-secondary">
       <div className="lg:hidden flex justify-between border-y border-black/10 p-5 md:p-8 bg-[$555]">
         <button
@@ -135,49 +114,22 @@ const Checkout = () => {
 
       <div className="block lg:flex lg:bg-white justify-evenly border-y border-black/10 no-scrollbar">
         <form
-          onSubmit={handleCheckoutSubmit(makePayment)}
+          onSubmit={handleCheckoutSubmit(handleCheckout)}
           className="flex-1 p-5 space-y-8 border-r hide-scrollbar bg-secondary border-black/10 md:p-8 lg:pl-20 lg:py-10"
         >
           <div className="space-y-5">
             <h2 className="text-xl font-bold capitalize font-noto-serif">
               Contact
             </h2>
-            <div>
-              {/* Email */}
-              <label
-                htmlFor="email"
-                className={`bg-white border border-black/10 cursor-text flex flex-col w-full px-3 py-4 rounded-sm group focus-within:border-primary focus-within:border text-sm relative ${
-                  checkoutErrors.email
-                    ? "outline outline-red-700 border-none"
-                    : ""
-                }`}
-              >
-                <span
-                  className={`absolute transition-all -translate-y-3 text-gray-500 text-xs ${
-                    emailValue?.length > 0 ? "opacity-100" : "opacity-0"
-                  }`}
-                >
-                  Email Address
-                </span>
-
-                <input
-                  className={`outline-none bg-transparent border-none transition-all ${
-                    emailValue?.length > 0
-                      ? "text-xs translate-y-2"
-                      : "translate-y-0"
-                  }`}
-                  type="email"
-                  placeholder="Email Address"
-                  id="email"
-                  {...checkout("email", {
-                    required: "Email is required",
-                  })}
-                />
-              </label>
-              {checkoutErrors.email && (
-                <p className={errorMsg}>{checkoutErrors.email.message}</p>
-              )}
-            </div>
+            <CheckoutInput
+              label={"Email Address"}
+              id={"email"}
+              register={checkout}
+              errors={checkoutErrors}
+              placeholder={"Email Address"}
+              type="email"
+              value={emailValue}
+            />
           </div>
           <div className="space-y-3">
             <h2 className="mb-5 text-xl font-bold capitalize font-noto-serif">
@@ -185,337 +137,115 @@ const Checkout = () => {
             </h2>
             <div className="space-y-3 lg:flex justify-stretch lg:gap-3">
               <div className="flex-1">
-                <label
-                  htmlFor="firstName"
-                  className={`bg-white border border-black/10 cursor-text flex flex-col w-full px-3 py-4 rounded-sm group focus-within:border-primary focus-within:border text-sm relative ${
-                    checkoutErrors.firstName
-                      ? "outline outline-red-700 border-none"
-                      : ""
-                  }`}
-                >
-                  <span
-                    className={`absolute transition-all -translate-y-3 text-gray-500 text-xs ${
-                      firstNameValue?.length > 0 ? "opacity-100" : "opacity-0"
-                    }`}
-                  >
-                    First Name
-                  </span>
-
-                  <input
-                    className={`outline-none bg-transparent border-none transition-all ${
-                      firstNameValue?.length > 0
-                        ? "text-xs translate-y-2"
-                        : "translate-y-0"
-                    }`}
-                    type="text"
-                    placeholder="First Name *"
-                    id="firstName"
-                    {...checkout("firstName", {
-                      required: "First Name is required",
-                    })}
-                  />
-                </label>
-                {checkoutErrors.firstName && (
-                  <p className={errorMsg}>{checkoutErrors.firstName.message}</p>
-                )}
+                <CheckoutInput
+                  label={"First Name"}
+                  id={"firstName"}
+                  register={checkout}
+                  errors={checkoutErrors}
+                  placeholder={"First Name"}
+                  type="text"
+                  value={firstNameValue}
+                />
               </div>
 
               {/* Last Name */}
               <div className="flex-1">
-                <label
-                  htmlFor="lastName"
-                  className={`bg-white border border-black/10 cursor-text flex flex-col w-full px-3 py-4 rounded-sm group focus-within:border-primary focus-within:border text-sm relative ${
-                    checkoutErrors.lastName
-                      ? "outline outline-red-700 border-none"
-                      : ""
-                  }`}
-                >
-                  <span
-                    className={`absolute transition-all -translate-y-3 text-gray-500 text-xs ${
-                      lastNameValue?.length > 0 ? "opacity-100" : "opacity-0"
-                    }`}
-                  >
-                    Last Name
-                  </span>
-
-                  <input
-                    className={`outline-none bg-transparent border-none transition-all ${
-                      lastNameValue?.length > 0
-                        ? "text-xs translate-y-2"
-                        : "translate-y-0"
-                    }`}
-                    type="text"
-                    placeholder="Last Name *"
-                    id="lastName"
-                    {...checkout("lastName", {
-                      required: "Last Name is required",
-                    })}
-                  />
-                </label>
-                {checkoutErrors.lastName && (
-                  <p className={errorMsg}>{checkoutErrors.lastName.message}</p>
-                )}
+                <CheckoutInput
+                  label={"Last Name"}
+                  id={"lastName"}
+                  register={checkout}
+                  errors={checkoutErrors}
+                  placeholder={"Last Name"}
+                  type="text"
+                  value={lastNameValue}
+                />
               </div>
             </div>
 
             {/* Country */}
-            <div>
-              <label
-                htmlFor="country"
-                className={`bg-white border border-black/10 cursor-text flex flex-col w-full px-3 py-4 rounded-sm group focus-within:border-primary focus-within:border text-sm relative ${
-                  checkoutErrors.country
-                    ? "outline outline-red-700 border-none"
-                    : ""
-                }`}
-              >
-                <span
-                  className={`absolute transition-all -translate-y-3 text-gray-500 text-xs ${
-                    countryValue?.length > 0 ? "opacity-100" : "opacity-0"
-                  }`}
-                >
-                  Country
-                </span>
-
-                <input
-                  className={`outline-none bg-transparent border-none transition-all ${
-                    countryValue?.length > 0
-                      ? "text-xs translate-y-2"
-                      : "translate-y-0"
-                  }`}
-                  type="text"
-                  placeholder="Country *"
-                  id="country"
-                  {...checkout("country", { required: "Country is required" })}
-                />
-              </label>
-              {checkoutErrors.country && (
-                <p className={errorMsg}>{checkoutErrors.country.message}</p>
-              )}
-            </div>
+            <CheckoutInput
+              label={"Country"}
+              id={"country"}
+              register={checkout}
+              errors={checkoutErrors}
+              placeholder={"Country"}
+              type="text"
+              value={countryValue}
+            />
 
             {/* Street Address */}
-            <div>
-              <label
-                htmlFor="StreetAddress"
-                className={`bg-white border border-black/10 cursor-text flex flex-col w-full px-3 py-4 rounded-sm group focus-within:border-primary focus-within:border text-sm relative ${
-                  checkoutErrors.StreetAddress
-                    ? "outline outline-red-700 border-none"
-                    : ""
-                }`}
-              >
-                <span
-                  className={`absolute transition-all -translate-y-3 text-gray-500 text-xs ${
-                    StreetAddressValue?.length > 0 ? "opacity-100" : "opacity-0"
-                  }`}
-                >
-                  Street Address
-                </span>
-
-                <input
-                  className={`outline-none bg-transparent border-none transition-all ${
-                    StreetAddressValue?.length > 0
-                      ? "text-xs translate-y-2"
-                      : "translate-y-0"
-                  }`}
-                  type="text"
-                  placeholder="Street Address *"
-                  id="StreetAddress"
-                  {...checkout("StreetAddress", {
-                    required: "Street Address is required",
-                  })}
-                />
-              </label>
-              {checkoutErrors.StreetAddress && (
-                <p className={errorMsg}>
-                  {checkoutErrors.StreetAddress.message}
-                </p>
-              )}
-            </div>
+            <CheckoutInput
+              label={"Street Address"}
+              id={"StreetAddress"}
+              register={checkout}
+              errors={checkoutErrors}
+              placeholder={"Street Address"}
+              type="text"
+              value={StreetAddressValue}
+            />
 
             {/* Building */}
-            <div>
-              <label
-                htmlFor="building"
-                className={`bg-white border border-black/10 cursor-text flex flex-col w-full px-3 py-4 rounded-sm group focus-within:border-primary focus-within:border text-sm relative ${
-                  checkoutErrors.building
-                    ? "outline outline-red-700 border-none"
-                    : ""
-                }`}
-              >
-                <span
-                  className={`absolute transition-all -translate-y-3 text-gray-500 text-xs ${
-                    buildingValue?.length > 0 ? "opacity-100" : "opacity-0"
-                  }`}
-                >
-                  Building
-                </span>
+            <CheckoutInput
+              label={"Building"}
+              placeholder={"Building"}
+              id={"building"}
+              register={checkout}
+              errors={checkoutErrors}
+              type="text"
+              value={buildingValue}
+            />
 
-                <input
-                  className={`outline-none bg-transparent border-none transition-all ${
-                    buildingValue?.length > 0
-                      ? "text-xs translate-y-2"
-                      : "translate-y-0"
-                  }`}
-                  type="text"
-                  placeholder="Building *"
-                  id="building"
-                  {...checkout("building", {
-                    required: "Building is required",
-                  })}
-                />
-              </label>
-              {checkoutErrors.building && (
-                <p className={errorMsg}>{checkoutErrors.building.message}</p>
-              )}
-            </div>
-
-            <div className="space-y-3 lg:flex justify-stretch lg:gap-3">
+            <div className="space-y-3 md:flex justify-stretch md:gap-3">
               {/* Town / City */}
               <div className="flex-1">
-                <label
-                  htmlFor="TownCity"
-                  className={`bg-white border border-black/10 cursor-text flex flex-col w-full px-3 py-4 rounded-sm group focus-within:border-primary focus-within:border text-sm relative ${
-                    checkoutErrors.TownCity
-                      ? "outline outline-red-700 border-none"
-                      : ""
-                  }`}
-                >
-                  <span
-                    className={`absolute transition-all -translate-y-3 text-gray-500 text-xs ${
-                      TownCityValue?.length > 0 ? "opacity-100" : "opacity-0"
-                    }`}
-                  >
-                    Town / City
-                  </span>
-
-                  <input
-                    className={`outline-none bg-transparent border-none transition-all ${
-                      TownCityValue?.length > 0
-                        ? "text-xs translate-y-2"
-                        : "translate-y-0"
-                    }`}
-                    type="text"
-                    placeholder="Town / City *"
-                    id="TownCity"
-                    {...checkout("TownCity", {
-                      required: "Town / City is required",
-                    })}
-                  />
-                </label>
-                {checkoutErrors.TownCity && (
-                  <p className={errorMsg}>{checkoutErrors.TownCity.message}</p>
-                )}
+                <CheckoutInput
+                  label={"Town / City"}
+                  placeholder={"Town / City"}
+                  id={"TownCity"}
+                  register={checkout}
+                  errors={checkoutErrors}
+                  type="text"
+                  value={TownCityValue}
+                />
               </div>
 
               {/* State */}
               <div className="flex-1">
-                <label
-                  htmlFor="State"
-                  className={`bg-white border border-black/10 cursor-text flex flex-col w-full px-3 py-4 rounded-sm group focus-within:border-primary focus-within:border text-sm relative ${
-                    checkoutErrors.State
-                      ? "outline outline-red-700 border-none"
-                      : ""
-                  }`}
-                >
-                  <span
-                    className={`absolute transition-all -translate-y-3 text-gray-500 text-xs ${
-                      StateValue?.length > 0 ? "opacity-100" : "opacity-0"
-                    }`}
-                  >
-                    State
-                  </span>
-
-                  <input
-                    className={`outline-none bg-transparent border-none transition-all ${
-                      StateValue?.length > 0
-                        ? "text-xs translate-y-2"
-                        : "translate-y-0"
-                    }`}
-                    type="text"
-                    placeholder="State *"
-                    id="State"
-                    {...checkout("State", { required: "State is required" })}
-                  />
-                </label>
-                {checkoutErrors.State && (
-                  <p className={errorMsg}>{checkoutErrors.State.message}</p>
-                )}
+                <CheckoutInput
+                  label={"State"}
+                  placeholder={"State"}
+                  id={"State"}
+                  register={checkout}
+                  errors={checkoutErrors}
+                  type="text"
+                  value={StateValue}
+                />
               </div>
 
               {/* Postal Code */}
               <div className="flex-1">
-                <label
-                  htmlFor="postalCode"
-                  className={`bg-white border border-black/10 cursor-text flex flex-col w-full px-3 py-4 rounded-sm group focus-within:border-primary focus-within:border text-sm relative ${
-                    checkoutErrors.postalCode
-                      ? "outline outline-red-700 border-none"
-                      : ""
-                  }`}
-                >
-                  <span
-                    className={`absolute transition-all -translate-y-3 text-gray-500 text-xs ${
-                      postalCodeValue?.length > 0 ? "opacity-100" : "opacity-0"
-                    }`}
-                  >
-                    Postal Code
-                  </span>
-
-                  <input
-                    className={`outline-none bg-transparent border-none transition-all ${
-                      postalCodeValue?.length > 0
-                        ? "text-xs translate-y-2"
-                        : "translate-y-0"
-                    }`}
-                    type="text"
-                    placeholder="Postal Code *"
-                    id="postalCode"
-                    {...checkout("postalCode", {
-                      required: "Postal Code is required",
-                    })}
-                  />
-                </label>
-                {checkoutErrors.postalCode && (
-                  <p className={errorMsg}>
-                    {checkoutErrors.postalCode.message}
-                  </p>
-                )}
+                <CheckoutInput
+                  label={"Postal Code"}
+                  placeholder={"Postal Code"}
+                  id={"postalCode"}
+                  register={checkout}
+                  errors={checkoutErrors}
+                  type="text"
+                  value={postalCodeValue}
+                />
               </div>
             </div>
 
             {/* Phone */}
-            <div>
-              <label
-                htmlFor="phone"
-                className={`bg-white border border-black/10 cursor-text flex flex-col w-full px-3 py-4 rounded-sm group focus-within:border-primary focus-within:border text-sm relative ${
-                  checkoutErrors.phone
-                    ? "outline outline-red-700 border-none"
-                    : ""
-                }`}
-              >
-                <span
-                  className={`absolute transition-all -translate-y-3 text-gray-500 text-xs ${
-                    phoneValue?.length > 0 ? "opacity-100" : "opacity-0"
-                  }`}
-                >
-                  Phone
-                </span>
-
-                <input
-                  className={`outline-none bg-transparent border-none transition-all ${
-                    phoneValue?.length > 0
-                      ? "text-xs translate-y-2"
-                      : "translate-y-0"
-                  }`}
-                  type="tel"
-                  placeholder="Phone *"
-                  id="phone"
-                  {...checkout("phone", { required: "Phone is required" })}
-                />
-              </label>
-              {checkoutErrors.phone && (
-                <p className={errorMsg}>{checkoutErrors.phone.message}</p>
-              )}
-            </div>
+            <CheckoutInput
+              label={"Phone"}
+              placeholder={"Phone"}
+              id={"phone"}
+              register={checkout}
+              errors={checkoutErrors}
+              type="text"
+              value={phoneValue}
+            />
           </div>
 
           <div className="space-y-3">
@@ -523,39 +253,18 @@ const Checkout = () => {
               Additional Information
             </h2>
             {/* Additional Info */}
-            <div>
-              <label
-                htmlFor="info"
-                className={`bg-white border border-black/10 cursor-text flex flex-col w-full px-3 py-4 rounded-sm group focus-within:border-primary focus-within:border text-sm relative ${
-                  checkoutErrors.info
-                    ? "outline outline-red-700 border-none"
-                    : ""
-                }`}
-              >
-                <span
-                  className={`absolute transition-all -translate-y-3 text-gray-500 text-xs ${
-                    infoValue?.length > 0 ? "opacity-100" : "opacity-0"
-                  }`}
-                >
-                  Order notes(optional)
-                </span>
-
-                <textarea
-                  className={`outline-none bg-transparent border-none transition-all ${
-                    infoValue?.length > 0
-                      ? "text-xs translate-y-2"
-                      : "translate-y-0"
-                  }`}
-                  type="text"
-                  placeholder="Note about your order, e.g. special notes for delivery."
-                  id="info"
-                  {...checkout("info")}
-                ></textarea>
-              </label>
-              {checkoutErrors.info && (
-                <p className={errorMsg}>{checkoutErrors.info.message}</p>
-              )}
-            </div>
+            <CheckoutInput
+              label={"Order notes(optional)"}
+              placeholder={
+                "Note about your order, e.g. special notes for delivery."
+              }
+              id={"info"}
+              register={checkout}
+              errors={checkoutErrors}
+              type="text"
+              value={infoValue}
+              required={false}
+            />
           </div>
 
           <button
@@ -570,44 +279,11 @@ const Checkout = () => {
         </form>
 
         <div className="flex-[0.9] h-[100%] ">
-          <section className="sticky hidden p-12 space-y-6 bg-white lg:block pr-15">
-            <div className="space-y-6">
-              {cart &&
-                cart.map((item) => (
-                  <Item
-                    key={item._id}
-                    quantity={item.quantity}
-                    cover={item.cover}
-                    title={item.title}
-                    price={item.price}
-                  />
-                ))}
-            </div>
-            <div className="items-center justify-center gap-3 lg:flex">
-              <input
-                className="flex-1 w-full h-full px-4 py-4 text-sm transition-all duration-300 rounded-md outline-none border-black/10 border-1 focus-within:border-primary focus-within:border-2"
-                type="text"
-                placeholder="Coupon Code"
-              />
-              <button
-                type="submit"
-                disabled={isCheckoutSubmitting}
-                className="flex-[0.4] cursor-pointer bg-primary py-3.5 font-semibold text-black rounded-sm hover:bg-primary/90 transition-all"
-              >
-                Apply
-              </button>
-            </div>
-            <div className="space-y-3">
-              <div className="flex justify-between text-sm">
-                <span>Subtotal:</span>
-                <span>${subtotal}</span>
-              </div>
-              <div className="flex justify-between text-xl">
-                <span>Total:</span>
-                <span>${subtotal}</span>
-              </div>
-            </div>
-          </section>
+          <OrderSummary
+            cart={cart}
+            isCheckoutSubmitting={isCheckoutSubmitting}
+            subtotal={subtotal}
+          />
         </div>
       </div>
     </div>

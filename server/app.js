@@ -21,7 +21,7 @@ const PORT = process.env.PORT;
 
 app.set("trust proxy", 1); // ✅ REQUIRED FOR RAILWAY / VERCEL
 
-app.use(cors({ origin: ["http://localhost:5173", "https://bookora-z.vercel.app"], credentials: true }));
+app.use(cors({ origin: [process.env.FRONTEND_URL], credentials: true }));
 app.use("/payment/webhook", express.raw({ type: "application/json" }), stripeWebHook); // for stripe webhook
 app.use(express.json());
 app.use(

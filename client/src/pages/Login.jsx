@@ -10,6 +10,8 @@ import { useContext } from "react";
 import { UserContext } from "../context/UserContext.jsx";
 import { CartContext } from "../context/CartContext.jsx";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function Login() {
   const navigate = useNavigate();
   const [isOn, setIsOn] = useState(true);
@@ -193,7 +195,7 @@ function Login() {
               </div>
 
               <a
-                href="http://localhost:8000/auth/google"
+                href={`${API_BASE_URL}/auth/google`}
                 className="w-full cursor-pointer py-3 rounded-lg border text-sm flex items-center justify-center gap-2 hover:bg-gray-100 transition-all"
               >
                 <FaGoogle />
@@ -271,7 +273,7 @@ function Login() {
                 </div>
 
                 <a
-                href="http://localhost:8000/auth/google"
+                href={`${API_BASE_URL}/auth/google`}
                 className="w-full cursor-pointer py-3 rounded-lg border text-sm flex items-center justify-center gap-2 hover:bg-gray-100 transition-all"
               >
                 <FaGoogle />

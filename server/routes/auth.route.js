@@ -43,10 +43,10 @@ authRouter.get(
 authRouter.get(
   "/google/callback",
   passport.authenticate("google", {
-    failureRedirect: "http://localhost:5173/login",
+    failureRedirect: `${process.env.FRONTEND_URL}/login`,
   }),
   (req, res) => {
-    res.redirect("http://localhost:5173/auth/success");
+    res.redirect(`${process.env.FRONTEND_URL}/auth/success`);
   }
 );
 

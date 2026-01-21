@@ -44,8 +44,8 @@ export const createCheckoutSessionService = async (userId, products) => {
       payment_method_types: ["card"],
       line_items: lineItems,
       mode: "payment",
-      success_url: "http://localhost:5173/payment/success",
-      cancel_url: "http://localhost:5173/payment/cancel",
+      success_url: `${process.env.FRONTEND_URL}/payment/success`,
+      cancel_url: `${process.env.FRONTEND_URL}/payment/cancel`,
       metadata: {
         orderId: order._id.toString(),
       },

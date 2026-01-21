@@ -40,6 +40,8 @@ export const createCheckoutSessionService = async (userId, products) => {
       payment_status: "pending",
     });
 
+    console.log("Frontend url",process.env.FRONTEND_URL);
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: lineItems,

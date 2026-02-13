@@ -33,6 +33,8 @@ export const registerUserController = async (req, res, next) => {
 };
 
 export const fetchUserController = async (req, res, next) => {
+  if (!req?.user) return res.status(401).json({ message: "User Id not found!", success: false })
+
   const { _id } = req.user;
   try {
     const user = await fetchUserService(_id);
@@ -136,7 +138,7 @@ export const logoutController = async (req, res, next) => {
 };
 
 export const isAuthController = async (req, res, next) => {
-  if (!req.isAuthenticated) {
+  if (!req.isAuthenticated || !req?.user) {
     return res.status(401).json({
       success: false,
       message: "Session expired. Please log in again.",

@@ -249,7 +249,7 @@ const Navbar = () => {
                   Login
                 </Link>
                 <Link
-                  to="/register"
+                  to="/login"
                   className="px-10 py-4 font-bold text-black cursor-pointer bg-primary text-nowrap"
                 >
                   Register

@@ -1,7 +1,7 @@
 import { addItemToCartService, removeItemToCartService, getCartService, updateCartService, clearCartService } from "../services/cart.service.js";
 
 export const getCartController = async (req, res, next) => {
-  const userId = req.user._id;
+  const userId = req.user?._id;
 
   try {
     const cart = await getCartService(userId);
